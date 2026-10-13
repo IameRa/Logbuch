@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zug-Logbuch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{--nacht:#111b27;--tafel:#1b2a3b;--amber:#ffb81c;--rot:#d4262c;--rot-dunkel:#b01d23;--papier:#eceff2;--weiss:#fff;--text:#18222e;--grau:#66717d;--linie:#dbe0e5;
+--kopf:"Barlow Condensed","Arial Narrow",Arial,sans-serif;--fliess:"Barlow","Helvetica Neue",Arial,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--papier);color:var(--text);font:400 16px/1.5 var(--fliess)}
+header{background:var(--nacht);color:var(--weiss);padding:28px 16px 0;position:relative}
+header::after{content:"";display:block;height:14px;margin-top:26px;
+  background:repeating-linear-gradient(90deg,#3a4552 0 10px,transparent 10px 26px) bottom/100% 6px no-repeat,
+             linear-gradient(#8a949f,#8a949f) center 2px/100% 3px no-repeat}
+.kopf{max-width:1040px;margin:0 auto}
+header h1{margin:0;font:700 clamp(2.4rem,7vw,3.6rem)/1 var(--kopf);letter-spacing:.01em}
+header p{margin:6px 0 0;color:#aab6c3}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.stat{background:var(--tafel);border:1px solid #2a3b4f;border-radius:8px;padding:8px 16px 6px;min-width:128px;box-shadow:inset 0 -3px 0 #0d151f}
+.stat b{display:block;font:700 2.2rem/1.1 var(--kopf);color:var(--amber);font-variant-numeric:tabular-nums}
+.stat span{color:#aab6c3;font-size:.82rem}
+main{max-width:1040px;margin:0 auto;padding:22px 16px 8px}
+h2{font:700 1.6rem/1.2 var(--kopf);margin:0;letter-spacing:.01em}
+form{background:var(--weiss);border-radius:14px;padding:22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px 16px;
+  box-shadow:0 1px 2px rgba(17,27,39,.06),0 12px 32px rgba(17,27,39,.08);border-top:5px solid var(--rot)}
+form h2{grid-column:1/-1}
+label{display:flex;flex-direction:column;font-size:.82rem;font-weight:600;color:var(--grau);gap:5px}
+input,select,textarea,button{font:inherit;color:var(--text)}
+input,select,textarea{padding:10px 12px;border:1.5px solid var(--linie);background:#f8f9fb;border-radius:8px;min-width:0;font-weight:400}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(255,184,28,.35);background:var(--weiss)}
+button:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.breit{grid-column:1/-1}
+.vorschau{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.vorschau img{width:150px;height:100px;object-fit:cover;border-radius:8px;border:1px solid var(--linie);background:var(--papier)}
+button{cursor:pointer;border:0;border-radius:999px;padding:12px 26px;background:var(--rot);color:var(--weiss);font-weight:600;transition:background .15s}
+button:hover{background:var(--rot-dunkel)}
+button.leise{background:var(--weiss);color:var(--text);border:1.5px solid var(--linie);font-weight:600;padding:9px 18px}
+button.leise:hover{background:var(--papier)}
+.leiste{display:flex;gap:10px;flex-wrap:wrap;margin:34px 0 14px;align-items:center}
+.leiste h2{flex:1 1 100%}
+.leiste input,.leiste select{flex:1 1 170px;border-radius:999px;padding-inline:16px;background:var(--weiss)}
+.liste{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:18px}
+.karte{--c:#66717d;background:var(--weiss);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 1px 2px rgba(17,27,39,.06),0 8px 24px rgba(17,27,39,.06);border-top:5px solid var(--c)}
+.karte img{width:100%;aspect-ratio:3/2;object-fit:cover;background:var(--papier);display:block}
+.karte .inhalt{padding:14px 16px 12px;flex:1}
+.karte h3{margin:0;font:700 1.45rem/1.15 var(--kopf)}
+.typ{display:inline-block;background:var(--c);color:var(--weiss);font-size:.75rem;font-weight:600;padding:2px 10px;border-radius:999px;margin-bottom:6px}
+.meta{color:var(--grau);font-size:.88rem}
+.notiz{margin:8px 0 0;font-size:.92rem}
+.karte>button{margin:0 16px 16px;align-self:flex-start}
+.karte.klick{cursor:pointer;transition:transform .15s,box-shadow .15s}
+.karte.klick:hover,.karte.klick:focus-visible{transform:translateY(-3px);box-shadow:0 14px 32px rgba(17,27,39,.14);outline:none}
+.daten{display:grid;grid-template-columns:auto 1fr;margin:10px 0 0;font-size:.85rem}
+.daten dt,.daten dd{padding:4px 0;border-top:1px dashed var(--linie)}
+.daten dt{color:var(--grau);padding-right:14px}
+.daten dd{margin:0;text-align:right;font-weight:600}
+.leer{grid-column:1/-1;background:var(--weiss);border:2px dashed #c6ced6;border-radius:14px;padding:34px;text-align:center;color:var(--grau)}
+.kat-kopf{margin:44px 0 14px;padding-top:22px;border-top:2px solid var(--linie)}
+.kat-info{color:var(--grau);margin:4px 0 0;font-size:.92rem}
+footer{max-width:1040px;margin:0 auto;padding:18px 16px 36px;color:var(--grau);font-size:.8rem}
+@media (prefers-reduced-motion:reduce){.karte.klick{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="kopf">
+    <h1>Zug-Logbuch</h1>
+    <p>Trag ein, was du gesehen hast.</p>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+<main>
+
+  <form id="form">
+    <h2>Neuen Zug eintragen</h2>
+    <label>Baureihe / Modell
+      <select id="modell"><option value="">Anderes / unbekannt</option></select>
+    </label>
+    <label>Zugnummer / Kennung
+      <input id="nummer" required placeholder="z. B. ICE 1601 oder 218 123">
+    </label>
+    <label>Art
+      <select id="typ">
+        <option>ICE</option><option>IC/EC</option><option>Regionalzug</option><option>S-Bahn</option>
+        <option>Güterzug</option><option>Straßenbahn/U-Bahn</option><option>Dampflok</option><option>Sonstiges</option>
+      </select>
+    </label>
+    <label>Ort / Bahnhof
+      <input id="ort" placeholder="z. B. Kiel Hbf">
+    </label>
+    <label>Datum und Uhrzeit
+      <input id="zeit" type="datetime-local" required>
+    </label>
+    <label>Foto vom Zug
+      <input id="foto" type="file" accept="image/*">
+    </label>
+    <label>oder Bild-Link
+      <input id="url" type="url" placeholder="https://…">
+    </label>
+    <label class="breit">Notiz
+      <textarea id="notiz" rows="2" placeholder="Farbe, Besonderheiten, Gleis …"></textarea>
+    </label>
+    <div class="breit vorschau">
+      <img id="vorschau" alt="Vorschau">
+      <button type="submit">Zug speichern</button>
+    </div>
+  </form>
+
+  <div class="leiste">
+    <h2>Meine Sichtungen</h2>
+    <input id="suche" type="search" placeholder="Suchen (Nummer, Ort, Notiz)">
+    <select id="filter"><option value="">Alle Arten</option></select>
+    <button class="leise" id="export" type="button">Sichern</button>
+    <button class="leise" id="import" type="button">Laden</button>
+    <input id="datei" type="file" accept="application/json" hidden>
+  </div>
+
+  <div class="liste" id="liste"></div>
+
+  <div class="kat-kopf"><h2>Zugkatalog</h2>
+  <p class="kat-info">Tippe auf ein Modell, um es für den nächsten Eintrag auszuwählen.</p>
+  <p class="kat-info" id="status" role="status"></p></div>
+  <div class="liste" id="katalog"></div>
+</main>
+<footer>Bilder: Wikipedia / Wikimedia Commons (Lizenzen auf der jeweiligen Bildseite), Internet nötig. Die Daten sind Richtwerte und können je nach Unterbauart abweichen.</footer>
+
+<script>
+const KEY = "zuglogbuch.v1";
+let zuege = [];
+try { zuege = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { zuege = []; }
+
+const $ = id => document.getElementById(id);
+const farben = {"ICE":"#d4262c","IC/EC":"#7d858e","Regionalzug":"#2f6fb0","S-Bahn":"#2e8b57","Güterzug":"#6b5a4a","Straßenbahn/U-Bahn":"#e08a1e","Dampflok":"#222","Sonstiges":"#8a9199"};
+
+const MODELLE = [
+  {id:"br101",name:"BR 101",typ:"IC/EC",wiki:"DB-Baureihe 101",art:"Elektrolok",ab:"1996",vmax:"220 km/h",leistung:"6.400 kW",laenge:"19,1 m",gewicht:"84 t",hersteller:"Adtranz"},
+  {id:"br111",name:"BR 111",typ:"Regionalzug",wiki:"DB-Baureihe 111",art:"Elektrolok",ab:"1974",vmax:"160 km/h",leistung:"3.640 kW",laenge:"16,75 m",gewicht:"83 t",hersteller:"Krauss-Maffei, Henschel, Krupp"},
+  {id:"br143",name:"BR 143",typ:"Regionalzug",wiki:"DB-Baureihe 143",art:"Elektrolok",ab:"1984",vmax:"120 km/h",leistung:"3.720 kW",laenge:"16,64 m",gewicht:"82,5 t",hersteller:"LEW Hennigsdorf"},
+  {id:"br146",name:"BR 146 (TRAXX P160 AC)",typ:"Regionalzug",wiki:"DB-Baureihe 146",art:"Elektrolok",ab:"2001",vmax:"160 km/h",leistung:"5.600 kW",laenge:"18,9 m",gewicht:"84 t",hersteller:"Bombardier"},
+  {id:"br185",name:"BR 185 (TRAXX F140 AC)",typ:"Güterzug",wiki:"DB-Baureihe 185",art:"Elektrolok",ab:"2001",vmax:"140 km/h",leistung:"5.600 kW",laenge:"18,9 m",gewicht:"84 t",hersteller:"Bombardier"},
+  {id:"br218",name:"BR 218",typ:"Regionalzug",wiki:"DB-Baureihe 218",art:"Diesellok",ab:"1968",vmax:"140 km/h",leistung:"2.060 kW",laenge:"16,4 m",gewicht:"78 t",hersteller:"Krupp, Henschel, KHD u. a."},
+  {id:"ice1",name:"ICE 1 (BR 401)",typ:"ICE",wiki:"ICE 1",art:"Hochgeschwindigkeitszug",ab:"1991",vmax:"280 km/h",leistung:"9.600 kW",laenge:"358 m",hersteller:"u. a. Krupp, Henschel, AEG"},
+  {id:"ice3",name:"ICE 3 (BR 403)",typ:"ICE",wiki:"ICE 3",art:"Hochgeschwindigkeitszug",ab:"1999",vmax:"330 km/h",leistung:"8.000 kW",laenge:"200 m",gewicht:"409 t",hersteller:"Siemens, Bombardier"},
+  {id:"ice4",name:"ICE 4 (BR 412)",typ:"ICE",wiki:"ICE 4",art:"Hochgeschwindigkeitszug",ab:"2017",vmax:"250 km/h",leistung:"9.900 kW",laenge:"346 m",hersteller:"Siemens"},
+  {id:"br423",name:"BR 423",typ:"S-Bahn",wiki:"DB-Baureihe 423",art:"S-Bahn-Triebzug",ab:"1999",vmax:"140 km/h",leistung:"2.350 kW",laenge:"67,4 m",hersteller:"Bombardier, LHB u. a."},
+  {id:"br52",name:"BR 52",typ:"Dampflok",wiki:"DB-Baureihe 52",art:"Dampflok (Kriegslok)",ab:"1942",vmax:"80 km/h",hersteller:"viele Werke"}
+];
+const modell = id => MODELLE.find(m => m.id === id);
+
+// Modellbilder kommen von Wikipedia und werden im Browser zwischengespeichert
+const BILDKEY = "zuglogbuch.bilder.v1";
+let bilder = {};
+try { bilder = JSON.parse(localStorage.getItem(BILDKEY)) || {}; } catch (e) { bilder = {}; }
+const modellBild = id => bilder[id] || "";
+const bildFuer = z => z.bild || modellBild(z.modell) || ersatzbild(z.typ);
+
+function bilderLaden() {
+  const offen = MODELLE.filter(m => !bilder[m.id]);
+  if (!offen.length) return;
+  const status = t => { $("status").textContent = t; };
+  window.wikiCb = j => {
+    const q = (j && j.query) || {};
+    const weg = {};
+    (q.normalized || []).forEach(n => { weg[n.from] = n.to; });
+    (q.redirects || []).forEach(r => { weg[r.from] = r.to; });
+    const seiten = Object.values(q.pages || {});
+    let gefunden = 0;
+    offen.forEach(m => {
+      let t = m.wiki; t = weg[t] || t; t = weg[t] || t;
+      const sv = seiten.find(x => x.title === t);
+      if (sv && sv.thumbnail) { bilder[m.id] = sv.thumbnail.source; gefunden++; }
+    });
+    try { localStorage.setItem(BILDKEY, JSON.stringify(bilder)); } catch (e) {}
+    status(gefunden < offen.length ? (offen.length - gefunden) + " Bilder nicht gefunden, dort bleibt die Zeichnung." : "");
+    zeigen(); katalogZeigen(); vorschauAktualisieren();
+  };
+  const sc = document.createElement("script");
+  sc.src = "https://de.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages&piprop=thumbnail&pithumbsize=640&redirects=1&callback=wikiCb&titles="
+         + encodeURIComponent(offen.map(m => m.wiki).join("|"));
+  sc.onerror = () => status("Die Bilder konnten nicht von Wikipedia geladen werden. Prüfe die Internetverbindung und öffne die Datei direkt im Browser, nicht in einer Vorschau.");
+  document.head.appendChild(sc);
+}
+
+function datenListe(m) {
+  const zeilen = [["Art", m.art], ["Seit", m.ab], ["Höchstgeschw.", m.vmax], ["Leistung", m.leistung],
+                  ["Länge", m.laenge], ["Gewicht", m.gewicht], ["Hersteller", m.hersteller]].filter(x => x[1]);
+  return '<dl class="daten">' + zeilen.map(x => `<dt>${x[0]}</dt><dd>${esc(x[1])}</dd>`).join("") + "</dl>";
+}
+function modellZeile(z) {
+  const m = modell(z.modell);
+  return m ? `<div class="meta">${esc(m.name)}</div>` + datenListe(m) : "";
+}
+function katalogZeigen() {
+  $("katalog").innerHTML = MODELLE.map(m => `
+    <article class="karte klick" tabindex="0" data-id="${m.id}" style="--c:${farben[m.typ] || '#66717d'}">
+      <img src="${modellBild(m.id) || ersatzbild(m.typ)}" alt="${esc(m.name)}" loading="lazy"
+           onerror="this.onerror=null;this.src='${ersatzbild(m.typ)}'">
+      <div class="inhalt"><span class="typ">${esc(m.typ)}</span><h3>${esc(m.name)}</h3>${datenListe(m)}</div>
+    </article>`).join("");
+}
+function modellWaehlen(id) {
+  $("modell").value = id;
+  const m = modell(id);
+  if (m) $("typ").value = m.typ;
+  vorschauAktualisieren();
+}
+
+// Ersatzbild als SVG, falls kein Foto vorhanden ist
+function ersatzbild(typ) {
+  const f = farben[typ] || "#8a9199";
+  let teile = "";
+  if (typ === "Güterzug") {
+    for (let i = 0; i < 3; i++) teile += `<rect x="${20+i*115}" y="70" width="105" height="48" fill="${i==0?'#222':f}"/>`;
+    teile += `<rect x="20" y="52" width="60" height="18" fill="#222"/>`;
+  } else if (typ === "Dampflok") {
+    teile = `<rect x="30" y="72" width="170" height="38" fill="${f}"/><rect x="40" y="46" width="48" height="26" fill="${f}"/><rect x="150" y="48" width="14" height="24" fill="${f}"/><rect x="205" y="78" width="100" height="32" fill="#444"/>`;
+  } else {
+    teile = `<path d="M20 120V76q0-14 14-14h250q40 4 60 40v18z" fill="${f}"/>`;
+    for (let i = 0; i < 6; i++) teile += `<rect x="${40+i*44}" y="74" width="30" height="16" fill="#dfe8ef"/>`;
+    teile += `<rect x="20" y="108" width="340" height="5" fill="#f2c230"/>`;
+  }
+  let raeder = "";
+  for (let x = 50; x < 340; x += 60) raeder += `<circle cx="${x}" cy="124" r="9" fill="#1c2b3a"/>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 180"><rect width="390" height="180" fill="#e8edf1"/><rect y="132" width="390" height="48" fill="#c9cfd5"/><rect y="132" width="390" height="4" fill="#8a9199"/>${teile}${raeder}</svg>`;
+  return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+}
+
+function speichern() {
+  try { localStorage.setItem(KEY, JSON.stringify(zuege)); }
+  catch (e) { alert("Speicher voll. Lösche alte Einträge oder sichere dein Logbuch."); }
+}
+
+function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+function zeigen() {
+  const q = $("suche").value.toLowerCase(), art = $("filter").value;
+  const treffer = zuege.filter(z =>
+    (!art || z.typ === art) &&
+    (z.nummer + " " + z.ort + " " + z.notiz + " " + ((modell(z.modell) || {}).name || "")).toLowerCase().includes(q)
+  ).sort((a, b) => b.zeit.localeCompare(a.zeit));
+
+  $("liste").innerHTML = treffer.length ? treffer.map(z => `
+    <article class="karte" style="--c:${farben[z.typ] || '#66717d'}">
+      <img src="${bildFuer(z)}" alt="${esc(z.nummer)}" loading="lazy"
+           onerror="this.onerror=null;this.src='${ersatzbild(z.typ)}'">
+      <div class="inhalt">
+        <span class="typ">${esc(z.typ)}</span>
+        <h3>${esc(z.nummer)}</h3>
+        ${modellZeile(z)}
+        <div class="meta">${esc(z.ort || "Ort unbekannt")} · ${new Date(z.zeit).toLocaleString("de-DE", {dateStyle:"medium", timeStyle:"short"})}</div>
+        ${z.notiz ? `<p class="notiz">${esc(z.notiz)}</p>` : ""}
+      </div>
+      <button class="leise" onclick="loeschen('${z.id}')">Löschen</button>
+    </article>`).join("")
+    : `<div class="leer">${zuege.length ? "Keine Treffer für diese Suche." : "Noch kein Zug im Logbuch. Trag oben deinen ersten ein."}</div>`;
+
+  const orte = new Set(zuege.map(z => z.ort.trim().toLowerCase()).filter(Boolean));
+  const nummern = new Set(zuege.map(z => z.nummer.trim().toLowerCase()));
+  $("stats").innerHTML =
+    `<div class="stat"><b>${zuege.length}</b><span>Sichtungen</span></div>` +
+    `<div class="stat"><b>${nummern.size}</b><span>verschiedene Züge</span></div>` +
+    `<div class="stat"><b>${orte.size}</b><span>Orte</span></div>`;
+}
+
+function loeschen(id) {
+  if (!confirm("Diesen Eintrag löschen?")) return;
+  zuege = zuege.filter(z => z.id !== id);
+  speichern(); zeigen();
+}
+
+// Foto verkleinern, damit der Browser-Speicher reicht
+function verkleinern(datei) {
+  return new Promise((ok, fehler) => {
+    const r = new FileReader();
+    r.onerror = fehler;
+    r.onload = () => {
+      const img = new Image();
+      img.onerror = fehler;
+      img.onload = () => {
+        const s = Math.min(1, 900 / Math.max(img.width, img.height));
+        const c = document.createElement("canvas");
+        c.width = img.width * s; c.height = img.height * s;
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        ok(c.toDataURL("image/jpeg", .75));
+      };
+      img.src = r.result;
+    };
+    r.readAsDataURL(datei);
+  });
+}
+
+let aktuellesFoto = "";
+
+function vorschauAktualisieren() {
+  $("vorschau").src = aktuellesFoto || $("url").value.trim() || modellBild($("modell").value) || ersatzbild($("typ").value);
+}
+
+$("foto").addEventListener("change", async e => {
+  const f = e.target.files[0];
+  aktuellesFoto = f ? await verkleinern(f).catch(() => "") : "";
+  vorschauAktualisieren();
+});
+$("url").addEventListener("input", vorschauAktualisieren);
+$("typ").addEventListener("change", vorschauAktualisieren);
+$("modell").addEventListener("change", () => modellWaehlen($("modell").value));
+$("katalog").addEventListener("click", e => {
+  const k = e.target.closest("[data-id]");
+  if (k) { modellWaehlen(k.dataset.id); $("form").scrollIntoView({behavior: "smooth"}); $("nummer").focus({preventScroll: true}); }
+});
+$("katalog").addEventListener("keydown", e => {
+  if (e.key === "Enter" && e.target.dataset.id) e.target.click();
+});
+
+$("form").addEventListener("submit", e => {
+  e.preventDefault();
+  zuege.push({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    nummer: $("nummer").value.trim(),
+    typ: $("typ").value,
+    modell: $("modell").value,
+    ort: $("ort").value.trim(),
+    zeit: $("zeit").value,
+    notiz: $("notiz").value.trim(),
+    bild: aktuellesFoto || $("url").value.trim()
+  });
+  speichern();
+  const ort = $("ort").value, typ = $("typ").value, mod = $("modell").value;
+  e.target.reset();
+  $("ort").value = ort; $("typ").value = typ; $("modell").value = mod; // Ort und Art bleiben für den nächsten Zug stehen
+  aktuellesFoto = ""; zeitSetzen(); vorschauAktualisieren(); zeigen();
+});
+
+function zeitSetzen() {
+  const d = new Date(Date.now() - new Date().getTimezoneOffset() * 60000);
+  $("zeit").value = d.toISOString().slice(0, 16);
+}
+
+// Sichern und Laden
+$("export").onclick = () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(zuege)], {type: "application/json"}));
+  a.download = "zug-logbuch.json"; a.click();
+};
+$("import").onclick = () => $("datei").click();
+$("datei").onchange = async e => {
+  try {
+    const neu = JSON.parse(await e.target.files[0].text());
+    const ids = new Set(zuege.map(z => z.id));
+    zuege = zuege.concat(neu.filter(z => z && z.id && !ids.has(z.id)));
+    speichern(); zeigen();
+  } catch (x) { alert("Die Datei konnte nicht gelesen werden."); }
+  e.target.value = "";
+};
+
+// Filter füllen und Suche verbinden
+Object.keys(farben).forEach(t => $("filter").insertAdjacentHTML("beforeend", `<option>${t}</option>`));
+$("suche").addEventListener("input", zeigen);
+$("filter").addEventListener("change", zeigen);
+
+MODELLE.forEach(m => $("modell").insertAdjacentHTML("beforeend", `<option value="${m.id}">${m.name}</option>`));
+zeitSetzen(); vorschauAktualisieren(); zeigen(); katalogZeigen(); bilderLaden();
+</script>
+</body>
+</html>
