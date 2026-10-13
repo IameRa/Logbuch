@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Zug-Logbuch</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
@@ -63,6 +65,22 @@ button.leise:hover{background:var(--papier)}
 .kat-kopf{margin:44px 0 14px;padding-top:22px;border-top:2px solid var(--linie)}
 .kat-info{color:var(--grau);margin:4px 0 0;font-size:.92rem}
 footer{max-width:1040px;margin:0 auto;padding:18px 16px 36px;color:var(--grau);font-size:.8rem}
+.kartenblock{margin-top:34px}
+#kartebox{height:380px;border-radius:14px;margin-top:12px;position:relative;z-index:0;box-shadow:0 1px 2px rgba(17,27,39,.06),0 8px 24px rgba(17,27,39,.08)}
+.fotobox{display:flex;flex-direction:column;gap:8px}
+.lbl{font-size:.82rem;font-weight:600;color:var(--grau)}
+.aktionen{display:flex;gap:8px;flex-wrap:wrap}
+.minis{display:flex;gap:10px;flex-wrap:wrap}
+.m{position:relative}
+.m img{width:84px;height:60px;object-fit:cover;border-radius:8px;display:block;border:1px solid var(--linie)}
+.m button,.m button:hover{position:absolute;top:-7px;right:-7px;width:22px;height:22px;padding:0;border-radius:50%;background:var(--text);line-height:1;font-size:15px}
+.mini{display:flex;gap:6px;padding:6px 8px;overflow-x:auto;background:#f4f6f8}
+.karte .mini img{width:56px;height:40px;aspect-ratio:auto;object-fit:cover;border-radius:6px;cursor:pointer;flex:none}
+.aktion{display:flex;gap:8px;padding:0 16px 16px;flex-wrap:wrap}
+.kamera{position:fixed;inset:0;background:#000;z-index:3000;display:flex;flex-direction:column}
+.kamera[hidden]{display:none}
+.kamera video{flex:1;min-height:0;width:100%;object-fit:contain}
+.kamleiste{display:flex;gap:12px;align-items:center;justify-content:center;padding:14px;background:var(--nacht);color:#fff}
 @media (prefers-reduced-motion:reduce){.karte.klick{transition:none}}
 </style>
 </head>
@@ -96,9 +114,18 @@ footer{max-width:1040px;margin:0 auto;padding:18px 16px 36px;color:var(--grau);f
     <label>Datum und Uhrzeit
       <input id="zeit" type="datetime-local" required>
     </label>
-    <label>Foto vom Zug
-      <input id="foto" type="file" accept="image/*">
-    </label>
+    <div class="breit fotobox">
+      <span class="lbl">Fotos und Standort</span>
+      <div class="aktionen">
+        <button type="button" class="leise" id="kamBtn">Kamera öffnen</button>
+        <button type="button" class="leise" id="galBtn">Aus Galerie wählen</button>
+        <button type="button" class="leise" id="posBtn">Standort holen</button>
+      </div>
+      <input id="foto" type="file" accept="image/*" multiple hidden>
+      <input id="fotoCam" type="file" accept="image/*" capture="environment" hidden>
+      <div class="minis" id="minis"></div>
+      <span class="kat-info" id="posInfo" role="status"></span>
+    </div>
     <label>oder Bild-Link
       <input id="url" type="url" placeholder="https://…">
     </label>
@@ -110,6 +137,12 @@ footer{max-width:1040px;margin:0 auto;padding:18px 16px 36px;color:var(--grau);f
       <button type="submit">Zug speichern</button>
     </div>
   </form>
+
+  <section class="kartenblock">
+    <h2>Karte</h2>
+    <p class="kat-info" id="kartenInfo"></p>
+    <div id="kartebox"></div>
+  </section>
 
   <div class="leiste">
     <h2>Meine Sichtungen</h2>
@@ -128,6 +161,15 @@ footer{max-width:1040px;margin:0 auto;padding:18px 16px 36px;color:var(--grau);f
   <div class="liste" id="katalog"></div>
 </main>
 <footer>Bilder: Wikipedia / Wikimedia Commons (Lizenzen auf der jeweiligen Bildseite), Internet nötig. Die Daten sind Richtwerte und können je nach Unterbauart abweichen.</footer>
+
+<div id="kamera" class="kamera" hidden>
+  <video id="video" playsinline autoplay muted></video>
+  <div class="kamleiste">
+    <span id="kamZahl">0 Fotos</span>
+    <button type="button" id="kamKnipp">Aufnehmen</button>
+    <button type="button" class="leise" id="kamZu">Fertig</button>
+  </div>
+</div>
 
 <script>
 const KEY = "zuglogbuch.v1";
@@ -157,7 +199,8 @@ const BILDKEY = "zuglogbuch.bilder.v1";
 let bilder = {};
 try { bilder = JSON.parse(localStorage.getItem(BILDKEY)) || {}; } catch (e) { bilder = {}; }
 const modellBild = id => bilder[id] || "";
-const bildFuer = z => z.bild || modellBild(z.modell) || ersatzbild(z.typ);
+const fotosVon = z => z.fotos || (z.bild ? [z.bild] : []);
+const bildFuer = z => fotosVon(z)[0] || modellBild(z.modell) || ersatzbild(z.typ);
 
 function bilderLaden() {
   const offen = MODELLE.filter(m => !bilder[m.id]);
@@ -243,11 +286,11 @@ function zeigen() {
     (!art || z.typ === art) &&
     (z.nummer + " " + z.ort + " " + z.notiz + " " + ((modell(z.modell) || {}).name || "")).toLowerCase().includes(q)
   ).sort((a, b) => b.zeit.localeCompare(a.zeit));
+  letzteTreffer = treffer;
 
   $("liste").innerHTML = treffer.length ? treffer.map(z => `
     <article class="karte" style="--c:${farben[z.typ] || '#66717d'}">
-      <img src="${bildFuer(z)}" alt="${esc(z.nummer)}" loading="lazy"
-           onerror="this.onerror=null;this.src='${ersatzbild(z.typ)}'">
+      ${galerie(z)}
       <div class="inhalt">
         <span class="typ">${esc(z.typ)}</span>
         <h3>${esc(z.nummer)}</h3>
@@ -255,7 +298,7 @@ function zeigen() {
         <div class="meta">${esc(z.ort || "Ort unbekannt")} · ${new Date(z.zeit).toLocaleString("de-DE", {dateStyle:"medium", timeStyle:"short"})}</div>
         ${z.notiz ? `<p class="notiz">${esc(z.notiz)}</p>` : ""}
       </div>
-      <button class="leise" onclick="loeschen('${z.id}')">Löschen</button>
+      <div class="aktion"><button class="leise" onclick="loeschen('${z.id}')">Löschen</button>${z.pos ? `<button class="leise" onclick="aufKarte('${z.id}')">Auf Karte</button>` : ""}</div>
     </article>`).join("")
     : `<div class="leer">${zuege.length ? "Keine Treffer für diese Suche." : "Noch kein Zug im Logbuch. Trag oben deinen ersten ein."}</div>`;
 
@@ -265,7 +308,17 @@ function zeigen() {
     `<div class="stat"><b>${zuege.length}</b><span>Sichtungen</span></div>` +
     `<div class="stat"><b>${nummern.size}</b><span>verschiedene Züge</span></div>` +
     `<div class="stat"><b>${orte.size}</b><span>Orte</span></div>`;
+  karteZeigen();
 }
+
+const attr = u => String(u).replace(/"/g, "&quot;");
+function galerie(z) {
+  const f = fotosVon(z), fall = ersatzbild(z.typ);
+  const gross = `<img class="gross" src="${attr(bildFuer(z))}" alt="${esc(z.nummer)}" loading="lazy" onerror="this.onerror=null;this.src='${fall}'">`;
+  const minis = f.length > 1 ? `<div class="mini">${f.map(u => `<img src="${attr(u)}" alt="" loading="lazy" onclick="tausche(this)">`).join("")}</div>` : "";
+  return `<div class="galerie">${gross}${minis}</div>`;
+}
+function tausche(el) { el.closest(".galerie").querySelector(".gross").src = el.src; }
 
 function loeschen(id) {
   if (!confirm("Diesen Eintrag löschen?")) return;
@@ -282,11 +335,11 @@ function verkleinern(datei) {
       const img = new Image();
       img.onerror = fehler;
       img.onload = () => {
-        const s = Math.min(1, 900 / Math.max(img.width, img.height));
+        const s = Math.min(1, 720 / Math.max(img.width, img.height));
         const c = document.createElement("canvas");
         c.width = img.width * s; c.height = img.height * s;
         c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-        ok(c.toDataURL("image/jpeg", .75));
+        ok(c.toDataURL("image/jpeg", .7));
       };
       img.src = r.result;
     };
@@ -294,17 +347,116 @@ function verkleinern(datei) {
   });
 }
 
-let aktuellesFoto = "";
+let aktuelleFotos = [], pos = null, letzteTreffer = [];
 
+function minisZeigen() {
+  $("minis").innerHTML = aktuelleFotos.map((u, i) =>
+    `<span class="m"><img src="${u}" alt="Foto ${i + 1}"><button type="button" aria-label="Foto entfernen" onclick="fotoWeg(${i})">×</button></span>`).join("");
+}
+function fotoWeg(i) { aktuelleFotos.splice(i, 1); minisZeigen(); vorschauAktualisieren(); }
 function vorschauAktualisieren() {
-  $("vorschau").src = aktuellesFoto || $("url").value.trim() || modellBild($("modell").value) || ersatzbild($("typ").value);
+  $("vorschau").src = aktuelleFotos[0] || $("url").value.trim() || modellBild($("modell").value) || ersatzbild($("typ").value);
+}
+async function dateienHinzu(liste) {
+  for (const f of liste) {
+    const u = await verkleinern(f).catch(() => "");
+    if (u) aktuelleFotos.push(u);
+  }
+  minisZeigen(); vorschauAktualisieren();
+}
+$("galBtn").onclick = () => $("foto").click();
+[$("foto"), $("fotoCam")].forEach(el => el.addEventListener("change", async e => {
+  await dateienHinzu([...e.target.files]); e.target.value = "";
+}));
+
+// Kamera direkt in der Seite
+let strom = null;
+async function kameraOeffnen() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { $("fotoCam").click(); return; }
+  try {
+    strom = await navigator.mediaDevices.getUserMedia({video: {facingMode: {ideal: "environment"}}, audio: false});
+  } catch (e) { $("fotoCam").click(); return; }
+  $("video").srcObject = strom;
+  $("kamera").hidden = false;
+  kamZahl();
+}
+function kameraSchliessen() {
+  if (strom) strom.getTracks().forEach(t => t.stop());
+  strom = null; $("video").srcObject = null; $("kamera").hidden = true;
+  minisZeigen(); vorschauAktualisieren();
+}
+function kamZahl() { $("kamZahl").textContent = aktuelleFotos.length + (aktuelleFotos.length === 1 ? " Foto" : " Fotos"); }
+$("kamBtn").onclick = kameraOeffnen;
+$("kamZu").onclick = kameraSchliessen;
+$("kamKnipp").onclick = () => {
+  const v = $("video");
+  if (!v.videoWidth) return;
+  const k = Math.min(1, 720 / Math.max(v.videoWidth, v.videoHeight));
+  const c = document.createElement("canvas");
+  c.width = v.videoWidth * k; c.height = v.videoHeight * k;
+  c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
+  aktuelleFotos.push(c.toDataURL("image/jpeg", .7));
+  kamZahl();
+};
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("kamera").hidden) kameraSchliessen(); });
+
+// Standort
+$("posBtn").onclick = () => {
+  const info = $("posInfo");
+  if (!navigator.geolocation) { info.textContent = "Dieses Gerät kann den Standort nicht abfragen."; return; }
+  info.textContent = "Standort wird gesucht …";
+  navigator.geolocation.getCurrentPosition(p => {
+    pos = {lat: +p.coords.latitude.toFixed(5), lon: +p.coords.longitude.toFixed(5)};
+    info.textContent = "Standort gespeichert (" + pos.lat + ", " + pos.lon + ")";
+    if (!$("ort").value.trim()) ortFinden(pos);
+  }, err => {
+    info.textContent = err.code === 1
+      ? "Standortzugriff abgelehnt. Erlaube ihn in den Browser-Einstellungen."
+      : "Standort nicht verfügbar. Versuche es draußen oder mit Internet noch einmal.";
+  }, {enableHighAccuracy: true, timeout: 15000, maximumAge: 30000});
+};
+function ortFinden(q) {
+  fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=14&accept-language=de&lat=${q.lat}&lon=${q.lon}`)
+    .then(r => r.json()).then(j => {
+      const a = j.address || {};
+      const n = a.city || a.town || a.village || a.suburb || a.municipality || "";
+      if (n && !$("ort").value.trim()) $("ort").value = n;
+    }).catch(() => {});
 }
 
-$("foto").addEventListener("change", async e => {
-  const f = e.target.files[0];
-  aktuellesFoto = f ? await verkleinern(f).catch(() => "") : "";
-  vorschauAktualisieren();
-});
+// Karte
+let karte = null, markerEbene = null, letzterSchluessel = "";
+const marker = {};
+function karteZeigen() {
+  if (typeof L === "undefined") { $("kartenInfo").textContent = "Die Karte konnte nicht geladen werden. Prüfe die Internetverbindung."; return; }
+  if (!karte) {
+    karte = L.map("kartebox").setView([51.2, 10.4], 6);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, attribution: "© OpenStreetMap-Mitwirkende"}).addTo(karte);
+    markerEbene = L.layerGroup().addTo(karte);
+  }
+  markerEbene.clearLayers();
+  Object.keys(marker).forEach(k => delete marker[k]);
+  const mitPos = letzteTreffer.filter(z => z.pos);
+  mitPos.forEach(z => {
+    const m = L.circleMarker([z.pos.lat, z.pos.lon], {radius: 9, color: "#fff", weight: 2, fillColor: farben[z.typ] || "#66717d", fillOpacity: 1}).addTo(markerEbene);
+    m.bindPopup(`<b>${esc(z.nummer)}</b><br>${esc(z.ort || "")}<br>${new Date(z.zeit).toLocaleString("de-DE", {dateStyle: "medium", timeStyle: "short"})}<br><img src="${attr(bildFuer(z))}" alt="" style="width:160px;border-radius:6px;margin-top:6px">`);
+    marker[z.id] = m;
+  });
+  $("kartenInfo").textContent = mitPos.length
+    ? mitPos.length + (mitPos.length === 1 ? " Sichtung" : " Sichtungen") + " mit Standort"
+    : "Noch keine Sichtung mit Standort. Tippe beim Eintragen auf „Standort holen“.";
+  const schluessel = mitPos.map(z => z.id).join();
+  if (mitPos.length && schluessel !== letzterSchluessel) {
+    karte.fitBounds(mitPos.map(z => [z.pos.lat, z.pos.lon]), {padding: [30, 30], maxZoom: 15});
+  }
+  letzterSchluessel = schluessel;
+}
+function aufKarte(id) {
+  $("kartebox").scrollIntoView({behavior: "smooth", block: "center"});
+  const m = marker[id];
+  if (m && karte) { karte.setView(m.getLatLng(), 15); m.openPopup(); }
+}
+
 $("url").addEventListener("input", vorschauAktualisieren);
 $("typ").addEventListener("change", vorschauAktualisieren);
 $("modell").addEventListener("change", () => modellWaehlen($("modell").value));
@@ -326,13 +478,14 @@ $("form").addEventListener("submit", e => {
     ort: $("ort").value.trim(),
     zeit: $("zeit").value,
     notiz: $("notiz").value.trim(),
-    bild: aktuellesFoto || $("url").value.trim()
+    fotos: aktuelleFotos.concat($("url").value.trim() ? [$("url").value.trim()] : []),
+    pos: pos
   });
   speichern();
   const ort = $("ort").value, typ = $("typ").value, mod = $("modell").value;
   e.target.reset();
   $("ort").value = ort; $("typ").value = typ; $("modell").value = mod; // Ort und Art bleiben für den nächsten Zug stehen
-  aktuellesFoto = ""; zeitSetzen(); vorschauAktualisieren(); zeigen();
+  aktuelleFotos = []; pos = null; $("posInfo").textContent = ""; minisZeigen(); zeitSetzen(); vorschauAktualisieren(); zeigen();
 });
 
 function zeitSetzen() {
