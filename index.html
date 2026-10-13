@@ -207,6 +207,32 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
 .ln-sub{color:var(--grau);font-size:.8rem;font-weight:400}
 .ln-zeile button{padding:5px 12px;font-size:.8rem}
 @media (max-width:520px){.ln-zeile{grid-template-columns:auto auto 1fr}.ln-zeile button{grid-column:2/-1;justify-self:start}}
+.funktionen{overflow-x:auto}
+.funktionen button,.funktionen button:hover{flex:1 0 62px}
+.fz-liste{display:grid;gap:8px;margin-top:10px}
+.fz{--c:#66717d;background:var(--weiss);border-radius:12px;border-left:5px solid var(--c);overflow:hidden}
+.fz summary{list-style:none;cursor:pointer;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center}
+.fz summary::-webkit-details-marker{display:none}
+.fz .fz-name{font-weight:600;overflow-wrap:anywhere}
+.fz .fz-zahl{font:700 1.15rem/1 var(--kopf);font-variant-numeric:tabular-nums}
+.fz .fz-balken{grid-column:1/-1;height:6px;background:var(--linie);border-radius:999px;overflow:hidden}
+.fz .fz-balken i{display:block;height:100%;background:var(--amber)}
+.fz-inhalt{padding:2px 14px 14px}
+.fz-gitter{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:5px;margin:10px 0}
+.fz-z,.fz-z:hover{padding:6px 0;border-radius:8px;background:var(--papier);color:var(--grau);font-size:.78rem;font-weight:600;border:1px solid var(--linie);font-variant-numeric:tabular-nums}
+.fz-z.m,.fz-z.m:hover{background:var(--amber);color:var(--nacht);border-color:var(--amber)}
+.fz-z.g,.fz-z.g:hover{background:var(--rot);color:#fff;border-color:var(--rot)}
+.fz-chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.fz-chips .fz-z{padding:5px 12px}
+.fz-add{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.fz-add input{flex:1 1 150px;border-radius:999px;padding-inline:16px}
+.fz-add button{padding:8px 16px;font-size:.85rem}
+.filterleiste #fzSuche{grid-column:1/-1}
+#nrHinweis{grid-column:1/-1;margin:-4px 0 0}
+#nrHinweis:empty{display:none}
+.eigen{background:var(--weiss);border-radius:12px;padding:12px 14px;margin:12px 0}
+.eigen summary{cursor:pointer;font-weight:600}
+.eigen .raster{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:10px}
 </style>
 </head>
 <body>
@@ -228,6 +254,7 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
     <label>Zugnummer / Kennung
       <input id="nummer" required placeholder="z. B. ICE 1601 oder 218 123">
     </label>
+    <span class="kat-info" id="nrHinweis" role="status"></span>
     <label>Art
       <select id="typ">
         <option>ICE</option><option>IC/EC</option><option>Regionalzug</option><option>S-Bahn</option>
@@ -287,6 +314,23 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
       <button type="button" class="leise" id="lnEinzelWeg">Hervorhebung entfernen</button>
     </div>
     <div id="kartebox"></div>
+  </section>
+
+  <section class="tab" id="tab-fahrzeuge">
+    <div class="leiste" style="margin-top:0">
+      <h2>Fahrzeuge</h2>
+      <button class="leise" id="fzExport" type="button">Sichern</button>
+      <button class="leise" id="fzImport" type="button">Laden</button>
+      <input id="fzDatei" type="file" accept="application/json" hidden>
+    </div>
+    <p class="kat-info">Hier zählt jede einzelne Lok und jeder Triebzug. Bei Baureihen mit Nummern wie „143 017“ erkennt die App die Nummer automatisch aus dem Logbuch. Bei Triebzügen ohne Baureihennummer (z. B. Stadler KISS oder FLIRT) wählst du beim Eintragen das Modell und gibst die Nummer an, die am Zug steht. Dann zählt die App pro Modell. Einen Bestand (erste bis letzte Nummer) kennt die App nur bei BR 101 und BR 111, alle anderen legst du selbst fest.</p>
+    <div class="filterleiste">
+      <input id="fzSuche" type="search" placeholder="Baureihe suchen, z. B. 143 oder ICE" aria-label="Baureihen durchsuchen">
+      <select id="fzArt" aria-label="Art"><option value="">Alle Arten</option></select>
+      <select id="fzStatus" aria-label="Status"><option value="">Alle</option><option value="ja">Mit Sichtung</option><option value="nein">Noch nichts gesehen</option></select>
+    </div>
+    <p class="kat-info" id="fzZahl" role="status"></p>
+    <div class="fz-liste" id="fzListe"></div>
   </section>
 
   <section class="tab" id="tab-linien">
@@ -378,7 +422,20 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
     <input id="katSuche" type="search" placeholder="Modell suchen (Name, Hersteller, Art)" aria-label="Katalog durchsuchen">
     <select id="katFilter" aria-label="Katalog nach Art filtern"><option value="">Alle Arten</option></select>
   </div>
-  <p class="kat-info" id="katZahl" role="status"></p></div>
+  <p class="kat-info" id="katZahl" role="status"></p>
+  <details class="eigen">
+    <summary>Eigenes Modell hinzufügen</summary>
+    <p class="kat-info">Fehlt ein Zug im Katalog? Lege ihn hier selbst an. Er erscheint dann auch bei „Eintragen“ und im Reiter „Fahrzeuge“.</p>
+    <div class="raster">
+      <label>Name<input id="emName" placeholder="z. B. Alstom Coradia Stream"></label>
+      <label>Art<select id="emTyp"></select></label>
+      <label>Bauart<input id="emArt" placeholder="z. B. Elektrotriebzug"></label>
+      <label>Hersteller<input id="emHersteller" placeholder="z. B. Alstom"></label>
+      <label>Höchstgeschwindigkeit<input id="emVmax" placeholder="z. B. 160 km/h"></label>
+      <label>Bild-Link (optional)<input id="emBild" type="url" placeholder="https://…"></label>
+    </div>
+    <button type="button" id="emSpeichern" style="margin-top:12px">Modell speichern</button>
+  </details></div>
   <div class="liste" id="katalog"></div>
   </section>
 </main>
@@ -388,6 +445,7 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
   <button type="button" data-tab="neu"><span class="ico" aria-hidden="true">✏️</span>Eintragen</button>
   <button type="button" data-tab="liste"><span class="ico" aria-hidden="true">📖</span>Logbuch</button>
   <button type="button" data-tab="galerie"><span class="ico" aria-hidden="true">🖼️</span>Galerie</button>
+  <button type="button" data-tab="fahrzeuge"><span class="ico" aria-hidden="true">🚂</span>Fahrzeuge</button>
   <button type="button" data-tab="karte"><span class="ico" aria-hidden="true">🗺️</span>Karte</button>
   <button type="button" data-tab="linien"><span class="ico" aria-hidden="true">🛤️</span>Linien</button>
   <button type="button" data-tab="bahnhof"><span class="ico" aria-hidden="true">🚉</span>Bahnhof</button>
@@ -530,9 +588,18 @@ const MODELLE = [
   // Sonstiges
   {id:"vt98",name:"Schienenbus (VT 95/98)",typ:"Sonstiges",wiki:"Schienenbus",art:"Dieseltriebwagen",ab:"1950er",vmax:"90 km/h",hersteller:"Uerdingen u. a."},
   {id:"transrapid",name:"Transrapid",typ:"Sonstiges",wiki:"Transrapid",art:"Magnetschwebebahn",vmax:"bis 500 km/h"},
-  {id:"schwebebahn",name:"Wuppertaler Schwebebahn",typ:"Sonstiges",wiki:"Wuppertaler Schwebebahn",art:"Hängebahn",ab:"1901",vmax:"60 km/h"}
+  {id:"schwebebahn",name:"Wuppertaler Schwebebahn",typ:"Sonstiges",wiki:"Wuppertaler Schwebebahn",art:"Hängebahn",ab:"1901",vmax:"60 km/h"},
+  {id:"kiss",name:"Stadler KISS",typ:"Regionalzug",wiki:"Stadler KISS",art:"Doppelstock-Triebzug",vmax:"160 km/h",laenge:"75 bis 200 m",hersteller:"Stadler"},
+  {id:"flirtakku",name:"Stadler FLIRT Akku",typ:"Regionalzug",wiki:"Stadler FLIRT Akku",art:"Akku-Triebzug (zweiteilig)",vmax:"160 km/h",hersteller:"Stadler"},
+  {id:"gtw",name:"Stadler GTW",typ:"Regionalzug",wiki:"Stadler GTW",art:"Gelenktriebwagen",hersteller:"Stadler"},
+  {id:"desiroml",name:"Siemens Desiro ML",typ:"Regionalzug",wiki:"Siemens Desiro ML",art:"Elektrotriebzug",vmax:"160 km/h",hersteller:"Siemens"}
 ];
 // Nach Art sortieren (Reihenfolge innerhalb der Art bleibt erhalten)
+MODELLE.sort((a, b) => Object.keys(farben).indexOf(a.typ) - Object.keys(farben).indexOf(b.typ));
+const EIGENE_KEY = "zuglogbuch.modelle.v1";
+let eigeneModelle = [];
+try { eigeneModelle = (JSON.parse(localStorage.getItem(EIGENE_KEY)) || []).filter(m => m && m.id && m.name && farben[m.typ]); } catch (e) { eigeneModelle = []; }
+eigeneModelle.forEach(m => MODELLE.push(m));
 MODELLE.sort((a, b) => Object.keys(farben).indexOf(a.typ) - Object.keys(farben).indexOf(b.typ));
 const modell = id => MODELLE.find(m => m.id === id);
 
@@ -540,7 +607,7 @@ const modell = id => MODELLE.find(m => m.id === id);
 const BILDKEY = "zuglogbuch.bilder.v1";
 let bilder = {};
 try { bilder = JSON.parse(localStorage.getItem(BILDKEY)) || {}; } catch (e) { bilder = {}; }
-const modellBild = id => bilder[id] || "";
+const modellBild = id => bilder[id] || (modell(id) || {}).bild || "";
 // Foto-Speicher: Fotos liegen nur lokal im Browser (IndexedDB), im Logbuch steht ein Verweis "idb:…"
 const fotoCache = new Map();
 let aktuelleFotos = []; // Fotos im Formular (Verweise)
@@ -594,7 +661,7 @@ zuege = zuege.map(ohneFotos);
 speichern(); // entfernt auch Fotos, die eine frühere Version gespeichert hat
 
 function bilderLaden() {
-  const offen = MODELLE.filter(m => !bilder[m.id]);
+  const offen = MODELLE.filter(m => m.wiki && !bilder[m.id]);
   if (!offen.length) return;
   const status = t => { $("status").textContent = t; };
   const pakete = [];
@@ -649,7 +716,7 @@ function katalogZeigen() {
     <article class="karte klick" tabindex="0" data-id="${m.id}" style="--c:${farben[m.typ] || '#66717d'}">
       <img src="${modellBild(m.id) || ersatzbild(m.typ)}" alt="${esc(m.name)}" loading="lazy"
            onerror="this.onerror=null;this.src='${ersatzbild(m.typ)}'">
-      <div class="inhalt"><span class="typ">${esc(m.typ)}</span><h3>${esc(m.name)}</h3>${datenListe(m)}</div>
+      <div class="inhalt"><span class="typ">${esc(m.typ)}</span><h3>${esc(m.name)}</h3>${datenListe(m)}${m.eigen ? `<button type="button" class="leise" data-del="${m.id}" style="margin-top:10px">Eigenes Modell löschen</button>` : ""}</div>
     </article>`).join("");
 }
 function modellWaehlen(id) {
@@ -735,7 +802,7 @@ function zeigen() {
   $("stats").innerHTML =
     `<div class="stat"><b>${zuege.length}</b><span>Sichtungen</span></div>` +
     `<div class="stat"><b>${nummern.size}</b><span>verschiedene Züge</span></div>` +
-    `<div class="stat"><b>${orte.size}</b><span>Orte</span></div>` + linienStatHtml();
+    `<div class="stat"><b>${orte.size}</b><span>Orte</span></div>` + linienStatHtml() + fzStatHtml();
   karteZeigen();
   galerieZeigen();
 }
@@ -913,6 +980,8 @@ $("url").addEventListener("input", vorschauAktualisieren);
 $("typ").addEventListener("change", vorschauAktualisieren);
 $("modell").addEventListener("change", () => modellWaehlen($("modell").value));
 $("katalog").addEventListener("click", e => {
+  const del = e.target.closest("[data-del]");
+  if (del) { modellLoeschen(del.dataset.del); return; }
   const k = e.target.closest("[data-id]");
   if (k) { modellWaehlen(k.dataset.id); tabZeigen("neu"); $("nummer").focus({preventScroll: true}); }
 });
@@ -1109,11 +1178,16 @@ Object.keys(farben).forEach(t => $("filter").insertAdjacentHTML("beforeend", `<o
 $("suche").addEventListener("input", zeigen);
 ["filter", "ortFilter", "zeitFilter", "sort"].forEach(i => $(i).addEventListener("change", zeigen));
 
-Object.keys(farben).forEach(t => {
-  const ms = MODELLE.filter(m => m.typ === t);
-  if (ms.length) $("modell").insertAdjacentHTML("beforeend", `<optgroup label="${t}">` + ms.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("") + "</optgroup>");
-  $("katFilter").insertAdjacentHTML("beforeend", `<option>${t}</option>`);
-});
+function modellListenFuellen() {
+  const aktuell = $("modell").value;
+  $("modell").innerHTML = '<option value="">Anderes / unbekannt</option>' + Object.keys(farben).map(t => {
+    const ms = MODELLE.filter(m => m.typ === t);
+    return ms.length ? `<optgroup label="${t}">` + ms.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("") + "</optgroup>" : "";
+  }).join("");
+  $("modell").value = aktuell;
+}
+modellListenFuellen();
+Object.keys(farben).forEach(t => $("katFilter").insertAdjacentHTML("beforeend", `<option>${t}</option>`));
 $("katSuche").addEventListener("input", katalogZeigen);
 $("katFilter").addEventListener("change", katalogZeigen);
 // Abfahrten und Ankünfte am Bahnhof (Daten: Transitous / MOTIS, kostenlos, ohne Schlüssel, mit Echtzeit wo verfügbar)
@@ -1656,6 +1730,189 @@ try {
 } catch (e) {}
 lnZeigen();
 
+// ===== Fahrzeuge einzeln abhaken: Baureihen mit Nummer (143 017) und Modelle mit freier Nummer (z. B. KISS) =====
+const FZ_KEY = "zuglogbuch.fahrzeuge.v1";
+let fzDaten = {}; // Schlüssel -> {man: {Nummer: Zeit}, von, bis}; Schlüssel "143" = Baureihe, "m:kiss" = Modell mit freier Nummer
+try { fzDaten = JSON.parse(localStorage.getItem(FZ_KEY)) || {}; } catch (e) { fzDaten = {}; }
+const fzSpeichern = () => { try { localStorage.setItem(FZ_KEY, JSON.stringify(fzDaten)); } catch (e) { toast("Speicher voll: Die Haken konnten nicht gesichert werden."); } };
+const FZ_FLOTTE = {"101": [1, 145], "111": [1, 227]}; // nur Bestände, die lückenlos nummeriert sind
+const KL_EXTRA = {ice1: ["401"], ice2: ["402"], ice3: ["403", "406"], ice3neo: ["408"], velarod: ["407"], ice4: ["412"], icet: ["411", "415"], icetd: ["605"], v200: ["220"]};
+const KL_MODELL = {};
+MODELLE.forEach(m => { (KL_EXTRA[m.id] || (/^br\d{2,3}$/.test(m.id) ? [m.id.slice(2)] : [])).forEach(k => { KL_MODELL[k] = m; }); });
+const KL_HAT = new Set(Object.values(KL_MODELL).map(m => m.id));
+const modellHatKl = m => KL_HAT.has(m.id);
+const fzPad = n => String(n).padStart(3, "0");
+const fzFreiNr = t => { const d = String(t).match(/(^|\D)(\d{3})[\s.\-]?(\d{3})(?!\d)/); return d ? d[2] + " " + d[3] : String(t).trim().replace(/\s+/g, " ").toUpperCase(); };
+
+function fzParse(z) { // "143 017-2" -> {kl: "143", nr: 17}; Modell ohne Baureihennummer -> {kl: "m:kiss", nr: "445 134", frei: true}
+  const m0 = z.modell ? modell(z.modell) : null;
+  const t = String(z.nummer || "");
+  if (m0 && !modellHatKl(m0)) { const nr = fzFreiNr(t); return nr ? {kl: "m:" + m0.id, nr, frei: true} : null; }
+  let m = z.typ === "Dampflok" ? t.match(/(^|\D)(\d{2})[\s.]?(\d{3,4})(?!\d)/) : t.match(/(^|\D)(\d{3})[\s.\-]?(\d{3})(?!\d)/);
+  if (!m) { const d = t.match(/^\s*(\d{2})[\s.]?(\d{3,4})\s*$/); if (d && KL_MODELL[d[1]] && KL_MODELL[d[1]].typ === "Dampflok") m = [d[0], "", d[1], d[2]]; }
+  return m ? {kl: m[2], nr: parseInt(m[3], 10)} : null;
+}
+function fzAuto() { // aus dem Logbuch: Schlüssel -> {Nummer: frühester Zeitpunkt}
+  const a = {};
+  zuege.forEach(z => { const p = fzParse(z); if (!p) return; const o = a[p.kl] || (a[p.kl] = {}); if (!o[p.nr] || z.zeit < o[p.nr]) o[p.nr] = z.zeit; });
+  return a;
+}
+const fzMan = kl => (fzDaten[kl] && fzDaten[kl].man) || {};
+const fzRange = kl => (fzDaten[kl] && fzDaten[kl].von) ? [fzDaten[kl].von, fzDaten[kl].bis] : (FZ_FLOTTE[kl] || null);
+function fzAnzahl() {
+  const a = fzAuto(), kls = new Set(Object.keys(a).concat(Object.keys(fzDaten)));
+  let n = 0;
+  kls.forEach(kl => { n += new Set(Object.keys(a[kl] || {}).concat(Object.keys(fzMan(kl)))).size; });
+  return n;
+}
+const fzStatHtml = () => `<div class="stat" id="statFz"><b>${fzAnzahl()}</b><span>Fahrzeuge gesehen</span></div>`;
+const fzStatAktual = () => { const el = $("statFz"); if (el) el.outerHTML = fzStatHtml(); };
+
+let fzOffen = new Set();
+function fzInhalt(kl, g, man, rg, frei) {
+  const alle = [...new Set(Object.keys(g).concat(Object.keys(man)))].sort((a, b) => frei ? a.localeCompare(b, "de", {numeric: true}) : a - b);
+  const lab = n => frei ? esc(n) : fzPad(n);
+  const zelle = n => `<button type="button" class="fz-z ${g[n] ? "g" : "m"}" data-kl="${lnA(kl)}" data-n="${lnA(n)}">${lab(n)}</button>`;
+  let h = "";
+  if (rg) {
+    let z = "";
+    for (let n = rg[0]; n <= rg[1]; n++) z += `<button type="button" class="fz-z ${g[n] ? "g" : man[n] ? "m" : ""}" data-kl="${kl}" data-n="${n}">${fzPad(n)}</button>`;
+    h += `<div class="kat-info">Tippe auf eine Nummer zum Abhaken. Rot: aus dem Logbuch, gelb: von Hand.</div><div class="fz-gitter">${z}</div>`;
+    const aus = alle.filter(n => +n < rg[0] || +n > rg[1]);
+    if (aus.length) h += `<div class="kat-info">Außerhalb des Bestands:</div><div class="fz-chips">${aus.map(zelle).join("")}</div>`;
+  } else {
+    h += alle.length ? `<div class="fz-chips">${alle.map(zelle).join("")}</div>` : '<div class="kat-info" style="margin-top:8px">Noch kein Fahrzeug gesehen.</div>';
+  }
+  return h + `<div class="fz-add">${frei
+    ? `<input type="text" maxlength="30" placeholder="Fahrzeugnummer, z. B. 445 134" aria-label="Fahrzeugnummer abhaken" data-eing="${lnA(kl)}">`
+    : `<input type="number" min="1" max="9999" inputmode="numeric" placeholder="Nummer abhaken, z. B. 17" aria-label="Nummer abhaken" data-eing="${kl}">`}
+    <button type="button" class="leise" data-add="${lnA(kl)}">Abhaken</button>${frei ? "" : `<button type="button" class="leise" data-bestand="${kl}">Bestand festlegen</button>`}</div>`;
+}
+function fzZeigen() {
+  const auto = fzAuto();
+  const kls = new Set(Object.keys(KL_MODELL));
+  MODELLE.forEach(m => { if (!modellHatKl(m)) kls.add("m:" + m.id); });
+  Object.keys(auto).concat(Object.keys(fzDaten)).forEach(k => kls.add(k));
+  const q = norm($("fzSuche").value), art = $("fzArt").value, st = $("fzStatus").value, arten = Object.keys(farben);
+  const zeilen = [...kls].map(kl => {
+    const frei = kl.startsWith("m:"), m = frei ? modell(kl.slice(2)) : KL_MODELL[kl], g = auto[kl] || {}, man = fzMan(kl);
+    const n = new Set(Object.keys(g).concat(Object.keys(man))).size;
+    const name = frei ? (m ? m.name : "Gelöschtes Modell") : m ? m.name + (KL_EXTRA[m.id] && KL_EXTRA[m.id].length > 1 ? " · BR " + kl : "") : "BR " + kl;
+    return {kl, frei, name, typ: m ? m.typ : "Sonstiges", g, man, n, rg: frei ? null : fzRange(kl)};
+  }).filter(r => (!art || r.typ === art) && (!st || (st === "ja") === (r.n > 0)) && (!q || norm(r.name + " " + r.kl).includes(q)))
+    .sort((a, b) => arten.indexOf(a.typ) - arten.indexOf(b.typ) || a.frei - b.frei || (a.frei ? a.name.localeCompare(b.name, "de") : parseInt(a.kl, 10) - parseInt(b.kl, 10)));
+  const mit = zeilen.filter(r => r.n > 0).length;
+  $("fzZahl").textContent = zeilen.length + " Baureihen und Modelle · bei " + mit + " davon hast du schon Fahrzeuge gesehen · insgesamt " + fzAnzahl() + " verschiedene Fahrzeuge";
+  $("fzListe").innerHTML = zeilen.length ? zeilen.map(r => {
+    const gesamt = r.rg ? r.rg[1] - r.rg[0] + 1 : 0;
+    const imBestand = r.rg ? Object.keys(r.g).concat(Object.keys(r.man)).filter((x, i, a) => a.indexOf(x) === i && +x >= r.rg[0] && +x <= r.rg[1]).length : 0;
+    return `<details class="fz" data-kl="${lnA(r.kl)}" style="--c:${farben[r.typ] || "#66717d"}"${fzOffen.has(r.kl) ? " open" : ""}>
+      <summary><span class="fz-name">${esc(r.name)}</span><span class="fz-zahl">${r.n}${gesamt ? " / " + gesamt : ""}</span>
+      ${gesamt ? `<span class="fz-balken"><i style="width:${Math.round(100 * imBestand / gesamt)}%"></i></span>` : ""}</summary>
+      <div class="fz-inhalt">${fzInhalt(r.kl, r.g, r.man, r.rg, r.frei)}</div></details>`;
+  }).join("") : '<div class="leer">Keine Baureihe und kein Modell für diese Filter gefunden.</div>';
+  fzStatAktual();
+}
+function fzToggle(kl, n) {
+  n = String(n);
+  const a = fzAuto();
+  if (a[kl] && a[kl][n]) { toast("Aus dem Logbuch: " + new Date(a[kl][n]).toLocaleDateString("de-DE")); return; }
+  const d = fzDaten[kl] || (fzDaten[kl] = {});
+  d.man = d.man || {};
+  if (d.man[n]) delete d.man[n]; else d.man[n] = new Date().toISOString();
+  if (!Object.keys(d.man).length && !d.von) delete fzDaten[kl];
+  fzSpeichern(); fzZeigen();
+}
+function fzHinzu(kl) {
+  const el = [...document.querySelectorAll("[data-eing]")].find(x => x.dataset.eing === kl), frei = kl.startsWith("m:");
+  let n;
+  if (frei) { n = fzFreiNr((el && el.value) || ""); if (!n) { toast("Bitte eine Fahrzeugnummer eingeben."); return; } }
+  else { n = parseInt(el && el.value, 10); if (!(n >= 1 && n <= 9999)) { toast("Bitte eine Nummer von 1 bis 9999 eingeben."); return; } }
+  const a = fzAuto();
+  if ((a[kl] && a[kl][n]) || fzMan(kl)[n]) { toast(n + " ist schon abgehakt."); return; }
+  fzToggle(kl, n);
+}
+function fzBestand(kl) {
+  const aktuell = fzRange(kl);
+  const t = prompt("Erste und letzte laufende Nummer der BR " + kl + ", z. B. 1-145.\nLeer lassen, um den Bestand zu entfernen.", aktuell ? aktuell[0] + "-" + aktuell[1] : "");
+  if (t === null) return;
+  const d = fzDaten[kl] || (fzDaten[kl] = {});
+  const m = t.match(/^\s*(\d+)\s*[-–]\s*(\d+)\s*$/);
+  if (!t.trim()) { delete d.von; delete d.bis; }
+  else if (m && +m[1] >= 1 && +m[2] >= +m[1] && +m[2] - +m[1] < 2000) { d.von = +m[1]; d.bis = +m[2]; }
+  else { toast("Bitte so eingeben: 1-145"); return; }
+  if (!Object.keys(d.man || {}).length && !d.von) delete fzDaten[kl];
+  fzSpeichern(); fzZeigen();
+}
+$("fzListe").addEventListener("click", e => {
+  const z = e.target.closest(".fz-z");
+  if (z) { fzToggle(z.dataset.kl, z.dataset.n); return; }
+  const a = e.target.closest("[data-add]"); if (a) { fzHinzu(a.dataset.add); return; }
+  const b = e.target.closest("[data-bestand]"); if (b) fzBestand(b.dataset.bestand);
+});
+$("fzListe").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.dataset.eing) { e.preventDefault(); fzHinzu(e.target.dataset.eing); } });
+$("fzListe").addEventListener("toggle", e => { const d = e.target; if (d.dataset && d.dataset.kl) { d.open ? fzOffen.add(d.dataset.kl) : fzOffen.delete(d.dataset.kl); } }, true);
+Object.keys(farben).forEach(t => $("fzArt").insertAdjacentHTML("beforeend", `<option>${t}</option>`));
+$("fzSuche").addEventListener("input", fzZeigen);
+["fzArt", "fzStatus"].forEach(id => $(id).addEventListener("change", fzZeigen));
+$("fzExport").onclick = () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify({zuglogbuch: "fahrzeuge", daten: fzDaten})], {type: "application/json"}));
+  a.download = "zug-logbuch-fahrzeuge.json"; a.click();
+};
+$("fzImport").onclick = () => $("fzDatei").click();
+$("fzDatei").onchange = async e => {
+  try {
+    const dt = JSON.parse(await e.target.files[0].text()).daten;
+    if (!dt || typeof dt !== "object") throw new Error();
+    let n = 0;
+    Object.keys(dt).forEach(kl => {
+      const v = dt[kl]; if (!v || typeof v !== "object") return;
+      const d = fzDaten[kl] || (fzDaten[kl] = {});
+      d.man = d.man || {};
+      Object.keys(v.man || {}).forEach(k => { if (!d.man[k]) { d.man[k] = v.man[k]; n++; } });
+      if (v.von && v.bis && !d.von) { d.von = v.von; d.bis = v.bis; }
+    });
+    fzSpeichern(); fzZeigen(); toast(n + " Fahrzeuge übernommen");
+  } catch (x) { alert("Die Datei konnte nicht gelesen werden."); }
+  e.target.value = "";
+};
+
+// Hinweis beim Eintragen: Baureihe und Nummer erkennen
+function nrHinweis() {
+  const p = fzParse({nummer: $("nummer").value, typ: $("typ").value, modell: $("modell").value}), el = $("nrHinweis");
+  if (!p) { el.textContent = ""; return; }
+  const m = p.frei ? modell(p.kl.slice(2)) : KL_MODELL[p.kl], a = fzAuto();
+  const schon = (a[p.kl] && a[p.kl][p.nr]) || fzMan(p.kl)[p.nr];
+  el.textContent = "Erkannt: " + (m ? m.name : "BR " + p.kl) + ", Nr. " + (p.frei ? p.nr : fzPad(p.nr)) + " · " + (schon ? "schon gesehen" : "neues Fahrzeug!");
+  if (m && !p.frei && !$("modell").value) modellWaehlen(m.id);
+}
+$("nummer").addEventListener("input", nrHinweis);
+$("typ").addEventListener("change", nrHinweis);
+$("modell").addEventListener("change", nrHinweis);
+
+// Eigene Modelle im Katalog
+Object.keys(farben).forEach(t => $("emTyp").insertAdjacentHTML("beforeend", `<option>${t}</option>`));
+const eigeneSpeichern = () => { try { localStorage.setItem(EIGENE_KEY, JSON.stringify(eigeneModelle)); } catch (e) { toast("Speicher voll: Das Modell konnte nicht gesichert werden."); } };
+$("emSpeichern").onclick = () => {
+  const name = $("emName").value.trim();
+  if (!name) { toast("Bitte einen Namen eingeben."); return; }
+  const m = {id: "x" + Date.now().toString(36), name, typ: $("emTyp").value, eigen: true};
+  [["art", "emArt"], ["vmax", "emVmax"], ["hersteller", "emHersteller"], ["bild", "emBild"]].forEach(k => { const v = $(k[1]).value.trim(); if (v) m[k[0]] = v; });
+  eigeneModelle.push(m); MODELLE.push(m);
+  MODELLE.sort((a, b) => Object.keys(farben).indexOf(a.typ) - Object.keys(farben).indexOf(b.typ));
+  eigeneSpeichern(); modellListenFuellen(); katalogZeigen();
+  ["emName", "emArt", "emHersteller", "emVmax", "emBild"].forEach(i => { $(i).value = ""; });
+  toast("Modell gespeichert");
+};
+function modellLoeschen(id) {
+  const m = modell(id);
+  if (!m || !m.eigen || !confirm("„" + m.name + "“ aus dem Katalog löschen? Bestehende Logbucheinträge bleiben erhalten.")) return;
+  eigeneModelle = eigeneModelle.filter(x => x.id !== id);
+  MODELLE.splice(MODELLE.indexOf(m), 1);
+  eigeneSpeichern(); modellListenFuellen(); katalogZeigen(); zeigen();
+}
+
 zeitSetzen(); vorschauAktualisieren(); zeigen(); katalogZeigen(); bilderLaden();
 fotoLaden().then(() => { fotosAufraeumen(); zeigen(); });
 if (bhfZuletzt.length) bhfWaehlen(bhfZuletzt[0]); else bhfChipsZeigen();
@@ -1668,6 +1925,7 @@ function tabZeigen(name) {
   try { history.replaceState(null, "", "#" + name); } catch (e) {}
   window.scrollTo(0, 0);
   if (name === "karte") { karteZeigen(); if (karte) karte.invalidateSize(); letzterSchluessel = ""; karteZeigen(); lnKarteBeiTab(); }
+  if (name === "fahrzeuge") fzZeigen();
 }
 $("funktionen").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) tabZeigen(b.dataset.tab); });
 let toastTimer;
