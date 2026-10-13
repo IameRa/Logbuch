@@ -191,6 +191,22 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
 .dt-eigene{display:flex;gap:6px;flex-wrap:wrap}
 .dt-eigene img{width:72px;height:54px;object-fit:cover;border-radius:6px}
 @media (prefers-reduced-motion:reduce){.karte.klick{transition:none}}
+.ln-leiste{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;align-items:center}
+.ln-leiste select{flex:1 1 220px;border-radius:999px;padding-inline:16px;background:var(--weiss)}
+.ln-schalter{display:flex;gap:10px;align-items:center;font-weight:600;font-size:.92rem;color:var(--text);background:var(--weiss);border-radius:12px;padding:10px 14px;margin:10px 0;flex-direction:row}
+.ln-schalter input{width:20px;height:20px;accent-color:var(--rot);flex:none}
+.ln-fortschritt{height:10px;background:var(--linie);border-radius:999px;overflow:hidden;margin:10px 0 4px}
+.ln-fortschritt i{display:block;height:100%;width:0;background:var(--amber);transition:width .3s}
+.filterleiste #lnSuche{grid-column:1/-1}
+.ln-liste{display:grid;gap:8px;margin-top:10px}
+.ln-zeile{--c:#66717d;display:grid;grid-template-columns:auto auto 1fr auto;gap:10px;align-items:center;background:var(--weiss);border-radius:12px;padding:10px 12px;border-left:5px solid var(--c)}
+.ln-zeile.ok{background:#f1faf4}
+.ln-zeile input{width:22px;height:22px;accent-color:var(--rot)}
+.ln-ref{background:var(--nacht);color:var(--amber);font:700 1rem/1.5 var(--kopf);padding:0 9px;border-radius:6px;min-width:3rem;text-align:center;white-space:nowrap}
+.ln-name{font-weight:600;overflow-wrap:anywhere;min-width:0}
+.ln-sub{color:var(--grau);font-size:.8rem;font-weight:400}
+.ln-zeile button{padding:5px 12px;font-size:.8rem}
+@media (max-width:520px){.ln-zeile{grid-template-columns:auto auto 1fr}.ln-zeile button{grid-column:2/-1;justify-self:start}}
 </style>
 </head>
 <body>
@@ -264,7 +280,38 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
   <section class="kartenblock tab" id="tab-karte">
     <h2>Karte</h2>
     <p class="kat-info" id="kartenInfo"></p>
+    <label class="ln-schalter"><input type="checkbox" class="lnAn"> Abgehakte Linien auf der Karte zeigen</label>
+    <p class="kat-info lnKInfo" role="status"></p>
+    <div class="aktionen" style="margin-bottom:10px">
+      <button type="button" class="leise" id="lnKarteLaden">Linien dieses Ausschnitts laden</button>
+      <button type="button" class="leise" id="lnEinzelWeg">Hervorhebung entfernen</button>
+    </div>
     <div id="kartebox"></div>
+  </section>
+
+  <section class="tab" id="tab-linien">
+    <div class="leiste" style="margin-top:0">
+      <h2>Linien</h2>
+      <button class="leise" id="lnExport" type="button">Sichern</button>
+      <button class="leise" id="lnImport" type="button">Laden</button>
+      <input id="lnDatei" type="file" accept="application/json" hidden>
+    </div>
+    <p class="kat-info">Bahnlinien wie RE 7, S 1 oder ICE 28 aus den Kartendaten von OpenStreetMap. Wähle ein Gebiet, lade die Linien und hake ab, welche du gefahren oder gesehen hast. Die Haken bleiben auf diesem Gerät gespeichert. Die Daten stammen von Freiwilligen und sind nicht überall vollständig.</p>
+    <div class="ln-leiste">
+      <select id="lnRegion" aria-label="Gebiet"></select>
+      <button type="button" id="lnLadenBtn">Linien laden</button>
+    </div>
+    <p class="kat-info" id="lnInfo" role="status"></p>
+    <label class="ln-schalter"><input type="checkbox" class="lnAn"> Abgehakte Linien auf der Karte zeigen</label>
+    <p class="kat-info lnKInfo" role="status"></p>
+    <div class="ln-fortschritt"><i id="lnBalken"></i></div>
+    <p class="kat-info" id="lnZahl"></p>
+    <div class="filterleiste">
+      <input id="lnSuche" type="search" placeholder="Linie suchen: Nummer, Ort, Verkehrsverbund" aria-label="Linien durchsuchen">
+      <select id="lnArt" aria-label="Art"><option value="">Alle Arten</option><option>Fernverkehr</option><option>Regional</option><option>S-Bahn</option></select>
+      <select id="lnStatus" aria-label="Status"><option value="">Alle</option><option value="ja">Abgehakt</option><option value="nein">Noch offen</option></select>
+    </div>
+    <div class="ln-liste" id="lnListe"></div>
   </section>
 
   <section class="bahnhof tab" id="tab-bahnhof">
@@ -335,13 +382,14 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
   <div class="liste" id="katalog"></div>
   </section>
 </main>
-<footer>Bilder: Wikipedia / Wikimedia Commons (Lizenzen auf der jeweiligen Bildseite). Karte: © OpenStreetMap-Mitwirkende (deutsche Beschriftung). Zugdaten: <a href="https://transitous.org/sources/" target="_blank" rel="noopener">Transitous</a> (Datenquellen dort aufgeführt). Internet nötig. Die Daten sind Richtwerte und können je nach Unterbauart abweichen.</footer>
+<footer>Bilder: Wikipedia / Wikimedia Commons (Lizenzen auf der jeweiligen Bildseite). Karte und Linien: © OpenStreetMap-Mitwirkende (Linien über die Overpass-API, deutsche Beschriftung). Zugdaten: <a href="https://transitous.org/sources/" target="_blank" rel="noopener">Transitous</a> (Datenquellen dort aufgeführt). Internet nötig. Die Daten sind Richtwerte und können je nach Unterbauart abweichen.</footer>
 
 <nav class="funktionen" id="funktionen" aria-label="Funktionen">
   <button type="button" data-tab="neu"><span class="ico" aria-hidden="true">✏️</span>Eintragen</button>
   <button type="button" data-tab="liste"><span class="ico" aria-hidden="true">📖</span>Logbuch</button>
   <button type="button" data-tab="galerie"><span class="ico" aria-hidden="true">🖼️</span>Galerie</button>
   <button type="button" data-tab="karte"><span class="ico" aria-hidden="true">🗺️</span>Karte</button>
+  <button type="button" data-tab="linien"><span class="ico" aria-hidden="true">🛤️</span>Linien</button>
   <button type="button" data-tab="bahnhof"><span class="ico" aria-hidden="true">🚉</span>Bahnhof</button>
   <button type="button" data-tab="katalog"><span class="ico" aria-hidden="true">📚</span>Katalog</button>
 </nav>
@@ -687,7 +735,7 @@ function zeigen() {
   $("stats").innerHTML =
     `<div class="stat"><b>${zuege.length}</b><span>Sichtungen</span></div>` +
     `<div class="stat"><b>${nummern.size}</b><span>verschiedene Züge</span></div>` +
-    `<div class="stat"><b>${orte.size}</b><span>Orte</span></div>`;
+    `<div class="stat"><b>${orte.size}</b><span>Orte</span></div>` + linienStatHtml();
   karteZeigen();
   galerieZeigen();
 }
@@ -1379,6 +1427,235 @@ function tafelEintragen(art, i, modellId) {
   toast("Zug übernommen");
 }
 
+// ===== Linien in Deutschland: abhaken und auf der Karte zeigen (Daten: OpenStreetMap über Overpass) =====
+const LN_KEY = "zuglogbuch.linien.v1", LN_LISTE_KEY = "zuglogbuch.linienliste.v1";
+let linienHaken = {}, linienAnzeigen = false;
+try { const d = JSON.parse(localStorage.getItem(LN_KEY)) || {}; linienHaken = d.haken || {}; linienAnzeigen = !!d.anzeigen; } catch (e) {}
+const lnSpeichern = () => { try { localStorage.setItem(LN_KEY, JSON.stringify({haken: linienHaken, anzeigen: linienAnzeigen})); } catch (e) { toast("Speicher voll: Die Haken konnten nicht gesichert werden."); } };
+const linienStatHtml = () => `<div class="stat" id="statLinien"><b>${Object.keys(linienHaken).length}</b><span>Linien abgehakt</span></div>`;
+const lnStatAktual = () => { const el = $("statLinien"); if (el) el.outerHTML = linienStatHtml(); };
+const lnA = s => esc(s).replace(/"/g, "&quot;");
+
+const OVERPASS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter"];
+async function overpass(q) {
+  let fehler;
+  for (const url of OVERPASS) {
+    try {
+      const r = await fetch(url, {method: "POST", headers: {"Content-Type": "application/x-www-form-urlencoded"}, body: "data=" + encodeURIComponent(q)});
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const j = await r.json();
+      if (j.remark && /error|timeout|timed out/i.test(j.remark)) throw new Error(j.remark);
+      return j;
+    } catch (e) { fehler = e; }
+  }
+  throw fehler;
+}
+
+const LN_LAENDER = ["Baden-Württemberg", "Bayern", "Berlin", "Brandenburg", "Bremen", "Hamburg", "Hessen", "Mecklenburg-Vorpommern", "Niedersachsen", "Nordrhein-Westfalen", "Rheinland-Pfalz", "Saarland", "Sachsen", "Sachsen-Anhalt", "Schleswig-Holstein", "Thüringen"];
+$("lnRegion").innerHTML = '<option value="DE">Ganz Deutschland (dauert länger)</option><option value="karte">Aktueller Kartenausschnitt</option>' +
+  LN_LAENDER.map(l => `<option>${l}</option>`).join("");
+const lnFarbe = {"Fernverkehr": "#d4262c", "Regional": "#2f6fb0", "S-Bahn": "#2e8b57"};
+const lnArten = Object.keys(lnFarbe);
+let lnListe = [], lnIndex = new Map(), lnAnz = 150, lnLauf = 0;
+
+const lnInfo = t => { $("lnInfo").textContent = t; };
+const lnKarteInfo = t => document.querySelectorAll(".lnKInfo").forEach(e => { e.textContent = t; });
+
+function lnArt(t, ref) {
+  const fern = /^(ICE|IC|EC|ECE|RJX?|NJ|FLX|TGV|THA|EN)\b/i;
+  if (fern.test(ref) || fern.test(t.name || "") || /^(high_speed|long_distance)$/.test(t.service || "")) return "Fernverkehr";
+  if (t.route === "light_rail" || /^S\s?\d/i.test(ref)) return "S-Bahn";
+  return "Regional";
+}
+function lnGruppieren(els) {
+  const m = new Map();
+  els.forEach(e => {
+    const t = e.tags || {};
+    if (!t.ref || t["railway:traffic_mode"] === "freight") return;
+    let ref = t.ref.trim();
+    const pre = (t.name || "").match(/^([A-Za-zÄÖÜ]{1,4}\s?\d+[A-Za-z]?)\b/);
+    if (/^\d+[A-Za-z]?$/.test(ref) && pre) ref = pre[1];
+    const netz = (t.network || t.operator || "").trim();
+    const k = netz + "|" + ref;
+    let g = m.get(k);
+    if (!g) {
+      const name = t.from && t.to ? t.from + " – " + t.to : (t.name || "").replace(/^[^:]*:\s*/, "") || ref;
+      g = {k, ref, name, netz, art: lnArt(t, ref), ids: []};
+      m.set(k, g);
+    }
+    g.ids.push(e.id);
+  });
+  return [...m.values()].sort((a, b) => lnArten.indexOf(a.art) - lnArten.indexOf(b.art) || a.ref.localeCompare(b.ref, "de", {numeric: true}) || a.netz.localeCompare(b.netz, "de"));
+}
+function lnAbfrage(region) {
+  const f = '["type"="route"]["route"~"^(train|light_rail)$"]["ref"]';
+  if (region === "karte") { const b = karte.getBounds(); return `[out:json][timeout:120];rel${f}(${b.getSouth()},${b.getWest()},${b.getNorth()},${b.getEast()});out tags;`; }
+  const gebiet = region === "DE" ? 'area["ISO3166-1"="DE"]["admin_level"="2"]' : `area["boundary"="administrative"]["admin_level"="4"]["name"="${region}"]`;
+  return `[out:json][timeout:180];${gebiet}->.a;rel(area.a)${f};out tags;`;
+}
+async function lnLaden(region) {
+  if (region === "karte" && (!karte || !$("tab-karte").classList.contains("aktiv"))) {
+    toast("Öffne die Karte und wähle den Ausschnitt.");
+    tabZeigen("karte");
+    return;
+  }
+  const lauf = ++lnLauf;
+  lnInfo("Linien werden geladen … (ganz Deutschland kann eine Minute dauern)");
+  try {
+    const j = await overpass(lnAbfrage(region));
+    if (lauf !== lnLauf) return;
+    const liste = lnGruppieren(j.elements || []);
+    if (!liste.length) { lnInfo("Für dieses Gebiet wurden keine Linien gefunden."); return; }
+    lnListe = liste; lnIndex = new Map(liste.map(g => [g.k, g])); lnAnz = 150;
+    $("lnRegion").value = region;
+    try { localStorage.setItem(LN_LISTE_KEY, JSON.stringify({region, t: Date.now(), liste})); } catch (e) {}
+    lnInfo(liste.length + " Linien geladen.");
+    lnZeigen();
+  } catch (e) {
+    if (lauf === lnLauf) lnInfo("Die Linien konnten nicht geladen werden. Der Overpass-Server ist vielleicht überlastet: Versuche es gleich noch einmal oder wähle ein einzelnes Bundesland.");
+  }
+}
+
+function lnGefiltert() {
+  const q = norm($("lnSuche").value), art = $("lnArt").value, st = $("lnStatus").value;
+  return lnListe.filter(g => (!art || g.art === art) && (!st || (st === "ja") === !!linienHaken[g.k]) &&
+    (!q || norm(g.ref + " " + g.name + " " + g.netz).includes(q)));
+}
+function lnZeigen() {
+  const l = lnGefiltert();
+  const haken = lnListe.filter(g => linienHaken[g.k]).length, gesamt = Object.keys(linienHaken).length;
+  $("lnBalken").style.width = (lnListe.length ? Math.round(100 * haken / lnListe.length) : 0) + "%";
+  $("lnZahl").textContent = lnListe.length
+    ? haken + " von " + lnListe.length + " Linien in dieser Auswahl abgehakt · insgesamt " + gesamt + " abgehakt" + (l.length !== lnListe.length ? " · " + l.length + " Treffer" : "")
+    : gesamt ? "Insgesamt " + gesamt + " Linien abgehakt." : "";
+  $("lnListe").innerHTML = !lnListe.length
+    ? '<div class="leer">Noch keine Linien geladen. Wähle oben ein Gebiet und tippe auf „Linien laden“.</div>'
+    : !l.length ? '<div class="leer">Keine Linie für diese Filter gefunden.</div>'
+    : l.slice(0, lnAnz).map(g => `<div class="ln-zeile${linienHaken[g.k] ? " ok" : ""}" style="--c:${lnFarbe[g.art]}">
+        <input type="checkbox" data-k="${lnA(g.k)}" ${linienHaken[g.k] ? "checked" : ""} aria-label="${lnA(g.ref)} abhaken">
+        <span class="ln-ref">${esc(g.ref)}</span>
+        <div class="ln-name">${esc(g.name)}<div class="ln-sub">${esc(g.art)}${g.netz ? " · " + esc(g.netz) : ""}</div></div>
+        <button type="button" class="leise" data-karte="${lnA(g.k)}">Auf Karte</button>
+      </div>`).join("") + (l.length > lnAnz ? `<button type="button" class="leise" id="lnMehr">Mehr anzeigen (${l.length - lnAnz} weitere)</button>` : "");
+  lnStatAktual();
+}
+
+// Karte: Streckenverläufe werden erst bei Bedarf geladen
+const lnGeo = new Map(); // Relations-ID -> [[Weg-ID, Punkte], ...]
+let lnEbene = null, lnEinzel = null, lnZeichenLauf = 0, lnGezeichnet = false;
+function lnEbenen() {
+  if (typeof L === "undefined") return false;
+  if (!karte) karteZeigen();
+  if (!karte) return false;
+  if (!lnEbene) { lnEbene = L.layerGroup().addTo(karte); lnEinzel = L.layerGroup().addTo(karte); }
+  return true;
+}
+async function lnGeoLaden(ids, fortschritt) {
+  const fehlt = ids.filter(id => !lnGeo.has(id));
+  for (let i = 0; i < fehlt.length; i += 12) {
+    const teil = fehlt.slice(i, i + 12);
+    const j = await overpass(`[out:json][timeout:120];rel(id:${teil.join(",")});out geom;`);
+    (j.elements || []).forEach(e => {
+      const wege = [];
+      (e.members || []).forEach(m => { if (m.type === "way" && m.geometry && !/platform|stop/.test(m.role || "")) wege.push([m.ref, m.geometry.filter(Boolean).map(q => [q.lat, q.lon])]); });
+      lnGeo.set(e.id, wege);
+    });
+    teil.forEach(id => { if (!lnGeo.has(id)) lnGeo.set(id, []); });
+    if (fortschritt) fortschritt(Math.min(i + 12, fehlt.length), fehlt.length);
+  }
+}
+function lnWege(g) { // doppelte Wege (beide Fahrtrichtungen) nur einmal
+  const gesehen = new Set(), wege = [];
+  g.ids.forEach(id => (lnGeo.get(id) || []).forEach(w => { if (!gesehen.has(w[0])) { gesehen.add(w[0]); wege.push(w[1]); } }));
+  return wege;
+}
+function lnZeichne(ebene, g, stark) {
+  lnWege(g).forEach(pts => L.polyline(pts, {color: stark ? "#ffb81c" : (lnFarbe[g.art] || "#66717d"), weight: stark ? 7 : 4, opacity: stark ? .95 : .8})
+    .bindPopup(`<b>${esc(g.ref)}</b><br>${esc(g.name)}${g.netz ? "<br>" + esc(g.netz) : ""}`).addTo(ebene));
+}
+async function lnKarteAktualisieren() {
+  const lauf = ++lnZeichenLauf;
+  if (!lnEbenen()) return;
+  lnEbene.clearLayers(); lnGezeichnet = false;
+  const gl = Object.values(linienHaken);
+  if (!linienAnzeigen) { lnKarteInfo(""); return; }
+  if (!gl.length) { lnKarteInfo("Noch keine Linie abgehakt."); return; }
+  lnKarteInfo("Linien werden geladen …");
+  try {
+    await lnGeoLaden([...new Set(gl.flatMap(g => g.ids))], (a, b) => { if (lauf === lnZeichenLauf) lnKarteInfo("Linien werden geladen … " + a + " von " + b); });
+    if (lauf !== lnZeichenLauf) return;
+    gl.forEach(g => lnZeichne(lnEbene, g, false));
+    lnGezeichnet = true;
+    lnKarteInfo(gl.length + (gl.length === 1 ? " abgehakte Linie" : " abgehakte Linien") + " auf der Karte.");
+  } catch (e) { if (lauf === lnZeichenLauf) lnKarteInfo("Die Streckenverläufe konnten nicht geladen werden. Versuche es später noch einmal."); }
+}
+function lnKarteBeiTab() { if (linienAnzeigen && !lnGezeichnet) lnKarteAktualisieren(); }
+async function lnAufKarte(k) {
+  const g = lnIndex.get(k) || linienHaken[k];
+  if (!g) return;
+  tabZeigen("karte");
+  if (!lnEbenen()) return;
+  lnEinzel.clearLayers();
+  lnKarteInfo(g.ref + " wird geladen …");
+  try { await lnGeoLaden(g.ids); } catch (e) { lnKarteInfo("Die Linie konnte nicht geladen werden. Versuche es später noch einmal."); return; }
+  lnZeichne(lnEinzel, g, true);
+  const pts = lnWege(g).flat();
+  if (pts.length) { karte.fitBounds(pts, {padding: [30, 30]}); lnKarteInfo(g.ref + ": " + g.name); }
+  else lnKarteInfo("Für diese Linie gibt es keine Strecke in den Kartendaten.");
+}
+
+// Bedienung
+$("lnLadenBtn").onclick = () => lnLaden($("lnRegion").value);
+$("lnKarteLaden").onclick = async () => { await lnLaden("karte"); if (lnListe.length) tabZeigen("linien"); };
+$("lnEinzelWeg").onclick = () => { if (lnEinzel) lnEinzel.clearLayers(); };
+["lnSuche", "lnArt", "lnStatus"].forEach(id => $(id).addEventListener(id === "lnSuche" ? "input" : "change", () => { lnAnz = 150; lnZeigen(); }));
+$("lnListe").addEventListener("change", e => {
+  const c = e.target.closest("input[data-k]");
+  if (!c) return;
+  const g = lnIndex.get(c.dataset.k);
+  if (!g) return;
+  if (c.checked) linienHaken[g.k] = {k: g.k, ref: g.ref, name: g.name, netz: g.netz, art: g.art, ids: g.ids, t: Date.now()};
+  else delete linienHaken[g.k];
+  lnSpeichern(); lnZeigen();
+  if (linienAnzeigen) lnKarteAktualisieren();
+});
+$("lnListe").addEventListener("click", e => {
+  const b = e.target.closest("[data-karte]");
+  if (b) { lnAufKarte(b.dataset.karte); return; }
+  if (e.target.closest("#lnMehr")) { lnAnz += 150; lnZeigen(); }
+});
+document.querySelectorAll(".lnAn").forEach(c => {
+  c.checked = linienAnzeigen;
+  c.addEventListener("change", () => {
+    linienAnzeigen = c.checked;
+    document.querySelectorAll(".lnAn").forEach(x => { x.checked = linienAnzeigen; });
+    lnSpeichern();
+    lnKarteAktualisieren();
+  });
+});
+$("lnExport").onclick = () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify({zuglogbuch: "linien", haken: linienHaken})], {type: "application/json"}));
+  a.download = "zug-logbuch-linien.json"; a.click();
+};
+$("lnImport").onclick = () => $("lnDatei").click();
+$("lnDatei").onchange = async e => {
+  try {
+    const h = JSON.parse(await e.target.files[0].text()).haken;
+    if (!h || typeof h !== "object") throw new Error();
+    let n = 0;
+    Object.keys(h).forEach(k => { const v = h[k]; if (v && Array.isArray(v.ids) && v.ref && !linienHaken[k]) { linienHaken[k] = v; n++; } });
+    lnSpeichern(); lnZeigen(); toast(n + " Linien übernommen");
+    if (linienAnzeigen) lnKarteAktualisieren();
+  } catch (x) { alert("Die Datei konnte nicht gelesen werden."); }
+  e.target.value = "";
+};
+try {
+  const d = JSON.parse(localStorage.getItem(LN_LISTE_KEY));
+  if (d && Array.isArray(d.liste) && d.liste.length) { lnListe = d.liste; lnIndex = new Map(lnListe.map(g => [g.k, g])); $("lnRegion").value = d.region; lnInfo(lnListe.length + " Linien aus dem letzten Laden (" + new Date(d.t).toLocaleDateString("de-DE") + ")."); }
+} catch (e) {}
+lnZeigen();
+
 zeitSetzen(); vorschauAktualisieren(); zeigen(); katalogZeigen(); bilderLaden();
 fotoLaden().then(() => { fotosAufraeumen(); zeigen(); });
 if (bhfZuletzt.length) bhfWaehlen(bhfZuletzt[0]); else bhfChipsZeigen();
@@ -1390,7 +1667,7 @@ function tabZeigen(name) {
   document.querySelectorAll("#funktionen button").forEach(b => { const a = b.dataset.tab === name; b.classList.toggle("aktiv", a); a ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current"); });
   try { history.replaceState(null, "", "#" + name); } catch (e) {}
   window.scrollTo(0, 0);
-  if (name === "karte") { karteZeigen(); if (karte) karte.invalidateSize(); letzterSchluessel = ""; karteZeigen(); }
+  if (name === "karte") { karteZeigen(); if (karte) karte.invalidateSize(); letzterSchluessel = ""; karteZeigen(); lnKarteBeiTab(); }
 }
 $("funktionen").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) tabZeigen(b.dataset.tab); });
 let toastTimer;
