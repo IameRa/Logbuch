@@ -201,7 +201,7 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
 
   <section class="bahnhof tab" id="tab-bahnhof">
     <h2>Abfahrten und Ankünfte</h2>
-    <p class="kat-info">Tippe einen Bahnhof ein oder nutze deinen Standort. Tippe dann auf einen Zug, um ihn ins Formular zu übernehmen. Echtzeitdaten der Deutschen Bahn, ohne Gewähr.</p>
+    <p class="kat-info">Tippe einen Bahnhof ein oder nutze deinen Standort. Tippe dann auf einen Zug, um ihn ins Formular zu übernehmen. Echtzeitdaten wo verfügbar, ohne Gewähr.</p>
     <div class="bhfsuche">
       <input id="bhfSuche" type="search" autocomplete="off" placeholder="Bahnhof eingeben, z. B. Kiel Hbf" aria-label="Bahnhof suchen">
       <button type="button" id="bhfBtn">Bahnhof in meiner Nähe</button>
@@ -255,7 +255,7 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
   <div class="liste" id="katalog"></div>
   </section>
 </main>
-<footer>Bilder: Wikipedia / Wikimedia Commons (Lizenzen auf der jeweiligen Bildseite). Karte: © OpenStreetMap-Mitwirkende (deutsche Beschriftung). Zugdaten: Deutsche Bahn über v6.db.transport.rest. Internet nötig. Die Daten sind Richtwerte und können je nach Unterbauart abweichen.</footer>
+<footer>Bilder: Wikipedia / Wikimedia Commons (Lizenzen auf der jeweiligen Bildseite). Karte: © OpenStreetMap-Mitwirkende (deutsche Beschriftung). Zugdaten: <a href="https://transitous.org/sources/" target="_blank" rel="noopener">Transitous</a> (Datenquellen dort aufgeführt). Internet nötig. Die Daten sind Richtwerte und können je nach Unterbauart abweichen.</footer>
 
 <nav class="funktionen" id="funktionen" aria-label="Funktionen">
   <button type="button" data-tab="neu"><span class="ico" aria-hidden="true">✏️</span>Eintragen</button>
@@ -743,52 +743,47 @@ Object.keys(farben).forEach(t => {
 });
 $("katSuche").addEventListener("input", katalogZeigen);
 $("katFilter").addEventListener("change", katalogZeigen);
-// Abfahrten und Ankünfte am Bahnhof (Daten: v6.db.transport.rest, Echtzeit, ohne Schlüssel)
-const DBAPI = "https://v6.db.transport.rest";
-const ZUGPRODUKTE = {nationalExpress: "ICE", national: "IC/EC", regionalExpress: "Regionalzug", regional: "Regionalzug", suburban: "S-Bahn"};
-const BHF_KEY = "zuglogbuch.bhf";
+// Abfahrten und Ankünfte am Bahnhof (Daten: Transitous / MOTIS, kostenlos, ohne Schlüssel, mit Echtzeit wo verfügbar)
+const API = "https://api.transitous.org/api";
+const ZUGPRODUKTE = {HIGHSPEED_RAIL: "ICE", LONG_DISTANCE: "IC/EC", NIGHT_RAIL: "IC/EC", REGIONAL_FAST_RAIL: "Regionalzug", REGIONAL_RAIL: "Regionalzug", RAIL: "Regionalzug", SUBURBAN: "S-Bahn", METRO: "S-Bahn"};
+const BAHNMODI = "HIGHSPEED_RAIL,LONG_DISTANCE,NIGHT_RAIL,REGIONAL_FAST_RAIL,REGIONAL_RAIL,SUBURBAN";
+const BHF_KEY = "zuglogbuch.bhf2";
 let bhf = null, bhfChips = [], bhfAnzeige = [], bhfVorschlaege = [], bhfTimer = null, bhfLauf = 0, bhfSuchLauf = 0, bhfSuchTimer = null;
 let bhfReiter = "ab", bhfFilter = "", tafelDaten = {ab: [], an: []}, bhfZuletzt = [];
 try { bhfZuletzt = JSON.parse(localStorage.getItem(BHF_KEY)) || []; } catch (e) { bhfZuletzt = []; }
 const bhfInfo = t => { $("bhfInfo").textContent = t; };
 const hm = iso => new Date(iso).toLocaleTimeString("de-DE", {hour: "2-digit", minute: "2-digit"});
-const hatZug = s => !s.products || !Object.keys(s.products).length || Object.keys(ZUGPRODUKTE).some(k => s.products[k]);
+const entfernung = (a, b, c, d) => { const r = Math.PI / 180; return 6371000 * Math.hypot((c - a) * r, (d - b) * r * Math.cos((a + c) * r / 2)); };
 
-async function dbApi(pfad, params, versuch = 0) {
-  const u = new URL(DBAPI + pfad);
+async function apiHolen(pfad, params, versuch = 0) {
+  const u = new URL(API + pfad);
   Object.keys(params).forEach(k => u.searchParams.set(k, params[k]));
-  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 12000);
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 15000);
   try {
     const r = await fetch(u, {signal: ctl.signal});
-    if (!r.ok) throw new Error("HTTP " + r.status);
+    if (!r.ok) { const f = new Error("HTTP " + r.status); f.status = r.status; throw f; }
     return await r.json();
   } catch (e) {
-    if (versuch < 1) { await new Promise(r => setTimeout(r, 800)); return dbApi(pfad, params, versuch + 1); }
+    if (versuch < 1 && !(e.status && e.status < 500)) { await new Promise(r => setTimeout(r, 800)); return apiHolen(pfad, params, versuch + 1); }
     throw e;
   } finally { clearTimeout(t); }
 }
 
-function bahnhoefeSammeln(liste) {
+function bahnhoefeSammeln(liste, lat, lon) {
   const namen = new Set(), alle = [];
-  (Array.isArray(liste) ? liste : []).forEach(s => {
-    if (!s || !s.id || (s.type && s.type !== "stop" && s.type !== "station") || namen.has(s.name)) return;
-    namen.add(s.name); alle.push(s);
+  (Array.isArray(liste) ? liste : []).forEach(m => {
+    if (!m || !m.id || m.type !== "STOP" || namen.has(m.name)) return;
+    namen.add(m.name);
+    alle.push({id: m.id, name: m.name, modes: m.modes || null,
+      distance: lat != null && m.lat != null ? Math.round(entfernung(lat, lon, m.lat, m.lon)) : 0});
   });
-  const zug = alle.filter(hatZug);
-  return (zug.length ? zug : alle).slice(0, 6);
+  const bahn = alle.filter(s => s.modes && s.modes.some(x => ZUGPRODUKTE[x]));
+  const l = bahn.length ? bahn : alle;
+  if (lat != null) l.sort((a, b) => a.distance - b.distance);
+  return l.slice(0, 6);
 }
-const bhfSucheApi = q => dbApi("/locations", {query: q, results: 8, poi: "false", addresses: "false", language: "de"}).then(bahnhoefeSammeln);
-
-async function bahnhoefeNahe(lat, lon) {
-  const p = {latitude: lat, longitude: lon, results: 20, distance: 5000, language: "de"};
-  for (const pfad of ["/stops/nearby", "/locations/nearby"]) {
-    try { const l = bahnhoefeSammeln(await dbApi(pfad, p)); if (l.length) return l; } catch (e) {}
-  }
-  // Notlösung: Ortsnamen über OpenStreetMap ermitteln und den Bahnhof dort suchen
-  const j = await (await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=14&accept-language=de&lat=${lat}&lon=${lon}`)).json();
-  const a = j.address || {}, ort = a.city || a.town || a.village || a.municipality;
-  return ort ? bhfSucheApi(ort) : [];
-}
+const bhfSucheApi = q => apiHolen("/v1/geocode", {text: q, type: "STOP", language: "de"}).then(l => bahnhoefeSammeln(l));
+const bahnhoefeNahe = (lat, lon) => apiHolen("/v1/reverse-geocode", {place: lat + "," + lon, type: "STOP"}).then(l => bahnhoefeSammeln(l, lat, lon));
 
 function bhfChipsZeigen() {
   const nahe = bhfChips.length > 1;
@@ -885,23 +880,33 @@ $("bhfFilter").addEventListener("click", e => { const b = e.target.closest("[dat
 
 async function tafelLaden() {
   if (!bhf) return;
-  const lauf = ++bhfLauf;
-  const id = encodeURIComponent(bhf.id);
-  const par = {duration: $("bhfDauer").value, results: 100, language: "de", bus: "false", tram: "false", subway: "false", ferry: "false", taxi: "false"};
+  const lauf = ++bhfLauf, jetzt = Date.now(), dauer = +$("bhfDauer").value * 60000;
+  const holen = (ab) => {
+    const p = {stopId: bhf.id, n: 100, language: "de", arriveBy: !ab, time: new Date(ab ? jetzt : jetzt + dauer).toISOString()};
+    return apiHolen("/v5/stoptimes", Object.assign({mode: BAHNMODI}, p)).catch(() => apiHolen("/v5/stoptimes", p));
+  };
+  const norm = (st, ab) => {
+    const p = st.place || {}, w = ab ? p.departure : p.arrival, g = (ab ? p.scheduledDeparture : p.scheduledArrival) || w;
+    return {when: w || g, plannedWhen: g, delay: st.realTime && w && g ? (new Date(w) - new Date(g)) / 1000 : undefined,
+      cancelled: !!(st.cancelled || st.tripCancelled), direction: ab ? st.headsign : undefined, provenance: ab ? undefined : st.headsign,
+      platform: p.track, plannedPlatform: p.scheduledTrack,
+      line: {name: st.displayName || st.routeShortName || "Zug", product: st.mode, fahrtNr: st.tripShortName}};
+  };
+  const aufbereiten = (res, ab) => ((res && res.stopTimes) || []).map(s => norm(s, ab))
+    .filter(d => d.plannedWhen && ZUGPRODUKTE[d.line.product])
+    .filter(d => { const t = new Date(d.when).getTime(); return t >= jetzt - 120000 && t <= jetzt + dauer; })
+    .sort((a, b) => a.when.localeCompare(b.when));
   try {
-    const [ab, an] = await Promise.all([dbApi(`/stops/${id}/departures`, par), dbApi(`/stops/${id}/arrivals`, par)]);
+    const [ab, an] = await Promise.all([holen(true), holen(false)]);
     if (lauf !== bhfLauf) return;
-    const liste = x => Array.isArray(x) ? x : ((x && (x.departures || x.arrivals)) || []);
-    const filtern = l => liste(l).filter(d => !d.line || !d.line.product || ZUGPRODUKTE[d.line.product])
-      .sort((a, b) => (a.when || a.plannedWhen || "").localeCompare(b.when || b.plannedWhen || ""));
-    tafelDaten.ab = filtern(ab); tafelDaten.an = filtern(an);
+    tafelDaten.ab = aufbereiten(ab, true); tafelDaten.an = aufbereiten(an, false);
     tafelZeichnen();
     bhfInfo("Stand " + new Date().toLocaleTimeString("de-DE", {hour: "2-digit", minute: "2-digit"}) + " Uhr · aktualisiert sich jede Minute");
   } catch (e) {
     if (lauf !== bhfLauf) return;
     bhfInfo("");
     if (!tafelDaten.ab.length && !tafelDaten.an.length)
-      $("bhfListe").innerHTML = '<div class="leer">Die Zugdaten konnten nicht geladen werden. Der Dienst der Bahn ist manchmal kurz überlastet.<br><button type="button" id="bhfNochmal">Erneut versuchen</button></div>';
+      $("bhfListe").innerHTML = '<div class="leer">Die Zugdaten konnten nicht geladen werden. Prüfe die Internetverbindung. Der kostenlose Dienst Transitous ist ehrenamtlich betrieben und manchmal kurz überlastet.<br><button type="button" id="bhfNochmal">Erneut versuchen</button></div>';
     else bhfInfo("Aktualisierung fehlgeschlagen, es werden die zuletzt geladenen Daten gezeigt.");
   }
 }
@@ -936,7 +941,7 @@ function tafelZeichnen() {
     const rel = d.cancelled ? "" : m <= 0 ? "jetzt" : m < 60 ? "in " + m + " Min." : "";
     return `<div class="zeile${d.cancelled ? " ausfall" : ""}" data-i="${i}" tabindex="0" role="button" aria-label="Zug ins Formular übernehmen">
       <div><div class="zeit">${hm(geplant)}</div>${morgen ? '<div class="sub">am ' + tag.toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit"}) + "</div>" : rel ? '<div class="rel">' + rel + "</div>" : ""}</div>
-      <div><div class="ziel"><span class="linie">${esc(l.name || "Zug")}</span>${esc((art === "ab" ? "nach " : "von ") + (ziel || "unbekannt"))}</div>
+      <div><div class="ziel"><span class="linie">${esc(l.name || "Zug")}</span>${esc((art === "ab" ? "nach " : "Richtung ") + (ziel || "unbekannt"))}</div>
         ${status ? `<div class="sub ${klasse}">${esc(status)}</div>` : ""}</div>
       <div class="gleis${gleisNeu ? " neu" : ""}">${gleis ? "Gl. " + esc(gleis) : "–"}${gleisNeu ? '<div class="sub">geändert</div>' : ""}<span class="plus">+ Eintragen</span></div>
     </div>`;
