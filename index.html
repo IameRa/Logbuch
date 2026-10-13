@@ -101,6 +101,29 @@ button.aktiv,button.aktiv:hover{background:var(--nacht);color:var(--weiss);borde
 .zeile .gleis.neu{color:var(--amber)}
 .zeile button{padding:2px 10px;font-size:.75rem;margin-top:4px}
 .tafel .leer{border:0;border-radius:0;background:transparent;color:#aab6c3;padding:24px}
+.bhfsuche{position:relative;display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.bhfsuche input{flex:1 1 240px;padding:12px 18px}
+.bhfsuche>button{white-space:nowrap}
+.vorschlag{position:absolute;left:0;right:0;top:100%;margin-top:6px;z-index:1000;background:var(--weiss);border-radius:14px;box-shadow:0 12px 32px rgba(17,27,39,.22);overflow:hidden;max-height:320px;overflow-y:auto}
+.vorschlag[hidden]{display:none}
+.vorschlag button,.vorschlag button:hover{display:block;width:100%;text-align:left;border-radius:0;color:var(--text);padding:13px 18px;border-bottom:1px solid var(--linie);background:var(--weiss)}
+.vorschlag button:hover{background:var(--papier)}
+.vorschlag .kat-info{margin:0;padding:13px 18px}
+.bhfkopf{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:20px 0 10px}
+.bhfkopf h3{margin:0;font:700 1.7rem/1.1 var(--kopf)}
+.reiter{display:flex;background:var(--weiss);border:1.5px solid var(--linie);border-radius:999px;padding:4px;gap:4px}
+.reiter button,.reiter button:hover{flex:1;background:transparent;color:var(--text)}
+.reiter button:hover{background:var(--papier)}
+.reiter button.aktiv,.reiter button.aktiv:hover{background:var(--nacht);color:var(--weiss)}
+.zahl{opacity:.7;font-weight:400}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;align-items:center}
+.chips select{border-radius:999px;padding-inline:14px;background:var(--weiss);margin-left:auto}
+.chips button{padding:7px 14px}
+.zeile{grid-template-columns:4rem 1fr auto;cursor:pointer;transition:background .15s}
+.zeile:hover,.zeile:focus-visible{background:#1f3145;outline:none}
+.zeile .rel{color:#aab6c3;font-size:.78rem}
+.zeile .plus{display:block;margin-top:6px;color:var(--amber);font-size:.78rem;font-weight:600}
+.leer button{margin-top:12px}
 @media (prefers-reduced-motion:reduce){.karte.klick{transition:none}}
 </style>
 </head>
@@ -167,21 +190,32 @@ button.aktiv,button.aktiv:hover{background:var(--nacht);color:var(--weiss);borde
 
   <section class="bahnhof">
     <h2>Abfahrten und Ankünfte</h2>
-    <p class="kat-info">Alle Züge an dem Bahnhof, an dem du gerade bist. Echtzeitdaten der Deutschen Bahn, ohne Gewähr.</p>
-    <div class="aktionen">
+    <p class="kat-info">Tippe einen Bahnhof ein oder nutze deinen Standort. Tippe dann auf einen Zug, um ihn ins Formular zu übernehmen. Echtzeitdaten der Deutschen Bahn, ohne Gewähr.</p>
+    <div class="bhfsuche">
+      <input id="bhfSuche" type="search" autocomplete="off" placeholder="Bahnhof eingeben, z. B. Kiel Hbf" aria-label="Bahnhof suchen">
       <button type="button" id="bhfBtn">Bahnhof in meiner Nähe</button>
-      <input id="bhfSuche" type="search" placeholder="oder Bahnhof suchen, z. B. Kiel Hbf" aria-label="Bahnhof suchen">
-      <button type="button" class="leise" id="bhfSucheBtn">Suchen</button>
-      <select id="bhfDauer" aria-label="Zeitraum">
-        <option value="30">nächste 30 Min.</option><option value="60" selected>nächste 60 Min.</option>
-        <option value="120">nächste 2 Std.</option><option value="240">nächste 4 Std.</option>
-      </select>
+      <div class="vorschlag" id="bhfVorschlag" hidden></div>
     </div>
-    <div class="aktionen" id="bhfWahl"></div>
+    <div class="aktionen" id="bhfWahl" style="margin-top:12px"></div>
     <p class="kat-info" id="bhfInfo" role="status"></p>
-    <div class="tafeln">
-      <div class="tafel"><h3>Abfahrten</h3><div id="bhfAb"><div class="leer">Wähle einen Bahnhof.</div></div></div>
-      <div class="tafel"><h3>Ankünfte</h3><div id="bhfAn"><div class="leer">Wähle einen Bahnhof.</div></div></div>
+    <div id="bhfBereich" hidden>
+      <div class="bhfkopf"><h3 id="bhfName"></h3><button type="button" class="leise" id="bhfRefresh">Aktualisieren</button></div>
+      <div class="reiter" id="bhfReiter" role="tablist">
+        <button type="button" data-r="ab" class="aktiv" role="tab">Abfahrten <span class="zahl" id="zahlAb"></span></button>
+        <button type="button" data-r="an" role="tab">Ankünfte <span class="zahl" id="zahlAn"></span></button>
+      </div>
+      <div class="chips" id="bhfFilter">
+        <button type="button" class="leise aktiv" data-f="">Alle</button>
+        <button type="button" class="leise" data-f="ICE">ICE</button>
+        <button type="button" class="leise" data-f="IC/EC">IC/EC</button>
+        <button type="button" class="leise" data-f="Regionalzug">Regional</button>
+        <button type="button" class="leise" data-f="S-Bahn">S-Bahn</button>
+        <select id="bhfDauer" aria-label="Zeitraum">
+          <option value="30">nächste 30 Min.</option><option value="60" selected>nächste 60 Min.</option>
+          <option value="120">nächste 2 Std.</option><option value="240">nächste 4 Std.</option>
+        </select>
+      </div>
+      <div class="tafel"><div id="bhfListe"></div></div>
     </div>
   </section>
 
@@ -542,20 +576,34 @@ $("kamKnipp").onclick = () => {
 };
 document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("kamera").hidden) kameraSchliessen(); });
 
-// Standort
-$("posBtn").onclick = () => {
-  const info = $("posInfo");
-  if (!navigator.geolocation) { info.textContent = "Dieses Gerät kann den Standort nicht abfragen."; return; }
-  info.textContent = "Standort wird gesucht …";
-  navigator.geolocation.getCurrentPosition(p => {
+// Standort (gemeinsam für Formular und Bahnhofstafel): erst schnell per WLAN/Funk, dann genau per GPS
+function standortHolen() {
+  return new Promise((ok, fehler) => {
+    if (!navigator.geolocation) return fehler({grund: "keine"});
+    if (window.isSecureContext === false) return fehler({grund: "unsicher"});
+    const versuch = hoch => navigator.geolocation.getCurrentPosition(ok,
+      err => (err.code === 1 || hoch) ? fehler(err) : versuch(true),
+      hoch ? {enableHighAccuracy: true, timeout: 20000, maximumAge: 0} : {enableHighAccuracy: false, timeout: 8000, maximumAge: 300000});
+    versuch(false);
+  });
+}
+function standortFehler(e) {
+  if (e.grund === "keine") return "Dieses Gerät kann den Standort nicht abfragen.";
+  if (e.grund === "unsicher") return "Der Standort funktioniert nur über eine sichere Verbindung. Öffne die Seite über https://.";
+  if (e.code === 1) return "Standortzugriff abgelehnt. Erlaube ihn in den Browser-Einstellungen (Schloss-Symbol neben der Adresse) und versuche es noch einmal.";
+  return "Standort nicht verfügbar. Schalte die Ortungsdienste ein oder versuche es im Freien noch einmal."
+    + (location.protocol === "file:" ? " Hinweis: Viele Browser blockieren den Standort bei lokal geöffneten Dateien. Öffne die Seite über https://." : "");
+}
+$("posBtn").onclick = async () => {
+  const info = $("posInfo"), b = $("posBtn");
+  b.disabled = true; info.textContent = "Standort wird gesucht … (bitte den Zugriff erlauben)";
+  try {
+    const p = await standortHolen();
     pos = {lat: +p.coords.latitude.toFixed(5), lon: +p.coords.longitude.toFixed(5)};
     info.textContent = "Standort gespeichert (" + pos.lat + ", " + pos.lon + ")";
     if (!$("ort").value.trim()) ortFinden(pos);
-  }, err => {
-    info.textContent = err.code === 1
-      ? "Standortzugriff abgelehnt. Erlaube ihn in den Browser-Einstellungen."
-      : "Standort nicht verfügbar. Versuche es draußen oder mit Internet noch einmal.";
-  }, {enableHighAccuracy: true, timeout: 15000, maximumAge: 30000});
+  } catch (e) { info.textContent = standortFehler(e); }
+  b.disabled = false;
 };
 function ortFinden(q) {
   fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=14&accept-language=de&lat=${q.lat}&lon=${q.lon}`)
@@ -674,77 +722,142 @@ $("katFilter").addEventListener("change", katalogZeigen);
 // Abfahrten und Ankünfte am Bahnhof (Daten: v6.db.transport.rest, Echtzeit, ohne Schlüssel)
 const DBAPI = "https://v6.db.transport.rest";
 const ZUGPRODUKTE = {nationalExpress: "ICE", national: "IC/EC", regionalExpress: "Regionalzug", regional: "Regionalzug", suburban: "S-Bahn"};
-let bhf = null, bhfListe = [], bhfTimer = null, bhfLauf = 0, tafelDaten = {ab: [], an: []};
+const BHF_KEY = "zuglogbuch.bhf";
+let bhf = null, bhfChips = [], bhfAnzeige = [], bhfVorschlaege = [], bhfTimer = null, bhfLauf = 0, bhfSuchLauf = 0, bhfSuchTimer = null;
+let bhfReiter = "ab", bhfFilter = "", tafelDaten = {ab: [], an: []}, bhfZuletzt = [];
+try { bhfZuletzt = JSON.parse(localStorage.getItem(BHF_KEY)) || []; } catch (e) { bhfZuletzt = []; }
 const bhfInfo = t => { $("bhfInfo").textContent = t; };
 const hm = iso => new Date(iso).toLocaleTimeString("de-DE", {hour: "2-digit", minute: "2-digit"});
-const hatZug = s => !s.products || Object.keys(ZUGPRODUKTE).some(k => s.products[k]);
+const hatZug = s => !s.products || !Object.keys(s.products).length || Object.keys(ZUGPRODUKTE).some(k => s.products[k]);
 
-async function dbApi(pfad, params) {
+async function dbApi(pfad, params, versuch = 0) {
   const u = new URL(DBAPI + pfad);
   Object.keys(params).forEach(k => u.searchParams.set(k, params[k]));
-  const r = await fetch(u);
-  if (!r.ok) throw new Error("HTTP " + r.status);
-  return r.json();
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 12000);
+  try {
+    const r = await fetch(u, {signal: ctl.signal});
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return await r.json();
+  } catch (e) {
+    if (versuch < 1) { await new Promise(r => setTimeout(r, 800)); return dbApi(pfad, params, versuch + 1); }
+    throw e;
+  } finally { clearTimeout(t); }
 }
 
-function bhfWahlZeigen() {
-  $("bhfWahl").innerHTML = bhfListe.map((s, i) =>
-    `<button type="button" class="leise${bhf && bhf.id === s.id ? " aktiv" : ""}" data-i="${i}">${esc(s.name)}${s.distance ? " · " + s.distance + " m" : ""}</button>`).join("");
+function bahnhoefeSammeln(liste) {
+  const namen = new Set(), alle = [];
+  (Array.isArray(liste) ? liste : []).forEach(s => {
+    if (!s || !s.id || (s.type && s.type !== "stop" && s.type !== "station") || namen.has(s.name)) return;
+    namen.add(s.name); alle.push(s);
+  });
+  const zug = alle.filter(hatZug);
+  return (zug.length ? zug : alle).slice(0, 6);
+}
+const bhfSucheApi = q => dbApi("/locations", {query: q, results: 8, poi: "false", addresses: "false", language: "de"}).then(bahnhoefeSammeln);
+
+async function bahnhoefeNahe(lat, lon) {
+  const p = {latitude: lat, longitude: lon, results: 20, distance: 5000, language: "de"};
+  for (const pfad of ["/stops/nearby", "/locations/nearby"]) {
+    try { const l = bahnhoefeSammeln(await dbApi(pfad, p)); if (l.length) return l; } catch (e) {}
+  }
+  // Notlösung: Ortsnamen über OpenStreetMap ermitteln und den Bahnhof dort suchen
+  const j = await (await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=14&accept-language=de&lat=${lat}&lon=${lon}`)).json();
+  const a = j.address || {}, ort = a.city || a.town || a.village || a.municipality;
+  return ort ? bhfSucheApi(ort) : [];
+}
+
+function bhfChipsZeigen() {
+  const nahe = bhfChips.length > 1;
+  bhfAnzeige = nahe ? bhfChips : bhfZuletzt.filter(s => !bhf || s.id !== bhf.id);
+  $("bhfWahl").innerHTML = bhfAnzeige.length
+    ? `<span class="lbl">${nahe ? "Weitere Bahnhöfe in der Nähe:" : "Zuletzt genutzt:"}</span>` + bhfAnzeige.map((s, i) =>
+      `<button type="button" class="leise${bhf && bhf.id === s.id ? " aktiv" : ""}" data-i="${i}">${esc(s.name)}${s.distance ? " · " + s.distance + " m" : ""}</button>`).join("") : "";
 }
 $("bhfWahl").addEventListener("click", e => {
   const b = e.target.closest("[data-i]");
-  if (b) bhfWaehlen(bhfListe[+b.dataset.i]);
+  if (b) bhfWaehlen(bhfAnzeige[+b.dataset.i]);
 });
 
-function bhfWaehlen(s) {
+function vorschlagZeigen(liste, leerText) {
+  bhfVorschlaege = liste;
+  const box = $("bhfVorschlag");
+  box.innerHTML = liste.length
+    ? liste.map((s, i) => `<button type="button" data-i="${i}">${esc(s.name)}</button>`).join("")
+    : `<p class="kat-info">${esc(leerText || "Kein Bahnhof gefunden.")}</p>`;
+  box.hidden = false;
+}
+const vorschlagZu = () => { $("bhfVorschlag").hidden = true; };
+$("bhfVorschlag").addEventListener("click", e => {
+  const b = e.target.closest("[data-i]");
+  if (b) bhfWaehlen(bhfVorschlaege[+b.dataset.i]);
+});
+document.addEventListener("click", e => { if (!e.target.closest(".bhfsuche")) vorschlagZu(); });
+
+async function bhfSuchen(q) {
+  const lauf = ++bhfSuchLauf;
+  try {
+    const l = await bhfSucheApi(q);
+    if (lauf !== bhfSuchLauf) return null;
+    vorschlagZeigen(l);
+    return l;
+  } catch (e) {
+    if (lauf === bhfSuchLauf) vorschlagZeigen([], "Die Suche ist fehlgeschlagen. Prüfe die Internetverbindung und versuche es gleich noch einmal.");
+    return null;
+  }
+}
+$("bhfSuche").addEventListener("input", () => {
+  clearTimeout(bhfSuchTimer);
+  const q = $("bhfSuche").value.trim();
+  if (q.length < 2) { bhfSuchLauf++; vorschlagZu(); return; }
+  bhfSuchTimer = setTimeout(() => bhfSuchen(q), 350);
+});
+$("bhfSuche").addEventListener("keydown", async e => {
+  if (e.key === "Escape") vorschlagZu();
+  if (e.key !== "Enter") return;
+  e.preventDefault();
+  clearTimeout(bhfSuchTimer);
+  const q = $("bhfSuche").value.trim();
+  if (!q) return;
+  const l = await bhfSuchen(q);
+  if (l && l.length) bhfWaehlen(l[0]);
+});
+
+$("bhfBtn").onclick = async () => {
+  const b = $("bhfBtn");
+  b.disabled = true; vorschlagZu();
+  bhfInfo("Standort wird gesucht … (bitte den Zugriff erlauben)");
+  let p;
+  try { p = await standortHolen(); }
+  catch (e) { bhfInfo(standortFehler(e) + " Du kannst oben auch einen Bahnhof eintippen."); b.disabled = false; return; }
+  try {
+    bhfInfo("Bahnhöfe in der Nähe werden gesucht …");
+    bhfChips = await bahnhoefeNahe(p.coords.latitude, p.coords.longitude);
+    if (bhfChips.length) bhfWaehlen(bhfChips[0], true);
+    else { bhfChipsZeigen(); bhfInfo("Im Umkreis wurde kein Bahnhof gefunden. Tippe oben einen Bahnhof ein."); }
+  } catch (e) { bhfInfo("Die Bahnhöfe konnten nicht geladen werden. Tippe oben einen Bahnhof ein oder versuche es gleich noch einmal."); }
+  b.disabled = false;
+};
+
+function bhfWaehlen(s, behalteChips) {
+  if (!s) return;
   bhf = s;
-  bhfWahlZeigen();
-  ["bhfAb", "bhfAn"].forEach(id => { $(id).innerHTML = '<div class="leer">Wird geladen …</div>'; });
+  if (!behalteChips && !bhfChips.some(c => c.id === s.id)) bhfChips = [];
+  bhfZuletzt = [{id: s.id, name: s.name}].concat(bhfZuletzt.filter(z => z.id !== s.id)).slice(0, 5);
+  try { localStorage.setItem(BHF_KEY, JSON.stringify(bhfZuletzt)); } catch (e) {}
+  $("bhfSuche").value = s.name; vorschlagZu();
+  $("bhfName").textContent = s.name; $("bhfBereich").hidden = false;
+  tafelDaten = {ab: [], an: []};
+  $("bhfListe").innerHTML = '<div class="leer">Züge werden geladen …</div>';
+  bhfChipsZeigen(); bhfInfo("");
   tafelLaden();
   clearInterval(bhfTimer);
   bhfTimer = setInterval(() => { if (!document.hidden) tafelLaden(); }, 60000);
 }
 
-function bahnhoefeSammeln(liste) {
-  const namen = new Set();
-  return (liste || []).filter(s => {
-    if (!s || !s.id || (s.type && s.type !== "stop" && s.type !== "station") || !hatZug(s) || namen.has(s.name)) return false;
-    namen.add(s.name); return true;
-  }).slice(0, 5);
-}
-
-$("bhfBtn").onclick = () => {
-  if (!navigator.geolocation) { bhfInfo("Dieses Gerät kann den Standort nicht abfragen."); return; }
-  bhfInfo("Standort wird gesucht …");
-  navigator.geolocation.getCurrentPosition(async p => {
-    try {
-      bhfInfo("Bahnhöfe in der Nähe werden gesucht …");
-      const l = await dbApi("/stops/nearby", {latitude: p.coords.latitude, longitude: p.coords.longitude, results: 20, distance: 5000, language: "de"});
-      bhfListe = bahnhoefeSammeln(l);
-      if (!bhfListe.length) { bhfWahlZeigen(); bhfInfo("Im Umkreis von 5 km wurde kein Bahnhof gefunden. Nutze die Suche."); return; }
-      bhfWaehlen(bhfListe[0]);
-    } catch (e) { bhfInfo("Die Bahnhöfe konnten nicht geladen werden. Prüfe die Internetverbindung oder versuche es später noch einmal."); }
-  }, err => {
-    bhfInfo(err.code === 1
-      ? "Standortzugriff abgelehnt. Erlaube ihn in den Browser-Einstellungen oder suche den Bahnhof von Hand."
-      : "Standort nicht verfügbar. Suche den Bahnhof von Hand.");
-  }, {enableHighAccuracy: true, timeout: 15000, maximumAge: 30000});
-};
-
-async function bhfSuchen() {
-  const q = $("bhfSuche").value.trim();
-  if (!q) return;
-  bhfInfo("Suche läuft …");
-  try {
-    const l = await dbApi("/locations", {query: q, results: 8, poi: "false", addresses: "false", language: "de"});
-    bhfListe = bahnhoefeSammeln(l);
-    if (!bhfListe.length) { bhfWahlZeigen(); bhfInfo("Kein Bahnhof gefunden."); return; }
-    bhfWaehlen(bhfListe[0]);
-  } catch (e) { bhfInfo("Die Suche ist fehlgeschlagen. Prüfe die Internetverbindung oder versuche es später noch einmal."); }
-}
-$("bhfSucheBtn").onclick = bhfSuchen;
-$("bhfSuche").addEventListener("keydown", e => { if (e.key === "Enter") bhfSuchen(); });
 $("bhfDauer").addEventListener("change", () => tafelLaden());
+$("bhfRefresh").onclick = () => tafelLaden();
+$("bhfReiter").addEventListener("click", e => { const b = e.target.closest("[data-r]"); if (b) { bhfReiter = b.dataset.r; tafelZeichnen(); } });
+$("bhfFilter").addEventListener("click", e => { const b = e.target.closest("[data-f]"); if (b) { bhfFilter = b.dataset.f; tafelZeichnen(); } });
 
 async function tafelLaden() {
   if (!bhf) return;
@@ -754,20 +867,37 @@ async function tafelLaden() {
   try {
     const [ab, an] = await Promise.all([dbApi(`/stops/${id}/departures`, par), dbApi(`/stops/${id}/arrivals`, par)]);
     if (lauf !== bhfLauf) return;
-    const filtern = l => (l || []).filter(d => !d.line || !d.line.product || ZUGPRODUKTE[d.line.product])
+    const liste = x => Array.isArray(x) ? x : ((x && (x.departures || x.arrivals)) || []);
+    const filtern = l => liste(l).filter(d => !d.line || !d.line.product || ZUGPRODUKTE[d.line.product])
       .sort((a, b) => (a.when || a.plannedWhen || "").localeCompare(b.when || b.plannedWhen || ""));
-    tafelDaten.ab = filtern(ab.departures);
-    tafelDaten.an = filtern(an.arrivals);
-    tafelZeichnen("bhfAb", "ab"); tafelZeichnen("bhfAn", "an");
-    bhfInfo(bhf.name + " · Stand " + new Date().toLocaleTimeString("de-DE") + " Uhr, aktualisiert sich jede Minute.");
+    tafelDaten.ab = filtern(ab); tafelDaten.an = filtern(an);
+    tafelZeichnen();
+    bhfInfo("Stand " + new Date().toLocaleTimeString("de-DE", {hour: "2-digit", minute: "2-digit"}) + " Uhr · aktualisiert sich jede Minute");
   } catch (e) {
-    if (lauf === bhfLauf) bhfInfo("Die Zugdaten konnten nicht geladen werden. Prüfe die Internetverbindung oder versuche es später noch einmal.");
+    if (lauf !== bhfLauf) return;
+    bhfInfo("");
+    if (!tafelDaten.ab.length && !tafelDaten.an.length)
+      $("bhfListe").innerHTML = '<div class="leer">Die Zugdaten konnten nicht geladen werden. Der Dienst der Bahn ist manchmal kurz überlastet.<br><button type="button" id="bhfNochmal">Erneut versuchen</button></div>';
+    else bhfInfo("Aktualisierung fehlgeschlagen, es werden die zuletzt geladenen Daten gezeigt.");
   }
 }
+$("bhfListe").addEventListener("click", e => {
+  if (e.target.closest("#bhfNochmal")) { $("bhfListe").innerHTML = '<div class="leer">Züge werden geladen …</div>'; tafelLaden(); return; }
+  const z = e.target.closest(".zeile");
+  if (z) tafelEintragen(bhfReiter, +z.dataset.i);
+});
+$("bhfListe").addEventListener("keydown", e => {
+  if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("zeile")) { e.preventDefault(); e.target.click(); }
+});
 
-function tafelZeichnen(boxId, art) {
-  const liste = tafelDaten[art];
-  $(boxId).innerHTML = liste.length ? liste.map((d, i) => {
+function tafelZeichnen() {
+  const art = bhfReiter;
+  $("zahlAb").textContent = tafelDaten.ab.length ? "(" + tafelDaten.ab.length + ")" : "";
+  $("zahlAn").textContent = tafelDaten.an.length ? "(" + tafelDaten.an.length + ")" : "";
+  document.querySelectorAll("#bhfReiter [data-r]").forEach(b => { const a = b.dataset.r === art; b.classList.toggle("aktiv", a); b.setAttribute("aria-selected", a); });
+  document.querySelectorAll("#bhfFilter [data-f]").forEach(b => b.classList.toggle("aktiv", b.dataset.f === bhfFilter));
+  const liste = tafelDaten[art].map((d, i) => [d, i]).filter(([d]) => !bhfFilter || ZUGPRODUKTE[(d.line || {}).product] === bhfFilter);
+  $("bhfListe").innerHTML = liste.length ? liste.map(([d, i]) => {
     const geplant = d.plannedWhen || d.when, l = d.line || {};
     const min = typeof d.delay === "number" ? Math.round(d.delay / 60) : null;
     const ziel = art === "ab" ? (d.direction || (d.destination && d.destination.name)) : (d.provenance || (d.origin && d.origin.name));
@@ -777,14 +907,16 @@ function tafelZeichnen(boxId, art) {
     else if (min === 0) { status = "pünktlich"; klasse = "ok"; }
     const gleisNeu = d.platform && d.plannedPlatform && d.platform !== d.plannedPlatform;
     const gleis = d.platform || d.plannedPlatform;
-    const morgen = new Date(geplant).toDateString() !== new Date().toDateString();
-    return `<div class="zeile${d.cancelled ? " ausfall" : ""}">
-      <div><div class="zeit">${hm(geplant)}</div>${morgen ? '<div class="sub">am ' + new Date(geplant).toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit"}) + "</div>" : ""}</div>
+    const tag = new Date(geplant), morgen = tag.toDateString() !== new Date().toDateString();
+    const m = Math.round((new Date(d.when || geplant) - Date.now()) / 60000);
+    const rel = d.cancelled ? "" : m <= 0 ? "jetzt" : m < 60 ? "in " + m + " Min." : "";
+    return `<div class="zeile${d.cancelled ? " ausfall" : ""}" data-i="${i}" tabindex="0" role="button" aria-label="Zug ins Formular übernehmen">
+      <div><div class="zeit">${hm(geplant)}</div>${morgen ? '<div class="sub">am ' + tag.toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit"}) + "</div>" : rel ? '<div class="rel">' + rel + "</div>" : ""}</div>
       <div><div class="ziel"><span class="linie">${esc(l.name || "Zug")}</span>${esc((art === "ab" ? "nach " : "von ") + (ziel || "unbekannt"))}</div>
         ${status ? `<div class="sub ${klasse}">${esc(status)}</div>` : ""}</div>
-      <div class="gleis${gleisNeu ? " neu" : ""}">${gleis ? "Gl. " + esc(gleis) : "–"}${gleisNeu ? '<div class="sub">geändert</div>' : ""}<br><button type="button" class="leise" onclick="tafelEintragen('${art}',${i})">Eintragen</button></div>
+      <div class="gleis${gleisNeu ? " neu" : ""}">${gleis ? "Gl. " + esc(gleis) : "–"}${gleisNeu ? '<div class="sub">geändert</div>' : ""}<span class="plus">+ Eintragen</span></div>
     </div>`;
-  }).join("") : '<div class="leer">Keine Züge im gewählten Zeitraum.</div>';
+  }).join("") : `<div class="leer">Keine ${bhfFilter ? esc(bhfFilter) + "-" : ""}Züge im gewählten Zeitraum.${bhfFilter ? "<br>Wähle oben „Alle“ oder" : "<br>Wähle"} einen längeren Zeitraum.</div>`;
 }
 
 // Zug aus der Tafel ins Formular übernehmen
@@ -800,11 +932,13 @@ function tafelEintragen(art, i) {
   const t = new Date(d.when || d.plannedWhen);
   $("zeit").value = new Date(t - t.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
   vorschauAktualisieren();
+  bhfInfo("„" + nr + "“ ins Formular übernommen. Ergänze Foto oder Notiz und tippe auf „Zug speichern“.");
   $("form").scrollIntoView({behavior: "smooth"});
   $("nummer").focus({preventScroll: true});
 }
 
 zeitSetzen(); vorschauAktualisieren(); zeigen(); katalogZeigen(); bilderLaden();
+if (bhfZuletzt.length) bhfWaehlen(bhfZuletzt[0]); else bhfChipsZeigen();
 </script>
 </body>
 </html>
