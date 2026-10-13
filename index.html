@@ -81,6 +81,26 @@ footer{max-width:1040px;margin:0 auto;padding:18px 16px 36px;color:var(--grau);f
 .kamera[hidden]{display:none}
 .kamera video{flex:1;min-height:0;width:100%;object-fit:contain}
 .kamleiste{display:flex;gap:12px;align-items:center;justify-content:center;padding:14px;background:var(--nacht);color:#fff}
+.bahnhof{margin-top:34px}
+.bahnhof .aktionen{margin-top:12px;align-items:center}
+.bahnhof input{flex:1 1 220px;border-radius:999px;padding-inline:16px;background:var(--weiss)}
+.bahnhof select{border-radius:999px;padding-inline:14px;background:var(--weiss)}
+button.aktiv,button.aktiv:hover{background:var(--nacht);color:var(--weiss);border-color:var(--nacht)}
+.tafeln{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr));gap:18px;margin-top:16px}
+.tafel{background:var(--nacht);color:var(--weiss);border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(17,27,39,.06),0 8px 24px rgba(17,27,39,.12)}
+.tafel h3{margin:0;padding:12px 16px;font:700 1.35rem/1 var(--kopf);background:var(--tafel);color:var(--amber);letter-spacing:.02em}
+.zeile{display:grid;grid-template-columns:3.4rem 1fr auto;gap:0 12px;padding:10px 16px;border-top:1px solid #243548;align-items:start}
+.zeile .zeit{font:700 1.35rem/1.1 var(--kopf);font-variant-numeric:tabular-nums;color:var(--amber)}
+.zeile .ziel{font-weight:600;overflow-wrap:anywhere}
+.zeile .linie{display:inline-block;background:var(--weiss);color:var(--text);font:700 .85rem/1.4 var(--kopf);padding:0 8px;border-radius:4px;margin-right:6px}
+.zeile .sub{color:#aab6c3;font-size:.82rem}
+.zeile .sub.spaet{color:#ff9a9a}
+.zeile .sub.ok{color:#7fd69b}
+.zeile.ausfall .ziel{text-decoration:line-through;color:#8fa0b3}
+.zeile .gleis{text-align:right;font-weight:600;white-space:nowrap}
+.zeile .gleis.neu{color:var(--amber)}
+.zeile button{padding:2px 10px;font-size:.75rem;margin-top:4px}
+.tafel .leer{border:0;border-radius:0;background:transparent;color:#aab6c3;padding:24px}
 @media (prefers-reduced-motion:reduce){.karte.klick{transition:none}}
 </style>
 </head>
@@ -125,6 +145,7 @@ footer{max-width:1040px;margin:0 auto;padding:18px 16px 36px;color:var(--grau);f
       <input id="fotoCam" type="file" accept="image/*" capture="environment" hidden>
       <div class="minis" id="minis"></div>
       <span class="kat-info" id="posInfo" role="status"></span>
+      <span class="kat-info">Fotos werden nirgends gespeichert: Sie bleiben nur bis zum Schließen oder Neuladen der Seite sichtbar und sind auch nicht in der Sicherungsdatei enthalten.</span>
     </div>
     <label>oder Bild-Link
       <input id="url" type="url" placeholder="https://…">
@@ -144,6 +165,26 @@ footer{max-width:1040px;margin:0 auto;padding:18px 16px 36px;color:var(--grau);f
     <div id="kartebox"></div>
   </section>
 
+  <section class="bahnhof">
+    <h2>Abfahrten und Ankünfte</h2>
+    <p class="kat-info">Alle Züge an dem Bahnhof, an dem du gerade bist. Echtzeitdaten der Deutschen Bahn, ohne Gewähr.</p>
+    <div class="aktionen">
+      <button type="button" id="bhfBtn">Bahnhof in meiner Nähe</button>
+      <input id="bhfSuche" type="search" placeholder="oder Bahnhof suchen, z. B. Kiel Hbf" aria-label="Bahnhof suchen">
+      <button type="button" class="leise" id="bhfSucheBtn">Suchen</button>
+      <select id="bhfDauer" aria-label="Zeitraum">
+        <option value="30">nächste 30 Min.</option><option value="60" selected>nächste 60 Min.</option>
+        <option value="120">nächste 2 Std.</option><option value="240">nächste 4 Std.</option>
+      </select>
+    </div>
+    <div class="aktionen" id="bhfWahl"></div>
+    <p class="kat-info" id="bhfInfo" role="status"></p>
+    <div class="tafeln">
+      <div class="tafel"><h3>Abfahrten</h3><div id="bhfAb"><div class="leer">Wähle einen Bahnhof.</div></div></div>
+      <div class="tafel"><h3>Ankünfte</h3><div id="bhfAn"><div class="leer">Wähle einen Bahnhof.</div></div></div>
+    </div>
+  </section>
+
   <div class="leiste">
     <h2>Meine Sichtungen</h2>
     <input id="suche" type="search" placeholder="Suchen (Nummer, Ort, Notiz)">
@@ -157,10 +198,15 @@ footer{max-width:1040px;margin:0 auto;padding:18px 16px 36px;color:var(--grau);f
 
   <div class="kat-kopf"><h2>Zugkatalog</h2>
   <p class="kat-info">Tippe auf ein Modell, um es für den nächsten Eintrag auszuwählen.</p>
-  <p class="kat-info" id="status" role="status"></p></div>
+  <p class="kat-info" id="status" role="status"></p>
+  <div class="leiste" style="margin:14px 0 0">
+    <input id="katSuche" type="search" placeholder="Modell suchen (Name, Hersteller, Art)" aria-label="Katalog durchsuchen">
+    <select id="katFilter" aria-label="Katalog nach Art filtern"><option value="">Alle Arten</option></select>
+  </div>
+  <p class="kat-info" id="katZahl" role="status"></p></div>
   <div class="liste" id="katalog"></div>
 </main>
-<footer>Bilder: Wikipedia / Wikimedia Commons (Lizenzen auf der jeweiligen Bildseite), Internet nötig. Die Daten sind Richtwerte und können je nach Unterbauart abweichen.</footer>
+<footer>Bilder: Wikipedia / Wikimedia Commons (Lizenzen auf der jeweiligen Bildseite). Karte: © OpenStreetMap-Mitwirkende (deutsche Beschriftung). Zugdaten: Deutsche Bahn über v6.db.transport.rest. Internet nötig. Die Daten sind Richtwerte und können je nach Unterbauart abweichen.</footer>
 
 <div id="kamera" class="kamera" hidden>
   <video id="video" playsinline autoplay muted></video>
@@ -190,8 +236,78 @@ const MODELLE = [
   {id:"ice3",name:"ICE 3 (BR 403)",typ:"ICE",wiki:"ICE 3",art:"Hochgeschwindigkeitszug",ab:"1999",vmax:"330 km/h",leistung:"8.000 kW",laenge:"200 m",gewicht:"409 t",hersteller:"Siemens, Bombardier"},
   {id:"ice4",name:"ICE 4 (BR 412)",typ:"ICE",wiki:"ICE 4",art:"Hochgeschwindigkeitszug",ab:"2017",vmax:"250 km/h",leistung:"9.900 kW",laenge:"346 m",hersteller:"Siemens"},
   {id:"br423",name:"BR 423",typ:"S-Bahn",wiki:"DB-Baureihe 423",art:"S-Bahn-Triebzug",ab:"1999",vmax:"140 km/h",leistung:"2.350 kW",laenge:"67,4 m",hersteller:"Bombardier, LHB u. a."},
-  {id:"br52",name:"BR 52",typ:"Dampflok",wiki:"DB-Baureihe 52",art:"Dampflok (Kriegslok)",ab:"1942",vmax:"80 km/h",hersteller:"viele Werke"}
+  {id:"br52",name:"BR 52",typ:"Dampflok",wiki:"DB-Baureihe 52",art:"Dampflok (Kriegslok)",ab:"1942",vmax:"80 km/h",hersteller:"viele Werke"},
+  // ICE und Fernverkehr
+  {id:"ice2",name:"ICE 2 (BR 402)",typ:"ICE",wiki:"ICE 2",art:"Hochgeschwindigkeitszug",ab:"1996",vmax:"280 km/h",leistung:"4.800 kW",laenge:"205 m",hersteller:"Siemens, Adtranz u. a."},
+  {id:"ice3neo",name:"ICE 3neo (BR 408)",typ:"ICE",wiki:"ICE 3neo",art:"Hochgeschwindigkeitszug",ab:"2022",vmax:"320 km/h",leistung:"8.000 kW",laenge:"200 m",hersteller:"Siemens"},
+  {id:"velarod",name:"ICE 3 (BR 407, Velaro D)",typ:"ICE",wiki:"Siemens Velaro D",art:"Hochgeschwindigkeitszug",ab:"2013",vmax:"320 km/h",leistung:"8.000 kW",laenge:"200 m",hersteller:"Siemens"},
+  {id:"icet",name:"ICE T (BR 411/415)",typ:"ICE",wiki:"ICE T",art:"Neigetechnik-Triebzug",ab:"1999",vmax:"230 km/h",leistung:"4.000 kW",laenge:"185 m (BR 411)",hersteller:"Siemens, Bombardier u. a."},
+  {id:"icetd",name:"ICE TD (BR 605)",typ:"ICE",wiki:"DB-Baureihe 605",art:"Diesel-Neigetechnik-Triebzug",ab:"2001",vmax:"200 km/h",hersteller:"Siemens, Bombardier u. a."},
+  {id:"icel",name:"ICE L (Talgo 230)",typ:"ICE",wiki:"ICE L",art:"Lokbespannter Zug",ab:"2024",vmax:"230 km/h",hersteller:"Talgo"},
+  {id:"br103",name:"BR 103",typ:"IC/EC",wiki:"DB-Baureihe 103",art:"Elektrolok",ab:"1965",vmax:"200 km/h",leistung:"7.440 kW",laenge:"19,5 m",gewicht:"114 t",hersteller:"Henschel, Krupp, Krauss-Maffei u. a."},
+  {id:"br120",name:"BR 120",typ:"IC/EC",wiki:"DB-Baureihe 120",art:"Elektrolok (Drehstrom)",ab:"1979",vmax:"200 km/h",leistung:"5.600 kW",laenge:"19,2 m",gewicht:"84 t",hersteller:"Henschel, BBC"},
+  {id:"v200",name:"BR 220 (V 200)",typ:"IC/EC",wiki:"DB-Baureihe V 200",art:"Diesellok",ab:"1953",vmax:"140 km/h",leistung:"ca. 1.620 kW",hersteller:"Krauss-Maffei, MaK"},
+  {id:"vt115",name:"VT 11.5 (TEE)",typ:"IC/EC",wiki:"DB-Baureihe VT 11.5",art:"Diesel-Triebzug (TEE)",ab:"1957",vmax:"140 km/h"},
+  // Regionalverkehr: Loks
+  {id:"br110",name:"BR 110 (E 10)",typ:"Regionalzug",wiki:"DB-Baureihe E 10",art:"Elektrolok",ab:"1956",vmax:"150 km/h",leistung:"3.700 kW",laenge:"16,4 m",gewicht:"85 t",hersteller:"Krupp, Henschel, Krauss-Maffei u. a."},
+  {id:"br112",name:"BR 112",typ:"Regionalzug",wiki:"DB-Baureihe 112",art:"Elektrolok (ex DR 212)",ab:"1990",vmax:"160 km/h",leistung:"3.720 kW",hersteller:"LEW Hennigsdorf"},
+  {id:"br147",name:"BR 147 (TRAXX P160 AC3)",typ:"Regionalzug",wiki:"DB-Baureihe 147",art:"Elektrolok",ab:"2013",vmax:"160 km/h",leistung:"5.600 kW",hersteller:"Bombardier"},
+  {id:"br181",name:"BR 181",typ:"Regionalzug",wiki:"DB-Baureihe 181",art:"Elektrolok (Zweisystem)",ab:"1974",vmax:"160 km/h",leistung:"4.200 kW",hersteller:"Krupp u. a."},
+  {id:"br182",name:"BR 182 (Taurus ES64U2)",typ:"Regionalzug",wiki:"DB-Baureihe 182",art:"Elektrolok",ab:"2001",vmax:"230 km/h",leistung:"6.400 kW",laenge:"19,28 m",gewicht:"86 t",hersteller:"Siemens"},
+  {id:"br245",name:"BR 245 (TRAXX DE ME)",typ:"Regionalzug",wiki:"DB-Baureihe 245",art:"Diesellok",ab:"2013",vmax:"160 km/h",leistung:"ca. 2.200 kW",hersteller:"Bombardier"},
+  // Regionalverkehr: Triebzüge
+  {id:"br425",name:"BR 425",typ:"Regionalzug",wiki:"DB-Baureihe 425",art:"Elektrotriebzug",ab:"1999",vmax:"160 km/h",leistung:"2.350 kW",laenge:"67,4 m",hersteller:"Bombardier, Adtranz"},
+  {id:"br612",name:"BR 612 (RegioSwinger)",typ:"Regionalzug",wiki:"DB-Baureihe 612",art:"Neigetechnik-Dieseltriebzug",ab:"1998",vmax:"160 km/h"},
+  {id:"br628",name:"BR 628",typ:"Regionalzug",wiki:"DB-Baureihe 628",art:"Dieseltriebwagen",ab:"1974",vmax:"120 km/h"},
+  {id:"br642",name:"BR 642 (Desiro Classic)",typ:"Regionalzug",wiki:"DB-Baureihe 642",art:"Dieseltriebwagen",ab:"1999",vmax:"120 km/h",leistung:"550 kW",laenge:"41,7 m",hersteller:"Siemens"},
+  {id:"br648",name:"BR 648 (Coradia LINT 41)",typ:"Regionalzug",wiki:"DB-Baureihe 648",art:"Dieseltriebwagen",ab:"1999",vmax:"120 km/h",hersteller:"Alstom (LHB)"},
+  {id:"br650",name:"BR 650 (Regio-Shuttle)",typ:"Regionalzug",wiki:"Regio-Shuttle RS1",art:"Dieseltriebwagen",ab:"1995",vmax:"120 km/h",hersteller:"Stadler Pankow"},
+  {id:"talent",name:"Talent (BR 643/644)",typ:"Regionalzug",wiki:"Bombardier Talent",art:"Dieseltriebwagen",ab:"1996",vmax:"120 km/h",hersteller:"Talbot, Bombardier"},
+  {id:"talent2",name:"Talent 2 (BR 442)",typ:"Regionalzug",wiki:"Bombardier Talent 2",art:"Elektrotriebzug",vmax:"160 km/h",hersteller:"Bombardier (heute Alstom)"},
+  {id:"flirt",name:"Stadler FLIRT",typ:"Regionalzug",wiki:"Stadler FLIRT",art:"Triebzug",ab:"2004",vmax:"160 km/h",hersteller:"Stadler"},
+  {id:"desirohc",name:"Desiro HC",typ:"Regionalzug",wiki:"Siemens Desiro HC",art:"Elektrotriebzug",vmax:"160 km/h",hersteller:"Siemens"},
+  {id:"mireo",name:"Siemens Mireo",typ:"Regionalzug",wiki:"Siemens Mireo",art:"Triebzug (elektrisch, Batterie, Wasserstoff)",ab:"2018",vmax:"160 km/h",hersteller:"Siemens"},
+  {id:"coradiac",name:"Alstom Coradia Continental (BR 440)",typ:"Regionalzug",wiki:"Alstom Coradia Continental",art:"Elektrotriebzug",ab:"2008",vmax:"160 km/h",hersteller:"Alstom"},
+  {id:"lint",name:"Alstom Coradia LINT",typ:"Regionalzug",wiki:"Alstom Coradia LINT",art:"Dieseltriebwagen",ab:"1999",vmax:"120 km/h",hersteller:"Alstom"},
+  {id:"ilint",name:"Alstom Coradia iLint",typ:"Regionalzug",wiki:"Alstom Coradia iLint",art:"Wasserstoff-Triebzug",ab:"2018",vmax:"140 km/h",hersteller:"Alstom"},
+  // S-Bahn
+  {id:"br420",name:"BR 420",typ:"S-Bahn",wiki:"DB-Baureihe 420",art:"S-Bahn-Triebzug",ab:"1969",vmax:"120 km/h"},
+  {id:"br422",name:"BR 422",typ:"S-Bahn",wiki:"DB-Baureihe 422",art:"S-Bahn-Triebzug",ab:"1999",vmax:"140 km/h",leistung:"2.350 kW",hersteller:"Bombardier, Adtranz"},
+  {id:"br481",name:"BR 481/482 (S-Bahn Berlin)",typ:"S-Bahn",wiki:"DB-Baureihe 481",art:"S-Bahn-Triebzug (Stromschiene)",ab:"1996",vmax:"100 km/h",hersteller:"DWA, Adtranz"},
+  {id:"br483",name:"BR 483/484 (S-Bahn Berlin)",typ:"S-Bahn",wiki:"DB-Baureihe 483",art:"S-Bahn-Triebzug (Stromschiene)",ab:"2021",vmax:"100 km/h",hersteller:"Stadler, Siemens"},
+  // Güterverkehr
+  {id:"br140",name:"BR 140 (E 40)",typ:"Güterzug",wiki:"DB-Baureihe E 40",art:"Elektrolok",ab:"1957",vmax:"110 km/h",leistung:"3.700 kW",laenge:"16,49 m",gewicht:"83 t",hersteller:"Krupp, Henschel, Krauss-Maffei u. a."},
+  {id:"br145",name:"BR 145 (TRAXX F140 AC1)",typ:"Güterzug",wiki:"DB-Baureihe 145",art:"Elektrolok",ab:"2001",vmax:"140 km/h",leistung:"4.200 kW",laenge:"18,9 m",gewicht:"84 t",hersteller:"Bombardier"},
+  {id:"br150",name:"BR 150 (E 50)",typ:"Güterzug",wiki:"DB-Baureihe E 50",art:"Elektrolok",ab:"1957",vmax:"100 km/h",leistung:"5.400 kW",laenge:"19,5 m",gewicht:"118 t",hersteller:"Krupp, Henschel, Krauss-Maffei u. a."},
+  {id:"br151",name:"BR 151",typ:"Güterzug",wiki:"DB-Baureihe 151",art:"Elektrolok",ab:"1972",vmax:"120 km/h",leistung:"6.288 kW",laenge:"19,5 m",gewicht:"118 t",hersteller:"Krupp, Henschel, Krauss-Maffei u. a."},
+  {id:"br152",name:"BR 152 (ES64F)",typ:"Güterzug",wiki:"DB-Baureihe 152",art:"Elektrolok",ab:"1999",vmax:"140 km/h",leistung:"6.400 kW",laenge:"19,6 m",gewicht:"86 t",hersteller:"Siemens"},
+  {id:"br155",name:"BR 155 (ex DR 250)",typ:"Güterzug",wiki:"DB-Baureihe 155",art:"Elektrolok",ab:"1974",vmax:"125 km/h",leistung:"5.100 kW",laenge:"19,6 m",gewicht:"123 t",hersteller:"LEW Hennigsdorf"},
+  {id:"br186",name:"BR 186 (TRAXX F140 MS)",typ:"Güterzug",wiki:"DB-Baureihe 186",art:"Elektrolok (Mehrsystem)",ab:"2002",vmax:"140 km/h",leistung:"5.600 kW",laenge:"18,9 m",gewicht:"85 t",hersteller:"Bombardier"},
+  {id:"br187",name:"BR 187 (TRAXX F140 AC3)",typ:"Güterzug",wiki:"DB-Baureihe 187",art:"Elektrolok",ab:"2013",vmax:"140 km/h",leistung:"5.600 kW",laenge:"18,9 m",gewicht:"86 t",hersteller:"Bombardier"},
+  {id:"br189",name:"BR 189 (ES64F4)",typ:"Güterzug",wiki:"DB-Baureihe 189",art:"Elektrolok (Mehrsystem)",ab:"2003",vmax:"140 km/h",leistung:"6.400 kW",hersteller:"Siemens"},
+  {id:"br193",name:"BR 193 (Vectron)",typ:"Güterzug",wiki:"DB-Baureihe 193",art:"Elektrolok (Mehrsystem)",ab:"2010",vmax:"160 km/h",leistung:"6.400 kW",hersteller:"Siemens"},
+  {id:"br194",name:"BR 194 (E 94)",typ:"Güterzug",wiki:"DB-Baureihe E 94",art:"Elektrolok",ab:"1940",vmax:"90 km/h",leistung:"4.700 kW",laenge:"18,6 m",gewicht:"120 t",hersteller:"Krauss-Maffei, Henschel u. a."},
+  {id:"br232",name:"BR 232 (Ludmilla)",typ:"Güterzug",wiki:"DB-Baureihe 232",art:"Diesellok",ab:"1973",vmax:"120 km/h",leistung:"2.940 kW",laenge:"20,8 m",gewicht:"123 t",hersteller:"Luhansk"},
+  // Straßenbahn und U-Bahn
+  {id:"combino",name:"Siemens Combino",typ:"Straßenbahn/U-Bahn",wiki:"Siemens Combino",art:"Niederflur-Straßenbahn",ab:"1996",hersteller:"Siemens"},
+  {id:"flexity",name:"Flexity Classic",typ:"Straßenbahn/U-Bahn",wiki:"Bombardier Flexity Classic",art:"Niederflur-Straßenbahn",hersteller:"Bombardier"},
+  {id:"gt8",name:"Duewag GT8",typ:"Straßenbahn/U-Bahn",wiki:"Duewag GT8",art:"Hochflur-Gelenktriebwagen",hersteller:"Duewag"},
+  // Dampfloks
+  {id:"br01",name:"BR 01",typ:"Dampflok",wiki:"DB-Baureihe 01",art:"Schnellzug-Dampflok",ab:"1926",vmax:"130 km/h",hersteller:"Borsig u. a."},
+  {id:"br03",name:"BR 03",typ:"Dampflok",wiki:"DB-Baureihe 03",art:"Schnellzug-Dampflok",ab:"1930",vmax:"120 km/h"},
+  {id:"br38",name:"BR 38 (Preußische P 8)",typ:"Dampflok",wiki:"Preußische P 8",art:"Personenzug-Dampflok",ab:"1906",vmax:"110 km/h"},
+  {id:"br41",name:"BR 41",typ:"Dampflok",wiki:"DB-Baureihe 41",art:"Güterzug-Dampflok",ab:"1936",vmax:"90 km/h"},
+  {id:"br44",name:"BR 44",typ:"Dampflok",wiki:"DB-Baureihe 44",art:"Güterzug-Dampflok",ab:"1926",vmax:"80 km/h"},
+  {id:"br50",name:"BR 50",typ:"Dampflok",wiki:"DB-Baureihe 50",art:"Güterzug-Dampflok",ab:"1939",vmax:"80 km/h"},
+  {id:"br64",name:"BR 64 (Bubikopf)",typ:"Dampflok",wiki:"DB-Baureihe 64",art:"Tenderlok",ab:"1928",vmax:"90 km/h"},
+  {id:"br86",name:"BR 86",typ:"Dampflok",wiki:"DB-Baureihe 86",art:"Tenderlok",ab:"1928",vmax:"80 km/h"},
+  // Sonstiges
+  {id:"vt98",name:"Schienenbus (VT 95/98)",typ:"Sonstiges",wiki:"Schienenbus",art:"Dieseltriebwagen",ab:"1950er",vmax:"90 km/h",hersteller:"Uerdingen u. a."},
+  {id:"transrapid",name:"Transrapid",typ:"Sonstiges",wiki:"Transrapid",art:"Magnetschwebebahn",vmax:"bis 500 km/h"},
+  {id:"schwebebahn",name:"Wuppertaler Schwebebahn",typ:"Sonstiges",wiki:"Wuppertaler Schwebebahn",art:"Hängebahn",ab:"1901",vmax:"60 km/h"}
 ];
+// Nach Art sortieren (Reihenfolge innerhalb der Art bleibt erhalten)
+MODELLE.sort((a, b) => Object.keys(farben).indexOf(a.typ) - Object.keys(farben).indexOf(b.typ));
 const modell = id => MODELLE.find(m => m.id === id);
 
 // Modellbilder kommen von Wikipedia und werden im Browser zwischengespeichert
@@ -202,31 +318,53 @@ const modellBild = id => bilder[id] || "";
 const fotosVon = z => z.fotos || (z.bild ? [z.bild] : []);
 const bildFuer = z => fotosVon(z)[0] || modellBild(z.modell) || ersatzbild(z.typ);
 
+// Fotos werden nirgends gespeichert: Aufgenommene Bilder (data:/blob:) bleiben nur im Arbeitsspeicher
+// und werden weder im Browser-Speicher noch in der Sicherungsdatei abgelegt. Bild-Links bleiben erhalten.
+const ohneFotos = z => {
+  const c = Object.assign({}, z);
+  c.fotos = fotosVon(z).filter(u => !/^(data|blob):/i.test(u));
+  delete c.bild;
+  return c;
+};
+zuege = zuege.map(ohneFotos);
+speichern(); // entfernt auch Fotos, die eine frühere Version gespeichert hat
+
 function bilderLaden() {
   const offen = MODELLE.filter(m => !bilder[m.id]);
   if (!offen.length) return;
   const status = t => { $("status").textContent = t; };
-  window.wikiCb = j => {
-    const q = (j && j.query) || {};
-    const weg = {};
-    (q.normalized || []).forEach(n => { weg[n.from] = n.to; });
-    (q.redirects || []).forEach(r => { weg[r.from] = r.to; });
-    const seiten = Object.values(q.pages || {});
-    let gefunden = 0;
-    offen.forEach(m => {
-      let t = m.wiki; t = weg[t] || t; t = weg[t] || t;
-      const sv = seiten.find(x => x.title === t);
-      if (sv && sv.thumbnail) { bilder[m.id] = sv.thumbnail.source; gefunden++; }
-    });
-    try { localStorage.setItem(BILDKEY, JSON.stringify(bilder)); } catch (e) {}
-    status(gefunden < offen.length ? (offen.length - gefunden) + " Bilder nicht gefunden, dort bleibt die Zeichnung." : "");
-    zeigen(); katalogZeigen(); vorschauAktualisieren();
+  const pakete = [];
+  for (let i = 0; i < offen.length; i += 40) pakete.push(offen.slice(i, i + 40));
+  let fertig = 0, fehlend = 0, fehler = false;
+  const abschluss = () => {
+    if (++fertig < pakete.length) return;
+    status(fehler ? "Einige Bilder konnten nicht von Wikipedia geladen werden. Prüfe die Internetverbindung und öffne die Datei direkt im Browser, nicht in einer Vorschau."
+      : fehlend ? fehlend + " Bilder nicht gefunden, dort bleibt die Zeichnung." : "");
   };
-  const sc = document.createElement("script");
-  sc.src = "https://de.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages&piprop=thumbnail&pithumbsize=640&redirects=1&callback=wikiCb&titles="
-         + encodeURIComponent(offen.map(m => m.wiki).join("|"));
-  sc.onerror = () => status("Die Bilder konnten nicht von Wikipedia geladen werden. Prüfe die Internetverbindung und öffne die Datei direkt im Browser, nicht in einer Vorschau.");
-  document.head.appendChild(sc);
+  pakete.forEach((paket, n) => {
+    const cb = "wikiCb" + n;
+    const sc = document.createElement("script");
+    window[cb] = j => {
+      const q = (j && j.query) || {};
+      const weg = {};
+      (q.normalized || []).forEach(x => { weg[x.from] = x.to; });
+      (q.redirects || []).forEach(r => { weg[r.from] = r.to; });
+      const seiten = Object.values(q.pages || {});
+      paket.forEach(m => {
+        let t = m.wiki; t = weg[t] || t; t = weg[t] || t;
+        const sv = seiten.find(x => x.title === t);
+        if (sv && sv.thumbnail) bilder[m.id] = sv.thumbnail.source; else fehlend++;
+      });
+      try { localStorage.setItem(BILDKEY, JSON.stringify(bilder)); } catch (e) {}
+      sc.remove();
+      zeigen(); katalogZeigen(); vorschauAktualisieren();
+      abschluss();
+    };
+    sc.src = "https://de.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages&piprop=thumbnail&pithumbsize=640&redirects=1&callback=" + cb + "&titles="
+           + encodeURIComponent(paket.map(m => m.wiki).join("|"));
+    sc.onerror = () => { fehler = true; abschluss(); };
+    document.head.appendChild(sc);
+  });
 }
 
 function datenListe(m) {
@@ -239,7 +377,11 @@ function modellZeile(z) {
   return m ? `<div class="meta">${esc(m.name)}</div>` + datenListe(m) : "";
 }
 function katalogZeigen() {
-  $("katalog").innerHTML = MODELLE.map(m => `
+  const q = $("katSuche").value.toLowerCase(), art = $("katFilter").value;
+  const liste = MODELLE.filter(m => (!art || m.typ === art) &&
+    [m.name, m.art, m.hersteller, m.typ].join(" ").toLowerCase().includes(q));
+  $("katZahl").textContent = liste.length + " von " + MODELLE.length + " Modellen";
+  $("katalog").innerHTML = !liste.length ? '<div class="leer">Kein Modell gefunden.</div>' : liste.map(m => `
     <article class="karte klick" tabindex="0" data-id="${m.id}" style="--c:${farben[m.typ] || '#66717d'}">
       <img src="${modellBild(m.id) || ersatzbild(m.typ)}" alt="${esc(m.name)}" loading="lazy"
            onerror="this.onerror=null;this.src='${ersatzbild(m.typ)}'">
@@ -274,7 +416,7 @@ function ersatzbild(typ) {
 }
 
 function speichern() {
-  try { localStorage.setItem(KEY, JSON.stringify(zuege)); }
+  try { localStorage.setItem(KEY, JSON.stringify(zuege.map(ohneFotos))); }
   catch (e) { alert("Speicher voll. Lösche alte Einträge oder sichere dein Logbuch."); }
 }
 
@@ -430,8 +572,15 @@ const marker = {};
 function karteZeigen() {
   if (typeof L === "undefined") { $("kartenInfo").textContent = "Die Karte konnte nicht geladen werden. Prüfe die Internetverbindung."; return; }
   if (!karte) {
-    karte = L.map("kartebox").setView([51.2, 10.4], 6);
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, attribution: "© OpenStreetMap-Mitwirkende"}).addTo(karte);
+    karte = L.map("kartebox", {zoomControl: false, attributionControl: false}).setView([51.2, 10.4], 6);
+    L.control.zoom({zoomInTitle: "Vergrößern", zoomOutTitle: "Verkleinern"}).addTo(karte);
+    L.control.attribution({prefix: '<a href="https://leafletjs.com" title="Eine JavaScript-Bibliothek für interaktive Karten">Leaflet</a>'}).addTo(karte);
+    // Kacheln des OSM-Deutschland-Servers: Ortsnamen weltweit auf Deutsch
+    L.tileLayer("https://tile.openstreetmap.de/{z}/{x}/{y}.png", {maxZoom: 19, attribution: "© OpenStreetMap-Mitwirkende"}).addTo(karte);
+    karte.on("popupopen", e => {
+      const b = e.popup.getElement().querySelector(".leaflet-popup-close-button");
+      if (b) { b.setAttribute("aria-label", "Popup schließen"); b.title = "Schließen"; }
+    });
     markerEbene = L.layerGroup().addTo(karte);
   }
   markerEbene.clearLayers();
@@ -496,7 +645,7 @@ function zeitSetzen() {
 // Sichern und Laden
 $("export").onclick = () => {
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(zuege)], {type: "application/json"}));
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(zuege.map(ohneFotos))], {type: "application/json"}));
   a.download = "zug-logbuch.json"; a.click();
 };
 $("import").onclick = () => $("datei").click();
@@ -504,7 +653,7 @@ $("datei").onchange = async e => {
   try {
     const neu = JSON.parse(await e.target.files[0].text());
     const ids = new Set(zuege.map(z => z.id));
-    zuege = zuege.concat(neu.filter(z => z && z.id && !ids.has(z.id)));
+    zuege = zuege.concat(neu.filter(z => z && z.id && !ids.has(z.id)).map(ohneFotos));
     speichern(); zeigen();
   } catch (x) { alert("Die Datei konnte nicht gelesen werden."); }
   e.target.value = "";
@@ -515,7 +664,146 @@ Object.keys(farben).forEach(t => $("filter").insertAdjacentHTML("beforeend", `<o
 $("suche").addEventListener("input", zeigen);
 $("filter").addEventListener("change", zeigen);
 
-MODELLE.forEach(m => $("modell").insertAdjacentHTML("beforeend", `<option value="${m.id}">${m.name}</option>`));
+Object.keys(farben).forEach(t => {
+  const ms = MODELLE.filter(m => m.typ === t);
+  if (ms.length) $("modell").insertAdjacentHTML("beforeend", `<optgroup label="${t}">` + ms.map(m => `<option value="${m.id}">${esc(m.name)}</option>`).join("") + "</optgroup>");
+  $("katFilter").insertAdjacentHTML("beforeend", `<option>${t}</option>`);
+});
+$("katSuche").addEventListener("input", katalogZeigen);
+$("katFilter").addEventListener("change", katalogZeigen);
+// Abfahrten und Ankünfte am Bahnhof (Daten: v6.db.transport.rest, Echtzeit, ohne Schlüssel)
+const DBAPI = "https://v6.db.transport.rest";
+const ZUGPRODUKTE = {nationalExpress: "ICE", national: "IC/EC", regionalExpress: "Regionalzug", regional: "Regionalzug", suburban: "S-Bahn"};
+let bhf = null, bhfListe = [], bhfTimer = null, bhfLauf = 0, tafelDaten = {ab: [], an: []};
+const bhfInfo = t => { $("bhfInfo").textContent = t; };
+const hm = iso => new Date(iso).toLocaleTimeString("de-DE", {hour: "2-digit", minute: "2-digit"});
+const hatZug = s => !s.products || Object.keys(ZUGPRODUKTE).some(k => s.products[k]);
+
+async function dbApi(pfad, params) {
+  const u = new URL(DBAPI + pfad);
+  Object.keys(params).forEach(k => u.searchParams.set(k, params[k]));
+  const r = await fetch(u);
+  if (!r.ok) throw new Error("HTTP " + r.status);
+  return r.json();
+}
+
+function bhfWahlZeigen() {
+  $("bhfWahl").innerHTML = bhfListe.map((s, i) =>
+    `<button type="button" class="leise${bhf && bhf.id === s.id ? " aktiv" : ""}" data-i="${i}">${esc(s.name)}${s.distance ? " · " + s.distance + " m" : ""}</button>`).join("");
+}
+$("bhfWahl").addEventListener("click", e => {
+  const b = e.target.closest("[data-i]");
+  if (b) bhfWaehlen(bhfListe[+b.dataset.i]);
+});
+
+function bhfWaehlen(s) {
+  bhf = s;
+  bhfWahlZeigen();
+  ["bhfAb", "bhfAn"].forEach(id => { $(id).innerHTML = '<div class="leer">Wird geladen …</div>'; });
+  tafelLaden();
+  clearInterval(bhfTimer);
+  bhfTimer = setInterval(() => { if (!document.hidden) tafelLaden(); }, 60000);
+}
+
+function bahnhoefeSammeln(liste) {
+  const namen = new Set();
+  return (liste || []).filter(s => {
+    if (!s || !s.id || (s.type && s.type !== "stop" && s.type !== "station") || !hatZug(s) || namen.has(s.name)) return false;
+    namen.add(s.name); return true;
+  }).slice(0, 5);
+}
+
+$("bhfBtn").onclick = () => {
+  if (!navigator.geolocation) { bhfInfo("Dieses Gerät kann den Standort nicht abfragen."); return; }
+  bhfInfo("Standort wird gesucht …");
+  navigator.geolocation.getCurrentPosition(async p => {
+    try {
+      bhfInfo("Bahnhöfe in der Nähe werden gesucht …");
+      const l = await dbApi("/stops/nearby", {latitude: p.coords.latitude, longitude: p.coords.longitude, results: 20, distance: 5000, language: "de"});
+      bhfListe = bahnhoefeSammeln(l);
+      if (!bhfListe.length) { bhfWahlZeigen(); bhfInfo("Im Umkreis von 5 km wurde kein Bahnhof gefunden. Nutze die Suche."); return; }
+      bhfWaehlen(bhfListe[0]);
+    } catch (e) { bhfInfo("Die Bahnhöfe konnten nicht geladen werden. Prüfe die Internetverbindung oder versuche es später noch einmal."); }
+  }, err => {
+    bhfInfo(err.code === 1
+      ? "Standortzugriff abgelehnt. Erlaube ihn in den Browser-Einstellungen oder suche den Bahnhof von Hand."
+      : "Standort nicht verfügbar. Suche den Bahnhof von Hand.");
+  }, {enableHighAccuracy: true, timeout: 15000, maximumAge: 30000});
+};
+
+async function bhfSuchen() {
+  const q = $("bhfSuche").value.trim();
+  if (!q) return;
+  bhfInfo("Suche läuft …");
+  try {
+    const l = await dbApi("/locations", {query: q, results: 8, poi: "false", addresses: "false", language: "de"});
+    bhfListe = bahnhoefeSammeln(l);
+    if (!bhfListe.length) { bhfWahlZeigen(); bhfInfo("Kein Bahnhof gefunden."); return; }
+    bhfWaehlen(bhfListe[0]);
+  } catch (e) { bhfInfo("Die Suche ist fehlgeschlagen. Prüfe die Internetverbindung oder versuche es später noch einmal."); }
+}
+$("bhfSucheBtn").onclick = bhfSuchen;
+$("bhfSuche").addEventListener("keydown", e => { if (e.key === "Enter") bhfSuchen(); });
+$("bhfDauer").addEventListener("change", () => tafelLaden());
+
+async function tafelLaden() {
+  if (!bhf) return;
+  const lauf = ++bhfLauf;
+  const id = encodeURIComponent(bhf.id);
+  const par = {duration: $("bhfDauer").value, results: 100, language: "de", bus: "false", tram: "false", subway: "false", ferry: "false", taxi: "false"};
+  try {
+    const [ab, an] = await Promise.all([dbApi(`/stops/${id}/departures`, par), dbApi(`/stops/${id}/arrivals`, par)]);
+    if (lauf !== bhfLauf) return;
+    const filtern = l => (l || []).filter(d => !d.line || !d.line.product || ZUGPRODUKTE[d.line.product])
+      .sort((a, b) => (a.when || a.plannedWhen || "").localeCompare(b.when || b.plannedWhen || ""));
+    tafelDaten.ab = filtern(ab.departures);
+    tafelDaten.an = filtern(an.arrivals);
+    tafelZeichnen("bhfAb", "ab"); tafelZeichnen("bhfAn", "an");
+    bhfInfo(bhf.name + " · Stand " + new Date().toLocaleTimeString("de-DE") + " Uhr, aktualisiert sich jede Minute.");
+  } catch (e) {
+    if (lauf === bhfLauf) bhfInfo("Die Zugdaten konnten nicht geladen werden. Prüfe die Internetverbindung oder versuche es später noch einmal.");
+  }
+}
+
+function tafelZeichnen(boxId, art) {
+  const liste = tafelDaten[art];
+  $(boxId).innerHTML = liste.length ? liste.map((d, i) => {
+    const geplant = d.plannedWhen || d.when, l = d.line || {};
+    const min = typeof d.delay === "number" ? Math.round(d.delay / 60) : null;
+    const ziel = art === "ab" ? (d.direction || (d.destination && d.destination.name)) : (d.provenance || (d.origin && d.origin.name));
+    let status = "", klasse = "";
+    if (d.cancelled) { status = "fällt aus"; klasse = "spaet"; }
+    else if (min > 0) { status = "+" + min + " Min." + (d.when ? ", neu " + hm(d.when) : ""); klasse = "spaet"; }
+    else if (min === 0) { status = "pünktlich"; klasse = "ok"; }
+    const gleisNeu = d.platform && d.plannedPlatform && d.platform !== d.plannedPlatform;
+    const gleis = d.platform || d.plannedPlatform;
+    const morgen = new Date(geplant).toDateString() !== new Date().toDateString();
+    return `<div class="zeile${d.cancelled ? " ausfall" : ""}">
+      <div><div class="zeit">${hm(geplant)}</div>${morgen ? '<div class="sub">am ' + new Date(geplant).toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit"}) + "</div>" : ""}</div>
+      <div><div class="ziel"><span class="linie">${esc(l.name || "Zug")}</span>${esc((art === "ab" ? "nach " : "von ") + (ziel || "unbekannt"))}</div>
+        ${status ? `<div class="sub ${klasse}">${esc(status)}</div>` : ""}</div>
+      <div class="gleis${gleisNeu ? " neu" : ""}">${gleis ? "Gl. " + esc(gleis) : "–"}${gleisNeu ? '<div class="sub">geändert</div>' : ""}<br><button type="button" class="leise" onclick="tafelEintragen('${art}',${i})">Eintragen</button></div>
+    </div>`;
+  }).join("") : '<div class="leer">Keine Züge im gewählten Zeitraum.</div>';
+}
+
+// Zug aus der Tafel ins Formular übernehmen
+function tafelEintragen(art, i) {
+  const d = tafelDaten[art][i];
+  if (!d || !bhf) return;
+  const l = d.line || {};
+  let nr = l.name || "";
+  if (l.fahrtNr && !nr.includes(l.fahrtNr)) nr += (nr ? " " : "") + "(" + l.fahrtNr + ")";
+  $("nummer").value = nr;
+  if (ZUGPRODUKTE[l.product]) $("typ").value = ZUGPRODUKTE[l.product];
+  $("ort").value = bhf.name;
+  const t = new Date(d.when || d.plannedWhen);
+  $("zeit").value = new Date(t - t.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+  vorschauAktualisieren();
+  $("form").scrollIntoView({behavior: "smooth"});
+  $("nummer").focus({preventScroll: true});
+}
+
 zeitSetzen(); vorschauAktualisieren(); zeigen(); katalogZeigen(); bilderLaden();
 </script>
 </body>
