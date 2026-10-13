@@ -133,6 +133,63 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
 .funktionen button.aktiv,.funktionen button.aktiv:hover{background:var(--tafel);color:var(--amber);border:0;box-shadow:inset 0 3px 0 var(--amber)}
 #toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:2500;background:var(--text);color:var(--weiss);padding:10px 20px;border-radius:999px;font-weight:600;font-size:.9rem;max-width:90%;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s}
 #toast.an{opacity:1}
+[hidden]{display:none!important}
+.filterleiste{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0 4px}
+.filterleiste #suche{grid-column:1/-1}
+#trefferInfo button{margin-left:10px;padding:5px 12px}
+.galgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:10px}
+.kachel,.kachel:hover{position:relative;padding:0;border-radius:10px;overflow:hidden;aspect-ratio:1;background:var(--tafel)}
+.kachel img{width:100%;height:100%;object-fit:cover;display:block}
+.kachel .tag{position:absolute;left:0;right:0;bottom:0;padding:16px 8px 6px;background:linear-gradient(transparent,rgba(0,0,0,.75));color:#fff;font-size:.72rem;font-weight:600;text-align:left}
+.kachel .stern{position:absolute;top:6px;right:6px;background:var(--amber);color:var(--nacht);border-radius:999px;padding:1px 7px;font-size:.75rem}
+#lightbox,#editor{position:fixed;inset:0;z-index:3200;background:rgba(10,16,24,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;color:#fff;gap:12px;overflow-y:auto}
+#editor{z-index:3400;justify-content:flex-start}
+#lbBild{max-width:100%;max-height:60vh;object-fit:contain;border-radius:8px}
+.lbinfo,.edsteu{display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;max-width:560px;width:100%}
+.lbinfo span{color:#aab6c3;font-size:.85rem}
+.lbx,.lbx:hover{position:absolute;top:calc(8px + env(safe-area-inset-top,0px));right:10px;width:42px;height:42px;padding:0;border-radius:50%;font-size:1.5rem;background:rgba(255,255,255,.15)}
+.lbnav,.lbnav:hover{position:absolute;top:38%;width:44px;height:56px;padding:0;font-size:2rem;background:rgba(255,255,255,.15);z-index:1}
+#lightbox .leise,#lightbox .leise:hover,#editor .leise,#editor .leise:hover{background:rgba(255,255,255,.14);color:#fff;border:0}
+#lightbox .leise:disabled{opacity:.5}
+#lightbox .lbinfo .aktionen,#editor .aktionen,#editor .chips{justify-content:center}
+#editor canvas{max-width:100%;max-height:42vh;border-radius:6px;background:#000}
+#editor label{width:100%;display:flex;align-items:center;gap:12px;color:#fff}
+#editor input[type=range]{flex:1;padding:0}
+#editor .leise.aktiv{background:var(--amber);color:var(--nacht)}
+.m .mb,.m .mb:hover{top:auto;right:auto;bottom:-7px;left:-7px;background:var(--amber);color:var(--nacht);font-size:12px}
+.m .mb.ed,.m .mb.ed:hover{left:auto;right:-7px;background:var(--weiss);color:var(--text);border:1px solid var(--linie)}
+.m .titel{position:absolute;left:4px;bottom:4px;background:var(--amber);color:var(--nacht);font:700 .62rem sans-serif;padding:1px 6px;border-radius:999px}
+.funktionen button,.funktionen button:hover{font-size:.66rem}
+#toast{z-index:4000}
+#detail{position:fixed;inset:0;z-index:3100;background:rgba(10,16,24,.55);display:flex;align-items:flex-end;justify-content:center}
+#detail .sheet{background:var(--papier);width:100%;max-width:640px;max-height:88vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom,0px));position:relative}
+.dtx,.dtx:hover{position:absolute;top:10px;right:12px;width:38px;height:38px;border-radius:50%;padding:0;font-size:1.4rem;background:var(--text);color:#fff}
+.dt-titel{font:700 1.3rem/1.3 var(--kopf);padding-right:44px}
+.dt-titel .linie{background:var(--nacht);color:var(--amber);border-radius:6px;padding:1px 9px;margin-right:6px;font-size:1.1rem}
+.dt-fakten{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:12px 0}
+.dt-fakten div{background:var(--weiss);border-radius:10px;padding:8px 12px}
+.dt-fakten b{display:block;font-size:.7rem;color:var(--grau);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.dt-meld{background:#fff4d6;color:var(--text);border-left:4px solid var(--amber);border-radius:8px;padding:10px 12px;margin:8px 0;font-size:.88rem}
+.verlauf{list-style:none;margin:10px 0 0;padding:0 0 0 16px;border-left:3px solid var(--linie)}
+.verlauf li{position:relative;display:grid;grid-template-columns:7.5rem 1fr auto;gap:8px;padding:7px 0}
+.verlauf li:before{content:"";position:absolute;left:-24px;top:12px;width:9px;height:9px;border-radius:50%;background:var(--weiss);border:3px solid var(--grau)}
+.verlauf .vorbei{opacity:.5}
+.verlauf .hier{font-weight:700}
+.verlauf .hier:before{border-color:var(--rot);background:var(--rot)}
+.verlauf .aus .hn{text-decoration:line-through}
+.verlauf .hz{font-variant-numeric:tabular-nums}
+.verlauf .spaet{color:var(--rot);font-weight:600}
+.verlauf .hg{color:var(--grau);font-size:.85rem}
+.dt-modelle{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px}
+.mk,.mk:hover{flex:0 0 112px;padding:0;border-radius:10px;background:var(--weiss);color:var(--text);overflow:hidden;text-align:left;border:2px solid transparent}
+.mk img{width:100%;height:72px;object-fit:cover;display:block}
+.mk span{display:block;padding:6px 8px;font-size:.74rem;font-weight:600;line-height:1.25}
+.mk.aktiv,.mk.aktiv:hover{border-color:var(--rot)}
+.dt-modell{background:var(--weiss);border-radius:12px;overflow:hidden;margin:8px 0}
+.dt-modell>img{width:100%;max-height:230px;object-fit:cover;display:block}
+.dt-modell .inh{padding:10px 14px 14px}
+.dt-eigene{display:flex;gap:6px;flex-wrap:wrap}
+.dt-eigene img{width:72px;height:54px;object-fit:cover;border-radius:6px}
 @media (prefers-reduced-motion:reduce){.karte.klick{transition:none}}
 </style>
 </head>
@@ -148,7 +205,7 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
 
   <section class="tab" id="tab-neu">
   <form id="form">
-    <h2>Neuen Zug eintragen</h2>
+    <h2 id="formTitel">Neuen Zug eintragen</h2>
     <label>Baureihe / Modell
       <select id="modell"><option value="">Anderes / unbekannt</option></select>
     </label>
@@ -178,7 +235,7 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
       <input id="fotoCam" type="file" accept="image/*" capture="environment" hidden>
       <div class="minis" id="minis"></div>
       <span class="kat-info" id="posInfo" role="status"></span>
-      <span class="kat-info">Fotos werden nirgends gespeichert: Sie bleiben nur bis zum Schließen oder Neuladen der Seite sichtbar und sind auch nicht in der Sicherungsdatei enthalten.</span>
+      <span class="kat-info">Fotos bleiben nur auf diesem Gerät im Browser gespeichert und werden nirgends hochgeladen. Die Sicherungsdatei enthält sie, deshalb kann sie groß werden. Mit ★ wählst du das Titelbild, mit ✎ bearbeitest du ein Foto.</span>
     </div>
     <label>oder Bild-Link
       <input id="url" type="url" placeholder="https://…">
@@ -188,9 +245,20 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
     </label>
     <div class="breit vorschau">
       <img id="vorschau" alt="Vorschau">
-      <button type="submit">Zug speichern</button>
+      <button type="submit" id="speicherBtn">Zug speichern</button>
+      <button type="button" class="leise" id="abbrBtn" hidden>Abbrechen</button>
     </div>
   </form>
+  </section>
+
+  <section class="tab" id="tab-galerie">
+    <div class="leiste" style="margin-top:0"><h2>Galerie</h2></div>
+    <div class="filterleiste">
+      <select id="galArt" aria-label="Art"><option value="">Alle Arten</option></select>
+      <select id="galSort" aria-label="Sortierung"><option value="neu">Neueste zuerst</option><option value="alt">Älteste zuerst</option></select>
+    </div>
+    <p class="kat-info" id="galInfo" role="status"></p>
+    <div class="galgrid" id="galGrid"></div>
   </section>
 
   <section class="kartenblock tab" id="tab-karte">
@@ -201,7 +269,7 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
 
   <section class="bahnhof tab" id="tab-bahnhof">
     <h2>Abfahrten und Ankünfte</h2>
-    <p class="kat-info">Tippe einen Bahnhof ein oder nutze deinen Standort. Tippe dann auf einen Zug, um ihn ins Formular zu übernehmen. Echtzeitdaten wo verfügbar, ohne Gewähr.</p>
+    <p class="kat-info">Tippe einen Bahnhof ein oder nutze deinen Standort. Tippe dann auf einen Zug für Details und zum Eintragen ins Logbuch. Echtzeitdaten wo verfügbar, ohne Gewähr.</p>
     <div class="bhfsuche">
       <input id="bhfSuche" type="search" autocomplete="off" placeholder="Bahnhof eingeben, z. B. Kiel Hbf" aria-label="Bahnhof suchen">
       <button type="button" id="bhfBtn">Bahnhof in meiner Nähe</button>
@@ -233,12 +301,24 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
   <section class="tab" id="tab-liste">
   <div class="leiste" style="margin-top:0">
     <h2>Meine Sichtungen</h2>
-    <input id="suche" type="search" placeholder="Suchen (Nummer, Ort, Notiz)">
-    <select id="filter"><option value="">Alle Arten</option></select>
     <button class="leise" id="export" type="button">Sichern</button>
     <button class="leise" id="import" type="button">Laden</button>
     <input id="datei" type="file" accept="application/json" hidden>
   </div>
+  <div class="filterleiste">
+    <input id="suche" type="search" placeholder="Suchen: Nummer, Ort, Notiz, Modell" aria-label="Suchen">
+    <select id="filter" aria-label="Art"><option value="">Alle Arten</option></select>
+    <select id="ortFilter" aria-label="Ort"><option value="">Alle Orte</option></select>
+    <select id="zeitFilter" aria-label="Zeitraum">
+      <option value="">Jederzeit</option><option value="heute">Heute</option><option value="7">Letzte 7 Tage</option>
+      <option value="30">Letzte 30 Tage</option><option value="jahr">Dieses Jahr</option>
+    </select>
+    <select id="sort" aria-label="Sortierung">
+      <option value="neu">Neueste zuerst</option><option value="alt">Älteste zuerst</option>
+      <option value="nr">Nummer A–Z</option><option value="ort">Ort A–Z</option>
+    </select>
+  </div>
+  <p class="kat-info" id="trefferInfo" role="status"></p>
 
   <div class="liste" id="liste"></div>
   </section>
@@ -259,12 +339,52 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
 
 <nav class="funktionen" id="funktionen" aria-label="Funktionen">
   <button type="button" data-tab="neu"><span class="ico" aria-hidden="true">✏️</span>Eintragen</button>
-  <button type="button" data-tab="liste"><span class="ico" aria-hidden="true">📖</span>Sichtungen</button>
+  <button type="button" data-tab="liste"><span class="ico" aria-hidden="true">📖</span>Logbuch</button>
+  <button type="button" data-tab="galerie"><span class="ico" aria-hidden="true">🖼️</span>Galerie</button>
   <button type="button" data-tab="karte"><span class="ico" aria-hidden="true">🗺️</span>Karte</button>
   <button type="button" data-tab="bahnhof"><span class="ico" aria-hidden="true">🚉</span>Bahnhof</button>
   <button type="button" data-tab="katalog"><span class="ico" aria-hidden="true">📚</span>Katalog</button>
 </nav>
 <div id="toast" role="status" aria-live="polite"></div>
+<div id="detail" hidden role="dialog" aria-label="Zugdetails">
+  <div class="sheet">
+    <button type="button" class="dtx" id="dtZu" aria-label="Schließen">×</button>
+    <div id="dtKopf"></div>
+    <div class="aktionen"><button type="button" id="dtEintragen">Ins Logbuch übernehmen</button><button type="button" class="leise" id="dtZu2">Schließen</button></div>
+    <div id="dtModell"></div>
+    <div id="dtMeld"></div>
+    <h3 style="margin:18px 0 0;font:700 1.1rem var(--kopf)">Fahrtverlauf</h3>
+    <div id="dtHalte"></div>
+  </div>
+</div>
+<div id="lightbox" hidden role="dialog" aria-label="Foto">
+  <button type="button" id="lbZu" class="lbx" aria-label="Schließen">×</button>
+  <button type="button" id="lbPrev" class="lbnav" aria-label="Vorheriges Foto" style="left:8px">‹</button>
+  <button type="button" id="lbNext" class="lbnav" aria-label="Nächstes Foto" style="right:8px">›</button>
+  <img id="lbBild" alt="">
+  <div class="lbinfo"><b id="lbTitel"></b><span id="lbMeta"></span>
+    <div class="aktionen">
+      <button type="button" class="leise" id="lbCover">★ Als Titelbild</button>
+      <button type="button" class="leise" id="lbEdit">✎ Bearbeiten</button>
+      <button type="button" class="leise" id="lbZug">Zug im Logbuch</button>
+      <button type="button" class="leise" id="lbDel">Foto löschen</button>
+    </div>
+  </div>
+</div>
+<div id="editor" hidden role="dialog" aria-label="Foto bearbeiten">
+  <canvas id="edCanvas"></canvas>
+  <div class="edsteu">
+    <div class="aktionen"><button type="button" class="leise" id="edL">⟲ Links drehen</button><button type="button" class="leise" id="edR">⟳ Rechts drehen</button></div>
+    <div class="chips" id="edRatio"><span class="lbl">Zuschnitt</span>
+      <button type="button" class="leise aktiv" data-r="0">Original</button><button type="button" class="leise" data-r="1">1:1</button>
+      <button type="button" class="leise" data-r="1.3333">4:3</button><button type="button" class="leise" data-r="0.75">3:4</button><button type="button" class="leise" data-r="1.7778">16:9</button>
+    </div>
+    <label>Helligkeit <input type="range" id="edBr" min="50" max="150" value="100"></label>
+    <label>Kontrast <input type="range" id="edCt" min="50" max="150" value="100"></label>
+    <label>Farbe <input type="range" id="edSa" min="0" max="200" value="100"></label>
+    <div class="aktionen"><button type="button" id="edOk">Speichern</button><button type="button" class="leise" id="edReset">Zurücksetzen</button><button type="button" class="leise" id="edAbbr">Abbrechen</button></div>
+  </div>
+</div>
 
 <div id="kamera" class="kamera" hidden>
   <video id="video" playsinline autoplay muted></video>
@@ -373,14 +493,52 @@ const BILDKEY = "zuglogbuch.bilder.v1";
 let bilder = {};
 try { bilder = JSON.parse(localStorage.getItem(BILDKEY)) || {}; } catch (e) { bilder = {}; }
 const modellBild = id => bilder[id] || "";
-const fotosVon = z => z.fotos || (z.bild ? [z.bild] : []);
+// Foto-Speicher: Fotos liegen nur lokal im Browser (IndexedDB), im Logbuch steht ein Verweis "idb:…"
+const fotoCache = new Map();
+let aktuelleFotos = []; // Fotos im Formular (Verweise)
+let fotoDB = null;
+const rohFotos = z => z.fotos || (z.bild ? [z.bild] : []);
+const fotoSrc = t => String(t || "").startsWith("idb:") ? (fotoCache.get(t) || "") : String(t || "");
+const fotosVon = z => rohFotos(z).map(fotoSrc).filter(Boolean);
 const bildFuer = z => fotosVon(z)[0] || modellBild(z.modell) || ersatzbild(z.typ);
-
-// Fotos werden nirgends gespeichert: Aufgenommene Bilder (data:/blob:) bleiben nur im Arbeitsspeicher
-// und werden weder im Browser-Speicher noch in der Sicherungsdatei abgelegt. Bild-Links bleiben erhalten.
+const bearbeitbar = t => /^(idb:|data:)/.test(String(t || "")) && !!fotoSrc(t);
+function idbOp(modus, fn) {
+  return new Promise(ok => {
+    if (!fotoDB) return ok(null);
+    try { const t = fotoDB.transaction("f", modus), q = fn(t.objectStore("f")); t.oncomplete = () => ok(q); t.onerror = t.onabort = () => ok(null); }
+    catch (e) { ok(null); }
+  });
+}
+function fotoLaden() {
+  return new Promise(ok => {
+    try {
+      const r = indexedDB.open("zuglogbuch-fotos", 1);
+      r.onupgradeneeded = () => r.result.createObjectStore("f");
+      r.onerror = () => ok();
+      r.onsuccess = async () => {
+        fotoDB = r.result;
+        const s = await idbOp("readonly", st => ({k: st.getAllKeys(), v: st.getAll()}));
+        if (s) s.k.result.forEach((k, i) => fotoCache.set(k, s.v.result[i]));
+        ok();
+      };
+    } catch (e) { ok(); }
+  });
+}
+async function fotoSpeichern(dataUrl) {
+  if (!fotoDB) return dataUrl; // ohne Speicher: nur im Arbeitsspeicher
+  const t = "idb:" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  fotoCache.set(t, dataUrl);
+  await idbOp("readwrite", s => s.put(dataUrl, t));
+  return t;
+}
+function fotosAufraeumen() { // nicht mehr verwendete Fotos löschen
+  const benutzt = new Set(aktuelleFotos);
+  zuege.forEach(z => rohFotos(z).forEach(t => benutzt.add(t)));
+  [...fotoCache.keys()].forEach(t => { if (!benutzt.has(t)) { fotoCache.delete(t); idbOp("readwrite", s => s.delete(t)); } });
+}
 const ohneFotos = z => {
   const c = Object.assign({}, z);
-  c.fotos = fotosVon(z).filter(u => !/^(data|blob):/i.test(u));
+  c.fotos = rohFotos(z).filter(u => !/^(data|blob):/i.test(u));
   delete c.bild;
   return c;
 };
@@ -415,7 +573,7 @@ function bilderLaden() {
       });
       try { localStorage.setItem(BILDKEY, JSON.stringify(bilder)); } catch (e) {}
       sc.remove();
-      zeigen(); katalogZeigen(); vorschauAktualisieren();
+      zeigen(); katalogZeigen(); vorschauAktualisieren(); detailModellRefresh();
       abschluss();
     };
     sc.src = "https://de.wikipedia.org/w/api.php?action=query&format=json&prop=pageimages&piprop=thumbnail&pithumbsize=640&redirects=1&callback=" + cb + "&titles="
@@ -476,17 +634,39 @@ function ersatzbild(typ) {
 function speichern() {
   try { localStorage.setItem(KEY, JSON.stringify(zuege.map(ohneFotos))); }
   catch (e) { alert("Speicher voll. Lösche alte Einträge oder sichere dein Logbuch."); }
+  fotosAufraeumen();
 }
 
 function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
+const norm = t => String(t || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+function filterReset() { ["suche", "filter", "ortFilter", "zeitFilter"].forEach(i => { $(i).value = ""; }); zeigen(); }
 function zeigen() {
-  const q = $("suche").value.toLowerCase(), art = $("filter").value;
-  const treffer = zuege.filter(z =>
-    (!art || z.typ === art) &&
-    (z.nummer + " " + z.ort + " " + z.notiz + " " + ((modell(z.modell) || {}).name || "")).toLowerCase().includes(q)
-  ).sort((a, b) => b.zeit.localeCompare(a.zeit));
+  const woerter = norm($("suche").value).split(/\s+/).filter(Boolean), art = $("filter").value, zf = $("zeitFilter").value;
+  // Ortsliste aus den Einträgen aufbauen
+  const ortListe = [...new Set(zuege.map(z => (z.ort || "").trim()).filter(Boolean))].sort((a, b) => a.localeCompare(b, "de"));
+  const ortF = ortListe.includes($("ortFilter").value) ? $("ortFilter").value : "";
+  $("ortFilter").innerHTML = '<option value="">Alle Orte</option>' + ortListe.map(o => `<option value="${attr(o)}">${esc(o)}</option>`).join("");
+  $("ortFilter").value = ortF;
+  const jetzt = new Date(), tag0 = new Date(jetzt.getFullYear(), jetzt.getMonth(), jetzt.getDate());
+  const ab = zf === "heute" ? tag0 : zf === "jahr" ? new Date(jetzt.getFullYear(), 0, 1) : zf ? new Date(tag0 - (+zf - 1) * 864e5) : null;
+  const sorter = {
+    neu: (a, b) => b.zeit.localeCompare(a.zeit), alt: (a, b) => a.zeit.localeCompare(b.zeit),
+    nr: (a, b) => a.nummer.localeCompare(b.nummer, "de", {numeric: true}),
+    ort: (a, b) => (a.ort || "").localeCompare(b.ort || "", "de") || b.zeit.localeCompare(a.zeit)
+  }[$("sort").value];
+  const treffer = zuege.filter(z => {
+    if (art && z.typ !== art) return false;
+    if (ortF && (z.ort || "").trim() !== ortF) return false;
+    if (ab && new Date(z.zeit) < ab) return false;
+    const heu = norm([z.nummer, z.ort, z.notiz, z.typ, (modell(z.modell) || {}).name].join(" "));
+    return woerter.every(w => heu.includes(w));
+  }).sort(sorter);
   letzteTreffer = treffer;
+  const aktiv = woerter.length || art || ortF || zf;
+  $("trefferInfo").innerHTML = aktiv
+    ? `${treffer.length} von ${zuege.length} Sichtungen <button type="button" class="leise" onclick="filterReset()">Filter zurücksetzen</button>`
+    : (zuege.length ? zuege.length + (zuege.length === 1 ? " Sichtung" : " Sichtungen") : "");
 
   $("liste").innerHTML = treffer.length ? treffer.map(z => `
     <article class="karte" style="--c:${farben[z.typ] || '#66717d'}">
@@ -498,9 +678,9 @@ function zeigen() {
         <div class="meta">${esc(z.ort || "Ort unbekannt")} · ${new Date(z.zeit).toLocaleString("de-DE", {dateStyle:"medium", timeStyle:"short"})}</div>
         ${z.notiz ? `<p class="notiz">${esc(z.notiz)}</p>` : ""}
       </div>
-      <div class="aktion"><button class="leise" onclick="loeschen('${z.id}')">Löschen</button>${z.pos ? `<button class="leise" onclick="aufKarte('${z.id}')">Auf Karte</button>` : ""}</div>
+      <div class="aktion"><button class="leise" onclick="bearbeiten('${z.id}')">Bearbeiten</button><button class="leise" onclick="loeschen('${z.id}')">Löschen</button>${z.pos ? `<button class="leise" onclick="aufKarte('${z.id}')">Auf Karte</button>` : ""}</div>
     </article>`).join("")
-    : `<div class="leer">${zuege.length ? "Keine Treffer für diese Suche." : "Noch kein Zug im Logbuch. Trag oben deinen ersten ein."}</div>`;
+    : `<div class="leer">${zuege.length ? "Keine Treffer für diese Suche." : "Noch kein Zug im Logbuch. Trag im Tab „Eintragen“ deinen ersten ein."}</div>`;
 
   const orte = new Set(zuege.map(z => z.ort.trim().toLowerCase()).filter(Boolean));
   const nummern = new Set(zuege.map(z => z.nummer.trim().toLowerCase()));
@@ -509,6 +689,7 @@ function zeigen() {
     `<div class="stat"><b>${nummern.size}</b><span>verschiedene Züge</span></div>` +
     `<div class="stat"><b>${orte.size}</b><span>Orte</span></div>`;
   karteZeigen();
+  galerieZeigen();
 }
 
 const attr = u => String(u).replace(/"/g, "&quot;");
@@ -523,6 +704,7 @@ function tausche(el) { el.closest(".galerie").querySelector(".gross").src = el.s
 function loeschen(id) {
   if (!confirm("Diesen Eintrag löschen?")) return;
   zuege = zuege.filter(z => z.id !== id);
+  if (bearbeiteId === id) bearbeitenAbbrechen();
   speichern(); zeigen();
 }
 
@@ -535,11 +717,11 @@ function verkleinern(datei) {
       const img = new Image();
       img.onerror = fehler;
       img.onload = () => {
-        const s = Math.min(1, 720 / Math.max(img.width, img.height));
+        const s = Math.min(1, 1280 / Math.max(img.width, img.height));
         const c = document.createElement("canvas");
         c.width = img.width * s; c.height = img.height * s;
         c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
-        ok(c.toDataURL("image/jpeg", .7));
+        ok(c.toDataURL("image/jpeg", .8));
       };
       img.src = r.result;
     };
@@ -547,20 +729,22 @@ function verkleinern(datei) {
   });
 }
 
-let aktuelleFotos = [], pos = null, letzteTreffer = [];
+let pos = null, letzteTreffer = [];
 
 function minisZeigen() {
   $("minis").innerHTML = aktuelleFotos.map((u, i) =>
-    `<span class="m"><img src="${u}" alt="Foto ${i + 1}"><button type="button" aria-label="Foto entfernen" onclick="fotoWeg(${i})">×</button></span>`).join("");
+    `<span class="m"><img src="${attr(fotoSrc(u))}" alt="Foto ${i + 1}">${i === 0 ? '<em class="titel">Titelbild</em>' : `<button type="button" class="mb" aria-label="Als Titelbild" title="Als Titelbild" onclick="fotoTitel(${i})">★</button>`}${bearbeitbar(u) ? `<button type="button" class="mb ed" aria-label="Foto bearbeiten" title="Bearbeiten" onclick="fotoBearb(${i})">✎</button>` : ""}<button type="button" aria-label="Foto entfernen" onclick="fotoWeg(${i})">×</button></span>`).join("");
 }
 function fotoWeg(i) { aktuelleFotos.splice(i, 1); minisZeigen(); vorschauAktualisieren(); }
+function fotoTitel(i) { aktuelleFotos.unshift(aktuelleFotos.splice(i, 1)[0]); minisZeigen(); vorschauAktualisieren(); }
+async function fotoBearb(i) { const n = await fotoEditor(aktuelleFotos[i]); if (n) { aktuelleFotos[i] = n; minisZeigen(); vorschauAktualisieren(); } }
 function vorschauAktualisieren() {
-  $("vorschau").src = aktuelleFotos[0] || $("url").value.trim() || modellBild($("modell").value) || ersatzbild($("typ").value);
+  $("vorschau").src = fotoSrc(aktuelleFotos[0]) || $("url").value.trim() || modellBild($("modell").value) || ersatzbild($("typ").value);
 }
 async function dateienHinzu(liste) {
   for (const f of liste) {
     const u = await verkleinern(f).catch(() => "");
-    if (u) aktuelleFotos.push(u);
+    if (u) aktuelleFotos.push(await fotoSpeichern(u));
   }
   minisZeigen(); vorschauAktualisieren();
 }
@@ -591,12 +775,11 @@ $("kamZu").onclick = kameraSchliessen;
 $("kamKnipp").onclick = () => {
   const v = $("video");
   if (!v.videoWidth) return;
-  const k = Math.min(1, 720 / Math.max(v.videoWidth, v.videoHeight));
+  const k = Math.min(1, 1280 / Math.max(v.videoWidth, v.videoHeight));
   const c = document.createElement("canvas");
   c.width = v.videoWidth * k; c.height = v.videoHeight * k;
   c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
-  aktuelleFotos.push(c.toDataURL("image/jpeg", .7));
-  kamZahl();
+  fotoSpeichern(c.toDataURL("image/jpeg", .8)).then(t => { aktuelleFotos.push(t); kamZahl(); });
 };
 document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("kamera").hidden) kameraSchliessen(); });
 
@@ -691,8 +874,7 @@ $("katalog").addEventListener("keydown", e => {
 
 $("form").addEventListener("submit", e => {
   e.preventDefault();
-  zuege.push({
-    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+  const eintrag = {
     nummer: $("nummer").value.trim(),
     typ: $("typ").value,
     modell: $("modell").value,
@@ -701,13 +883,151 @@ $("form").addEventListener("submit", e => {
     notiz: $("notiz").value.trim(),
     fotos: aktuelleFotos.concat($("url").value.trim() ? [$("url").value.trim()] : []),
     pos: pos
-  });
+  };
+  if (bearbeiteId) {
+    const i = zuege.findIndex(x => x.id === bearbeiteId);
+    if (i >= 0) zuege[i] = Object.assign({}, zuege[i], eintrag);
+    speichern(); bearbeitenAbbrechen(); zeigen(); tabZeigen("liste"); toast("Änderungen gespeichert");
+    return;
+  }
+  eintrag.id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  zuege.push(eintrag);
   speichern();
   const ort = $("ort").value, typ = $("typ").value, mod = $("modell").value;
   e.target.reset();
   $("ort").value = ort; $("typ").value = typ; $("modell").value = mod; // Ort und Art bleiben für den nächsten Zug stehen
   aktuelleFotos = []; pos = null; $("posInfo").textContent = ""; minisZeigen(); zeitSetzen(); vorschauAktualisieren(); zeigen(); toast("Zug gespeichert");
 });
+
+// Galerie, Großansicht und Foto-Editor
+let galListe = [], lbI = -1;
+Object.keys(farben).forEach(t => $("galArt").insertAdjacentHTML("beforeend", `<option>${t}</option>`));
+$("galArt").onchange = $("galSort").onchange = () => galerieZeigen();
+function galerieZeigen() {
+  const art = $("galArt").value, alt = $("galSort").value === "alt";
+  galListe = [];
+  zuege.filter(z => !art || z.typ === art).sort((a, b) => alt ? a.zeit.localeCompare(b.zeit) : b.zeit.localeCompare(a.zeit))
+    .forEach(z => rohFotos(z).forEach((t, i) => { if (fotoSrc(t)) galListe.push({z, t, i}); }));
+  $("galInfo").textContent = galListe.length
+    ? galListe.length + (galListe.length === 1 ? " Foto" : " Fotos") + ". Tippe ein Foto an: vergrößern, bearbeiten oder als Titelbild wählen."
+    : "Noch keine Fotos. Mache beim Eintragen eines Zuges ein Foto.";
+  $("galGrid").innerHTML = galListe.map((g, n) => `<button type="button" class="kachel" data-n="${n}" aria-label="${attr(g.z.nummer)}, Foto ${g.i + 1}"><img loading="lazy" src="${attr(fotoSrc(g.t))}" alt=""><span class="tag">${esc(g.z.nummer)}</span>${g.i === 0 ? '<span class="stern" title="Titelbild">★</span>' : ""}</button>`).join("");
+}
+$("galGrid").addEventListener("click", e => { const k = e.target.closest("[data-n]"); if (k) lbZeigen(+k.dataset.n); });
+
+function lbZeigen(n) {
+  if (!galListe.length) return lbZu();
+  lbI = (n + galListe.length) % galListe.length;
+  const g = galListe[lbI], z = g.z;
+  $("lbBild").src = fotoSrc(g.t);
+  $("lbTitel").textContent = z.nummer + " · " + z.typ;
+  $("lbMeta").textContent = (z.ort || "Ort unbekannt") + " · " + new Date(z.zeit).toLocaleString("de-DE", {dateStyle: "medium", timeStyle: "short"}) + " · Foto " + (g.i + 1) + " von " + rohFotos(z).length;
+  $("lbCover").disabled = g.i === 0; $("lbCover").textContent = g.i === 0 ? "★ Ist Titelbild" : "★ Als Titelbild";
+  $("lbEdit").hidden = !bearbeitbar(g.t);
+  $("lightbox").hidden = false;
+}
+const lbZu = () => { $("lightbox").hidden = true; lbI = -1; };
+function lbNach(token) { galerieZeigen(); const n = galListe.findIndex(g => g.t === token); n >= 0 ? lbZeigen(n) : lbZu(); }
+$("lbZu").onclick = lbZu;
+$("lbPrev").onclick = () => lbZeigen(lbI - 1);
+$("lbNext").onclick = () => lbZeigen(lbI + 1);
+$("lbCover").onclick = () => {
+  const g = galListe[lbI]; if (!g) return;
+  g.z.fotos = [g.t].concat(rohFotos(g.z).filter(x => x !== g.t));
+  speichern(); zeigen(); lbNach(g.t); toast("Titelbild geändert");
+};
+$("lbEdit").onclick = async () => {
+  const g = galListe[lbI]; if (!g) return;
+  const n = await fotoEditor(g.t); if (!n) return;
+  g.z.fotos = rohFotos(g.z).map(x => x === g.t ? n : x);
+  speichern(); zeigen(); lbNach(n); toast("Foto gespeichert");
+};
+$("lbDel").onclick = () => {
+  const g = galListe[lbI]; if (!g || !confirm("Dieses Foto löschen?")) return;
+  g.z.fotos = rohFotos(g.z).filter(x => x !== g.t);
+  speichern(); zeigen(); lbZeigen(Math.min(lbI, galListe.length - 1));
+};
+$("lbZug").onclick = () => {
+  const g = galListe[lbI]; if (!g) return;
+  lbZu(); filterReset(); $("suche").value = g.z.nummer; tabZeigen("liste"); zeigen();
+};
+let lbX = 0;
+$("lightbox").addEventListener("touchstart", e => { lbX = e.touches[0].clientX; }, {passive: true});
+$("lightbox").addEventListener("touchend", e => { const d = e.changedTouches[0].clientX - lbX; if (Math.abs(d) > 60) lbZeigen(lbI + (d < 0 ? 1 : -1)); });
+document.addEventListener("keydown", e => {
+  if (!$("editor").hidden) { if (e.key === "Escape") $("edAbbr").click(); return; }
+  if ($("lightbox").hidden) return;
+  if (e.key === "Escape") lbZu(); else if (e.key === "ArrowLeft") lbZeigen(lbI - 1); else if (e.key === "ArrowRight") lbZeigen(lbI + 1);
+});
+
+// Foto-Editor: drehen, zuschneiden, Helligkeit, Kontrast, Farbe. Gibt den neuen Foto-Verweis zurück oder null.
+function fotoEditor(token) {
+  return new Promise(ok => {
+    const ov = $("editor"), cv = $("edCanvas"), img = new Image();
+    const neu = () => ({rot: 0, br: 100, ct: 100, sa: 100, ratio: 0});
+    let st = neu();
+    const render = (c, max) => {
+      const w = img.naturalWidth, h = img.naturalHeight, q = st.rot % 2, rw = q ? h : w, rh = q ? w : h;
+      let cw = rw, ch = rh;
+      if (st.ratio) { if (rw / rh > st.ratio) cw = rh * st.ratio; else ch = rw / st.ratio; }
+      const s = Math.min(1, max / Math.max(cw, ch));
+      c.width = Math.round(cw * s); c.height = Math.round(ch * s);
+      const x = c.getContext("2d");
+      x.translate(c.width / 2, c.height / 2); x.rotate(st.rot * Math.PI / 2); x.scale(s, s);
+      x.drawImage(img, -w / 2, -h / 2);
+    };
+    const filter = () => { cv.style.filter = `saturate(${st.sa / 100}) brightness(${st.br / 100}) contrast(${st.ct / 100})`; };
+    const regler = () => {
+      $("edBr").value = st.br; $("edCt").value = st.ct; $("edSa").value = st.sa;
+      document.querySelectorAll("#edRatio [data-r]").forEach(b => b.classList.toggle("aktiv", +b.dataset.r === st.ratio));
+    };
+    const zeige = () => { render(cv, 720); filter(); };
+    const zu = r => { ov.hidden = true; ok(r); };
+    $("edL").onclick = () => { st.rot = (st.rot + 3) % 4; zeige(); };
+    $("edR").onclick = () => { st.rot = (st.rot + 1) % 4; zeige(); };
+    [["edBr", "br"], ["edCt", "ct"], ["edSa", "sa"]].forEach(([id, k]) => { $(id).oninput = () => { st[k] = +$(id).value; filter(); }; });
+    $("edRatio").onclick = e => { const b = e.target.closest("[data-r]"); if (b) { st.ratio = +b.dataset.r; regler(); zeige(); } };
+    $("edReset").onclick = () => { st = neu(); regler(); zeige(); };
+    $("edAbbr").onclick = () => zu(null);
+    $("edOk").onclick = async () => {
+      const c = document.createElement("canvas"); render(c, 1600);
+      const x = c.getContext("2d"), d = x.getImageData(0, 0, c.width, c.height), p = d.data, b = st.br / 100, k = st.ct / 100, sa = st.sa / 100;
+      for (let i = 0; i < p.length; i += 4) {
+        const g = .299 * p[i] + .587 * p[i + 1] + .114 * p[i + 2];
+        for (let j = 0; j < 3; j++) p[i + j] = ((g + (p[i + j] - g) * sa) * b - 128) * k + 128;
+      }
+      x.putImageData(d, 0, 0);
+      zu(await fotoSpeichern(c.toDataURL("image/jpeg", .88)));
+    };
+    img.onload = () => { ov.hidden = false; regler(); zeige(); };
+    img.onerror = () => { toast("Foto konnte nicht geladen werden"); ok(null); };
+    img.src = fotoSrc(token);
+  });
+}
+
+// Eintrag nachträglich bearbeiten
+let bearbeiteId = null;
+function bearbeitenModus(an) {
+  $("formTitel").textContent = an ? "Eintrag bearbeiten" : "Neuen Zug eintragen";
+  $("speicherBtn").textContent = an ? "Änderungen speichern" : "Zug speichern";
+  $("abbrBtn").hidden = !an;
+}
+function bearbeiten(id) {
+  const z = zuege.find(x => x.id === id);
+  if (!z) return;
+  bearbeiteId = id;
+  $("modell").value = z.modell || ""; $("nummer").value = z.nummer; $("typ").value = z.typ;
+  $("ort").value = z.ort || ""; $("zeit").value = z.zeit; $("notiz").value = z.notiz || ""; $("url").value = "";
+  aktuelleFotos = rohFotos(z).slice(); pos = z.pos || null;
+  $("posInfo").textContent = pos ? "Standort gespeichert (" + pos.lat + ", " + pos.lon + ")" : "";
+  minisZeigen(); vorschauAktualisieren(); bearbeitenModus(true);
+  tabZeigen("neu");
+}
+function bearbeitenAbbrechen() {
+  bearbeiteId = null; $("form").reset(); aktuelleFotos = []; pos = null; $("posInfo").textContent = "";
+  minisZeigen(); zeitSetzen(); vorschauAktualisieren(); bearbeitenModus(false);
+}
+$("abbrBtn").onclick = () => { bearbeitenAbbrechen(); tabZeigen("liste"); };
 
 function zeitSetzen() {
   const d = new Date(Date.now() - new Date().getTimezoneOffset() * 60000);
@@ -716,16 +1036,21 @@ function zeitSetzen() {
 
 // Sichern und Laden
 $("export").onclick = () => {
+  const liste = zuege.map(ohneFotos), fotos = {};
+  liste.forEach(z => z.fotos.forEach(t => { if (fotoCache.has(t)) fotos[t] = fotoCache.get(t); }));
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(zuege.map(ohneFotos))], {type: "application/json"}));
+  a.href = URL.createObjectURL(new Blob([JSON.stringify({format: 2, zuege: liste, fotos})], {type: "application/json"}));
   a.download = "zug-logbuch.json"; a.click();
 };
 $("import").onclick = () => $("datei").click();
 $("datei").onchange = async e => {
   try {
-    const neu = JSON.parse(await e.target.files[0].text());
+    const roh = JSON.parse(await e.target.files[0].text());
+    const neu = Array.isArray(roh) ? roh : (roh.zuege || []), fotos = (!Array.isArray(roh) && roh.fotos) || {};
     const ids = new Set(zuege.map(z => z.id));
-    zuege = zuege.concat(neu.filter(z => z && z.id && !ids.has(z.id)).map(ohneFotos));
+    const dazu = neu.filter(z => z && z.id && !ids.has(z.id)).map(ohneFotos);
+    for (const z of dazu) for (const t of z.fotos) if (fotos[t] && !fotoCache.has(t) && fotoDB) { fotoCache.set(t, fotos[t]); await idbOp("readwrite", st => st.put(fotos[t], t)); }
+    zuege = zuege.concat(dazu);
     speichern(); zeigen();
   } catch (x) { alert("Die Datei konnte nicht gelesen werden."); }
   e.target.value = "";
@@ -734,7 +1059,7 @@ $("datei").onchange = async e => {
 // Filter füllen und Suche verbinden
 Object.keys(farben).forEach(t => $("filter").insertAdjacentHTML("beforeend", `<option>${t}</option>`));
 $("suche").addEventListener("input", zeigen);
-$("filter").addEventListener("change", zeigen);
+["filter", "ortFilter", "zeitFilter", "sort"].forEach(i => $(i).addEventListener("change", zeigen));
 
 Object.keys(farben).forEach(t => {
   const ms = MODELLE.filter(m => m.typ === t);
@@ -883,13 +1208,13 @@ async function tafelLaden() {
   const lauf = ++bhfLauf, jetzt = Date.now(), dauer = +$("bhfDauer").value * 60000;
   const holen = (ab) => {
     const p = {stopId: bhf.id, n: 100, language: "de", arriveBy: !ab, time: new Date(ab ? jetzt : jetzt + dauer).toISOString()};
-    return apiHolen("/v5/stoptimes", Object.assign({mode: BAHNMODI}, p)).catch(() => apiHolen("/v5/stoptimes", p));
+    return apiHolen("/v5/stoptimes", Object.assign({mode: BAHNMODI, withAlerts: true}, p)).catch(() => apiHolen("/v5/stoptimes", p));
   };
   const norm = (st, ab) => {
     const p = st.place || {}, w = ab ? p.departure : p.arrival, g = (ab ? p.scheduledDeparture : p.scheduledArrival) || w;
     return {when: w || g, plannedWhen: g, delay: st.realTime && w && g ? (new Date(w) - new Date(g)) / 1000 : undefined,
       cancelled: !!(st.cancelled || st.tripCancelled), direction: ab ? st.headsign : undefined, provenance: ab ? undefined : st.headsign,
-      platform: p.track, plannedPlatform: p.scheduledTrack,
+      platform: p.track, plannedPlatform: p.scheduledTrack, tripId: st.tripId, agency: st.agencyName, alerts: st.alerts,
       line: {name: st.displayName || st.routeShortName || "Zug", product: st.mode, fahrtNr: st.tripShortName}};
   };
   const aufbereiten = (res, ab) => ((res && res.stopTimes) || []).map(s => norm(s, ab))
@@ -913,7 +1238,7 @@ async function tafelLaden() {
 $("bhfListe").addEventListener("click", e => {
   if (e.target.closest("#bhfNochmal")) { $("bhfListe").innerHTML = '<div class="leer">Züge werden geladen …</div>'; tafelLaden(); return; }
   const z = e.target.closest(".zeile");
-  if (z) tafelEintragen(bhfReiter, +z.dataset.i);
+  if (z) detailOeffnen(bhfReiter, +z.dataset.i);
 });
 $("bhfListe").addEventListener("keydown", e => {
   if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("zeile")) { e.preventDefault(); e.target.click(); }
@@ -939,17 +1264,103 @@ function tafelZeichnen() {
     const tag = new Date(geplant), morgen = tag.toDateString() !== new Date().toDateString();
     const m = Math.round((new Date(d.when || geplant) - Date.now()) / 60000);
     const rel = d.cancelled ? "" : m <= 0 ? "jetzt" : m < 60 ? "in " + m + " Min." : "";
-    return `<div class="zeile${d.cancelled ? " ausfall" : ""}" data-i="${i}" tabindex="0" role="button" aria-label="Zug ins Formular übernehmen">
+    return `<div class="zeile${d.cancelled ? " ausfall" : ""}" data-i="${i}" tabindex="0" role="button" aria-label="Details zum Zug anzeigen">
       <div><div class="zeit">${hm(geplant)}</div>${morgen ? '<div class="sub">am ' + tag.toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit"}) + "</div>" : rel ? '<div class="rel">' + rel + "</div>" : ""}</div>
       <div><div class="ziel"><span class="linie">${esc(l.name || "Zug")}</span>${esc((art === "ab" ? "nach " : "Richtung ") + (ziel || "unbekannt"))}</div>
         ${status ? `<div class="sub ${klasse}">${esc(status)}</div>` : ""}</div>
-      <div class="gleis${gleisNeu ? " neu" : ""}">${gleis ? "Gl. " + esc(gleis) : "–"}${gleisNeu ? '<div class="sub">geändert</div>' : ""}<span class="plus">+ Eintragen</span></div>
+      <div class="gleis${gleisNeu ? " neu" : ""}">${gleis ? "Gl. " + esc(gleis) : "–"}${gleisNeu ? '<div class="sub">geändert</div>' : ""}<span class="plus">Details ›</span></div>
     </div>`;
   }).join("") : `<div class="leer">Keine ${bhfFilter ? esc(bhfFilter) + "-" : ""}Züge im gewählten Zeitraum.${bhfFilter ? "<br>Wähle oben „Alle“ oder" : "<br>Wähle"} einen längeren Zeitraum.</div>`;
 }
 
+// Modell zum Zug: Die Fahrplandaten nennen das Fahrzeug nicht, daher Auswahl aus dem Katalog
+let detailModell = "";
+function modellBereichZeigen() {
+  const d = tafelDaten[detailArt][detailI], typ = d && ZUGPRODUKTE[(d.line || {}).product];
+  const liste = MODELLE.filter(m => m.typ === typ), gew = modell(detailModell);
+  if (!liste.length) { $("dtModell").innerHTML = ""; return; }
+  const bild = m => attr(modellBild(m.id) || ersatzbild(m.typ));
+  const eigene = gew ? zuege.filter(z => z.modell === gew.id).flatMap(z => fotosVon(z)).slice(0, 4) : [];
+  $("dtModell").innerHTML = '<h3 style="margin:18px 0 4px;font:700 1.1rem var(--kopf)">Modell</h3>' +
+    '<p class="kat-info">Die Fahrplandaten nennen das Fahrzeug nicht. Wähle das Modell, das du siehst. Es wird beim Eintragen übernommen.</p>' +
+    (gew ? `<div class="dt-modell"><img src="${bild(gew)}" alt="${attr(gew.name)}" onerror="this.onerror=null;this.src='${ersatzbild(gew.typ)}'"><div class="inh"><b>${esc(gew.name)}</b>${datenListe(gew)}
+      ${eigene.length ? '<p class="kat-info">Deine Fotos dieses Modells:</p><div class="dt-eigene">' + eigene.map(u => `<img src="${attr(u)}" alt="">`).join("") + "</div>" : ""}
+      <button type="button" class="leise" data-m="" style="margin-top:10px">Auswahl aufheben</button></div></div>` : "") +
+    '<div class="dt-modelle">' + liste.map(m => `<button type="button" class="mk${m.id === detailModell ? " aktiv" : ""}" data-m="${m.id}"><img src="${bild(m)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='${ersatzbild(m.typ)}'"><span>${esc(m.name)}</span></button>`).join("") + "</div>";
+}
+function detailModellRefresh() { if (!$("detail").hidden) modellBereichZeigen(); }
+$("dtModell").addEventListener("click", e => {
+  const b = e.target.closest("[data-m]");
+  if (b) { detailModell = b.dataset.m; modellBereichZeigen(); }
+});
+
+// Zugdetails: Fahrtverlauf mit allen Halten, Verspätungen, Gleisen und Meldungen
+let detailLauf = 0, detailArt = "ab", detailI = 0;
+const meldungenHtml = liste => {
+  const seen = new Set();
+  return (liste || []).map(a => ({k: a.headerText || "", t: a.descriptionText || ""})).filter(a => (a.k || a.t) && !seen.has(a.k + a.t) && seen.add(a.k + a.t))
+    .map(a => `<div class="dt-meld">${a.k ? "<b>" + esc(a.k) + "</b>" : ""}${a.k && a.t ? "<br>" : ""}${esc(a.t)}</div>`).join("");
+};
+const zeitMitVerspaetung = (plan, ist) => {
+  if (!plan) return ist ? hm(ist) : "";
+  const m = ist ? Math.round((new Date(ist) - new Date(plan)) / 60000) : 0;
+  return hm(plan) + (m > 0 ? ` <span class="spaet">${hm(ist)} (+${m})</span>` : "");
+};
+function detailOeffnen(art, i) {
+  const d = tafelDaten[art][i];
+  if (!d) return;
+  const lauf = ++detailLauf, l = d.line || {};
+  detailArt = art; detailI = i;
+  const min = typeof d.delay === "number" ? Math.round(d.delay / 60) : null;
+  const gleisNeu = d.platform && d.plannedPlatform && d.platform !== d.plannedPlatform;
+  const ziel = art === "ab" ? d.direction : d.provenance;
+  const status = d.cancelled ? "Fällt aus" : min > 0 ? "+" + min + " Min. verspätet" : min === 0 ? "Pünktlich" : "Keine Echtzeitdaten";
+  const fakt = (k, v) => v ? `<div><b>${k}</b>${v}</div>` : "";
+  $("dtKopf").innerHTML = `<div class="dt-titel"><span class="linie">${esc(l.name || "Zug")}</span> ${esc((art === "ab" ? "nach " : "Richtung ") + (ziel || "unbekannt"))}</div>
+    <div class="dt-fakten">
+      ${fakt(art === "ab" ? "Abfahrt" : "Ankunft", zeitMitVerspaetung(d.plannedWhen, d.when))}
+      ${fakt("Status", esc(status))}
+      ${fakt("Gleis", d.platform || d.plannedPlatform ? esc(d.platform || d.plannedPlatform) + (gleisNeu ? " (geändert, geplant " + esc(d.plannedPlatform) + ")" : "") : "")}
+      ${fakt("Art", esc(ZUGPRODUKTE[l.product] || ""))}
+      ${fakt("Zugnummer", esc(l.fahrtNr || ""))}
+      ${fakt("Betreiber", esc(d.agency || ""))}
+    </div>`;
+  $("dtMeld").innerHTML = meldungenHtml(d.alerts);
+  detailModell = ""; modellBereichZeigen();
+  $("dtEintragen").onclick = () => { const m = detailModell; detailZu(); tafelEintragen(art, i, m); };
+  $("detail").hidden = false;
+  if (!d.tripId) { $("dtHalte").innerHTML = '<p class="kat-info">Zu diesem Zug liegt kein Fahrtverlauf vor.</p>'; return; }
+  $("dtHalte").innerHTML = '<p class="kat-info">Fahrtverlauf wird geladen …</p>';
+  apiHolen("/v5/trip", {tripId: d.tripId, language: "de"}).then(res => {
+    if (lauf !== detailLauf) return;
+    const halte = [], alle = [];
+    ((res && res.legs) || []).forEach(leg => {
+      (leg.alerts || []).forEach(a => alle.push(a));
+      [leg.from].concat(leg.intermediateStops || [], [leg.to]).forEach(p => { if (p && !(halte.length && halte[halte.length - 1].stopId === p.stopId)) halte.push(p); });
+    });
+    if (alle.length) $("dtMeld").innerHTML = meldungenHtml((d.alerts || []).concat(alle));
+    if (!halte.length) { $("dtHalte").innerHTML = '<p class="kat-info">Zu diesem Zug liegt kein Fahrtverlauf vor.</p>'; return; }
+    const jetzt = Date.now();
+    $("dtHalte").innerHTML = `<p class="kat-info">${esc(halte[0].name)} → ${esc(halte[halte.length - 1].name)} · ${halte.length} Halte</p><ol class="verlauf">` + halte.map((p, n) => {
+      const plan = p.scheduledArrival || p.scheduledDeparture, ist = p.arrival || p.departure, gl = p.track || p.scheduledTrack;
+      const hier = p.name === bhf.name || p.stopId === bhf.id, vorbei = ist && new Date(p.departure || ist) < jetzt - 60000;
+      return `<li class="${hier ? "hier " : ""}${vorbei ? "vorbei " : ""}${p.cancelled ? "aus" : ""}"><span class="hz">${zeitMitVerspaetung(plan, ist)}</span><span class="hn">${esc(p.name)}${hier ? " (hier)" : ""}</span><span class="hg">${gl ? "Gl. " + esc(gl) : ""}</span></li>`;
+    }).join("") + "</ol>";
+    const h = $("dtHalte").querySelector(".hier"); if (h && h.scrollIntoView) h.scrollIntoView({block: "center"});
+  }).catch(() => {
+    if (lauf === detailLauf) $("dtHalte").innerHTML = '<p class="kat-info">Der Fahrtverlauf konnte nicht geladen werden.</p><button type="button" class="leise" id="dtNochmal">Erneut versuchen</button>';
+  });
+}
+const detailZu = () => { $("detail").hidden = true; detailLauf++; };
+$("dtZu").onclick = $("dtZu2").onclick = detailZu;
+$("detail").addEventListener("click", e => {
+  if (e.target === $("detail")) detailZu();
+  if (e.target.closest("#dtNochmal")) detailOeffnen(detailArt, detailI);
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("detail").hidden) detailZu(); });
+
 // Zug aus der Tafel ins Formular übernehmen
-function tafelEintragen(art, i) {
+function tafelEintragen(art, i, modellId) {
   const d = tafelDaten[art][i];
   if (!d || !bhf) return;
   const l = d.line || {};
@@ -958,6 +1369,7 @@ function tafelEintragen(art, i) {
   $("nummer").value = nr;
   if (ZUGPRODUKTE[l.product]) $("typ").value = ZUGPRODUKTE[l.product];
   $("ort").value = bhf.name;
+  if (modellId) modellWaehlen(modellId); else $("modell").value = "";
   const t = new Date(d.when || d.plannedWhen);
   $("zeit").value = new Date(t - t.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
   vorschauAktualisieren();
@@ -968,6 +1380,7 @@ function tafelEintragen(art, i) {
 }
 
 zeitSetzen(); vorschauAktualisieren(); zeigen(); katalogZeigen(); bilderLaden();
+fotoLaden().then(() => { fotosAufraeumen(); zeigen(); });
 if (bhfZuletzt.length) bhfWaehlen(bhfZuletzt[0]); else bhfChipsZeigen();
 
 // Tabs mit Funktionsleiste unten
