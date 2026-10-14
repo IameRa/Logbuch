@@ -333,6 +333,10 @@ body{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 .kcheck input{width:20px;height:20px;accent-color:var(--rot)}
 .kmehr{margin-top:16px;border-top:1px solid var(--linie);padding-top:12px}
 .kmehr summary{cursor:pointer;font-weight:600}
+.tbraster{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin-top:8px}
+.tbraster img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;cursor:pointer;border:3px solid transparent;display:block}
+.tbraster img.an{border-color:var(--rot)}
+#tbVorschau{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:12px;background:var(--weiss);margin-top:8px}
 </style>
 </head>
 <body>
@@ -621,6 +625,23 @@ Bilder: Wikipedia / Wikimedia Commons (Lizenzen auf der jeweiligen Bildseite). K
     <button type="button" class="leise" id="lnWahlKeine">Keine davon</button>
   </div>
 </div>
+<div class="lnwahl" id="tbDialog" hidden role="dialog" aria-modal="true" aria-labelledby="tbTitel">
+  <div class="box">
+    <h3 id="tbTitel">Titelbild</h3>
+    <img id="tbVorschau" alt="Aktuelles Titelbild">
+    <div class="kfeld">
+      <label>Bild-Link<input id="tbLink" type="url" placeholder="https://…" inputmode="url" autocomplete="off"></label>
+      <div class="aktionen"><button type="button" id="tbLinkOk">Link übernehmen</button></div>
+      <div class="aktionen"><button type="button" class="leise" id="tbDatei">Foto aufnehmen oder auswählen</button><input id="tbDateiEin" type="file" accept="image/*" hidden></div>
+    </div>
+    <div id="tbEigene" hidden>
+      <p class="kat-info" style="margin-top:14px">Oder wähle eines deiner Fotos zu diesem Modell:</p>
+      <div class="tbraster" id="tbRaster"></div>
+    </div>
+    <p class="kat-info" id="tbMeld" role="status" style="margin-top:10px"></p>
+    <div class="aktionen" style="margin-top:10px"><button type="button" class="leise" id="tbStandard">Standard-Bild</button><button type="button" id="tbZu">Fertig</button></div>
+  </div>
+</div>
 <div class="lnwahl" id="kontoDialog" hidden role="dialog" aria-modal="true" aria-labelledby="kontoTitel">
   <div class="box">
     <h3 id="kontoTitel">Konto</h3>
@@ -836,7 +857,14 @@ const modell = id => MODELLE.find(m => m.id === id);
 const BILDKEY = "zuglogbuch.bilder.v1";
 let bilder = {};
 try { bilder = JSON.parse(localStorage.getItem(BILDKEY)) || {}; } catch (e) { bilder = {}; }
-const modellBild = id => bilder[id] || (modell(id) || {}).bild || "";
+// Eigene Titelbilder pro Modell: Bild-Link (https) oder eigenes Foto (Verweis "idb:…")
+const TB_KEY = "zuglogbuch.titelbilder.v1";
+let titel = {};
+try { titel = JSON.parse(localStorage.getItem(TB_KEY)) || {}; } catch (e) { titel = {}; }
+const titelOk = v => typeof v === "string" && (/^https:\/\/\S+$/i.test(v) || /^idb:[a-z0-9]+$/.test(v));
+Object.keys(titel).forEach(k => { if (!titelOk(titel[k])) delete titel[k]; });
+const modellBild = id => fotoSrc(titel[id]) || bilder[id] || (modell(id) || {}).bild || "";
+const titelSpeichern = () => { syTrack(); try { localStorage.setItem(TB_KEY, JSON.stringify(titel)); } catch (e) { toast("Speicher voll: Das Titelbild konnte nicht gemerkt werden."); } };
 // Foto-Speicher: Fotos liegen nur lokal im Browser (IndexedDB), im Logbuch steht ein Verweis "idb:…"
 const fotoCache = new Map();
 let aktuelleFotos = []; // Fotos im Formular (Verweise)
@@ -876,7 +904,7 @@ async function fotoSpeichern(dataUrl) {
   return t;
 }
 function fotosAufraeumen() { // nicht mehr verwendete Fotos löschen
-  const benutzt = new Set(aktuelleFotos);
+  const benutzt = new Set(aktuelleFotos.concat(Object.values(titel)));
   zuege.forEach(z => rohFotos(z).forEach(t => benutzt.add(t)));
   [...fotoCache.keys()].forEach(t => { if (!benutzt.has(t)) { fotoCache.delete(t); idbOp("readwrite", s => s.delete(t)); } });
 }
@@ -945,7 +973,7 @@ function katalogZeigen() {
     <article class="karte klick" tabindex="0" data-id="${m.id}" style="--c:${farben[m.typ] || '#66717d'}">
       <img src="${modellBild(m.id) || ersatzbild(m.typ)}" alt="${esc(m.name)}" loading="lazy"
            onerror="this.onerror=null;this.src='${ersatzbild(m.typ)}'">
-      <div class="inhalt"><span class="typ">${esc(m.typ)}</span><h3>${esc(m.name)}</h3>${datenListe(m)}${m.eigen ? `<button type="button" class="leise" data-del="${m.id}" style="margin-top:10px">Eigenes Modell löschen</button>` : ""}</div>
+      <div class="inhalt"><span class="typ">${esc(m.typ)}</span><h3>${esc(m.name)}</h3>${datenListe(m)}<div class="aktionen" style="margin-top:10px"><button type="button" class="leise" data-tb="${m.id}">Titelbild ändern</button>${m.eigen ? `<button type="button" class="leise" data-del="${m.id}">Eigenes Modell löschen</button>` : ""}</div></div>
     </article>`).join("");
 }
 function modellWaehlen(id) {
@@ -1212,6 +1240,8 @@ $("modell").addEventListener("change", () => modellWaehlen($("modell").value));
 $("katalog").addEventListener("click", e => {
   const del = e.target.closest("[data-del]");
   if (del) { modellLoeschen(del.dataset.del); return; }
+  const tb = e.target.closest("[data-tb]");
+  if (tb) { tbOeffnen(tb.dataset.tb); return; }
   const k = e.target.closest("[data-id]");
   if (k) { modellWaehlen(k.dataset.id); tabZeigen("neu"); $("nummer").focus({preventScroll: true}); }
 });
@@ -2218,7 +2248,8 @@ function sichMerken() {
 async function sichAlles() {
   const liste = zuege.map(ohneFotos), fotos = {};
   liste.forEach(z => z.fotos.forEach(t => { if (fotoCache.has(t)) fotos[t] = fotoCache.get(t); }));
-  const inhalt = {zuglogbuch: "komplett", format: 3, erstellt: new Date().toISOString(), zuege: liste, fotos, linien: linienHaken, fahrzeuge: fzDaten, modelle: eigeneModelle, linienmodelle: linienModelle};
+  Object.values(titel).forEach(t => { if (fotoCache.has(t)) fotos[t] = fotoCache.get(t); });
+  const inhalt = {zuglogbuch: "komplett", format: 3, erstellt: new Date().toISOString(), zuege: liste, fotos, linien: linienHaken, fahrzeuge: fzDaten, modelle: eigeneModelle, linienmodelle: linienModelle, titelbilder: titel};
   const name = "traintastic-sicherung-" + new Date().toISOString().slice(0, 10) + ".json";
   const blob = new Blob([JSON.stringify(inhalt)], {type: "application/json"});
   persistAnfragen();
@@ -2235,11 +2266,11 @@ async function sichLadenDatei(datei) {
   if (!datei) return;
   let roh;
   try { roh = JSON.parse(await datei.text()); } catch (e) { alert("Die Datei konnte nicht gelesen werden."); return; }
-  const b = {zuege: [], fotos: {}, linien: null, fz: null, modelle: [], lm: null};
+  const b = {zuege: [], fotos: {}, linien: null, fz: null, modelle: [], lm: null, tb: null};
   if (Array.isArray(roh)) b.zuege = roh;
   else if (roh && typeof roh === "object") {
     if (Array.isArray(roh.zuege)) { b.zuege = roh.zuege; b.fotos = roh.fotos || {}; }
-    if (roh.zuglogbuch === "komplett") { b.linien = roh.linien; b.fz = roh.fahrzeuge; b.modelle = Array.isArray(roh.modelle) ? roh.modelle : []; b.lm = roh.linienmodelle; }
+    if (roh.zuglogbuch === "komplett") { b.linien = roh.linien; b.fz = roh.fahrzeuge; b.modelle = Array.isArray(roh.modelle) ? roh.modelle : []; b.lm = roh.linienmodelle; b.tb = roh.titelbilder; }
     else if (roh.zuglogbuch === "linien") b.linien = roh.haken;
     else if (roh.zuglogbuch === "fahrzeuge") b.fz = roh.daten;
   }
@@ -2270,6 +2301,15 @@ async function sichLadenDatei(datei) {
       fzSpeichern(); fzZeigen();
     }
     if (b.lm && typeof b.lm === "object") { Object.keys(b.lm).forEach(k => { if (!linienModelle[k] && modell(b.lm[k])) linienModelle[k] = b.lm[k]; }); lmSpeichern(); }
+    if (b.tb && typeof b.tb === "object") {
+      for (const k of Object.keys(b.tb)) {
+        const v = b.tb[k];
+        if (titel[k] || !titelOk(v) || !modell(k)) continue;
+        if (/^idb:/.test(v)) { if (!b.fotos[v] && !fotoCache.has(v)) continue; if (b.fotos[v] && !fotoCache.has(v) && fotoDB) { fotoCache.set(v, b.fotos[v]); await idbOp("readwrite", st => st.put(b.fotos[v], v)); } }
+        titel[k] = v;
+      }
+      titelSpeichern(); katalogZeigen();
+    }
     zeigen();
     toast("Wiederhergestellt: " + n.z + " Sichtungen, " + n.l + " Linien, " + n.f + " Fahrzeuge, " + n.m + " Modelle");
   } catch (x) { alert("Beim Wiederherstellen ist ein Fehler aufgetreten: " + x.message); }
@@ -2355,6 +2395,7 @@ function syWerte() {
   });
   eigeneModelle.forEach(m => { w["m:" + m.id] = m; });
   Object.keys(linienModelle).forEach(k => { w["lm:" + k] = linienModelle[k]; });
+  Object.keys(titel).forEach(k => { w["t:" + k] = titel[k]; });
   return w;
 }
 const sySpeichern = () => { try { localStorage.setItem(SY_KEY, JSON.stringify(sy)); } catch (e) {} try { cloudPlanen(); } catch (e) {} };
@@ -2384,7 +2425,7 @@ function syInit() {
   }
 }
 const syNeuer = (r, l) => !l || r[0] > l.t || (r[0] === l.t && r[1] !== l.h && String(r[1]) > String(l.h));
-const syPraefix = k => ["fs", "lm", "f", "m", "z", "l"].find(x => k.startsWith(x + ":"));
+const syPraefix = k => ["fs", "lm", "f", "m", "z", "l", "t"].find(x => k.startsWith(x + ":"));
 function syAnwenden(k, v) { // v === null: gelöscht. Gibt false zurück, wenn der Wert unbrauchbar ist.
   const p = syPraefix(k);
   if (!p) return false;
@@ -2415,6 +2456,8 @@ function syAnwenden(k, v) { // v === null: gelöscht. Gibt false zurück, wenn d
     else return false;
   } else if (p === "lm") {
     if (v === null) delete linienModelle[r]; else if (typeof v === "string") linienModelle[r] = v; else return false;
+  } else if (p === "t") {
+    if (v === null) delete titel[r]; else if (titelOk(v)) titel[r] = v; else return false;
   }
   return true;
 }
@@ -2538,7 +2581,7 @@ async function syBeginn() {
   if (!syLauf.daten && !syLauf.fertig) syStatus("Verbunden. Abgleich läuft …");
   await syGesendet({t: "manifest", v: 1, m: syManifest()});
 }
-const syFehlendeFotos = () => [...new Set(zuege.flatMap(z => rohFotos(z)).filter(t => /^idb:/.test(t) && !fotoCache.has(t)))];
+const syFehlendeFotos = () => [...new Set(zuege.flatMap(z => rohFotos(z)).concat(Object.values(titel)).filter(t => /^idb:/.test(t) && !fotoCache.has(t)))];
 async function syBehandeln(m) {
   if (!m || !syDc) return;
   if (!syLauf) syLauf = syLaufNeu();
@@ -2567,7 +2610,7 @@ async function syBehandeln(m) {
       const w = syWerte();
       Object.keys(sy.tab).forEach(k => { if (sy.tab[k].h === "?") sy.tab[k].h = k in w ? syHash(w[k]) : ""; });
       sySpeichern();
-      speichern(); lnSpeichern(); fzSpeichern(); eigeneSpeichern(); lmSpeichern();
+      speichern(); lnSpeichern(); fzSpeichern(); eigeneSpeichern(); lmSpeichern(); titelSpeichern();
       syLauf.daten = true;
       const fehlt = syFehlendeFotos();
       syLauf.wunsch = fehlt.length;
@@ -2579,7 +2622,7 @@ async function syBehandeln(m) {
     for (const k of keys) { await syGesendet({t: "foto", k, d: fotoCache.get(k)}); syLauf.fotosGesendet++; }
     await syGesendet({t: "fotoEnde"});
   } else if (m.t === "foto") {
-    const benutzt = zuege.some(z => rohFotos(z).includes(m.k));
+    const benutzt = zuege.some(z => rohFotos(z).includes(m.k)) || Object.values(titel).includes(m.k);
     if (benutzt && /^idb:/.test(m.k) && /^data:image\//.test(m.d || "") && m.d.length < 25e6) {
       fotoCache.set(m.k, m.d);
       if (fotoDB) await idbOp("readwrite", st => st.put(m.d, m.k));
@@ -2647,11 +2690,65 @@ zeitSetzen(); vorschauAktualisieren(); zeigen(); katalogZeigen(); bilderLaden();
 fotoLaden().then(() => { fotosGeladen = true; fotosAufraeumen(); zeigen(); persistInit(); cloudStart(); });
 if (bhfZuletzt.length) bhfWaehlen(bhfZuletzt[0]); else bhfChipsZeigen();
 
+// ===== Titelbilder im Katalog =====
+let tbId = "";
+const tbMeld = t => { $("tbMeld").textContent = t || ""; };
+function tbOeffnen(id) {
+  if (!modell(id)) return;
+  tbId = id;
+  $("tbTitel").textContent = "Titelbild: " + modell(id).name;
+  $("tbLink").value = /^https:/.test(titel[id] || "") ? titel[id] : "";
+  tbMeld("");
+  tbZeigen();
+  $("tbDialog").hidden = false;
+}
+function tbZeigen() {
+  const m = modell(tbId) || {};
+  $("tbVorschau").src = modellBild(tbId) || ersatzbild(m.typ);
+  const fotos = [...new Set(zuege.filter(z => z.modell === tbId).flatMap(z => rohFotos(z)))].filter(t => titelOk(t) && fotoSrc(t));
+  $("tbEigene").hidden = !fotos.length;
+  $("tbRaster").innerHTML = fotos.map(t => `<img src="${attr(fotoSrc(t))}" alt="Eigenes Foto" data-t="${attr(t)}" class="${titel[tbId] === t ? "an" : ""}">`).join("");
+  $("tbStandard").hidden = !titel[tbId];
+}
+function tbSetzen(wert) {
+  if (wert) titel[tbId] = wert; else delete titel[tbId];
+  titelSpeichern(); fotosAufraeumen();
+  tbZeigen(); katalogZeigen(); vorschauAktualisieren(); detailModellRefresh();
+}
+function tbZu() { $("tbDialog").hidden = true; }
+$("tbLinkOk").onclick = () => {
+  const u = $("tbLink").value.trim();
+  if (!/^https:\/\/\S+$/i.test(u)) { tbMeld("Bitte einen Bild-Link eingeben, der mit https:// beginnt."); return; }
+  tbMeld("Bild wird geprüft …");
+  const img = new Image(), id = tbId;
+  img.onload = () => { if (tbId !== id) return; tbSetzen(u); tbMeld("Titelbild gespeichert."); };
+  img.onerror = () => { if (tbId === id) tbMeld("Dieses Bild konnte nicht geladen werden. Der Link muss direkt auf ein Bild zeigen (oft endet er auf .jpg oder .png). Manche Seiten erlauben das Einbinden nicht."); };
+  img.src = u;
+};
+$("tbLink").addEventListener("keydown", e => { if (e.key === "Enter") $("tbLinkOk").click(); });
+$("tbDatei").onclick = () => $("tbDateiEin").click();
+$("tbDateiEin").onchange = async e => {
+  const f = e.target.files[0]; e.target.value = "";
+  if (!f) return;
+  if (!fotoDB) { tbMeld("Auf diesem Gerät können keine Fotos gespeichert werden. Nutze einen Bild-Link."); return; }
+  tbMeld("Bild wird verarbeitet …");
+  try { tbSetzen(await fotoSpeichern(await verkleinern(f))); tbMeld("Titelbild gespeichert."); }
+  catch (x) { tbMeld("Das Bild konnte nicht gelesen werden."); }
+};
+$("tbRaster").addEventListener("click", e => {
+  const i = e.target.closest("[data-t]");
+  if (i) { tbSetzen(i.dataset.t); tbMeld("Titelbild gespeichert."); }
+});
+$("tbStandard").onclick = () => { tbSetzen(""); $("tbLink").value = ""; tbMeld("Standard-Bild wiederhergestellt."); };
+$("tbZu").onclick = tbZu;
+$("tbDialog").addEventListener("click", e => { if (e.target === e.currentTarget) tbZu(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("tbDialog").hidden) tbZu(); });
+
 // ===== Konto und Cloud (Supabase) =====
 // Anmeldung per E-Mail und Passwort. Die Daten werden mit dem vorhandenen Abgleich-System (syWerte/syAnwenden)
 // pro Eintrag zusammengeführt: der jüngere Stand gewinnt. Fotos gehen nur in die Cloud, wenn du das einschaltest.
-const SUPABASE_URL = "https://sjnuuscfzugvvgfwjcfa.supabase.co";   // zum Beispiel "https://abcdefgh.supabase.co"
-const SUPABASE_KEY = "sb_publishable_zSBip_OsPaxKOBjTHB-AUg_qCPemfgk";   // anon- bzw. publishable-Key aus Project Settings > API (öffentlich, durch Row Level Security geschützt)
+const SUPABASE_URL = "";   // zum Beispiel "https://abcdefgh.supabase.co"
+const SUPABASE_KEY = "";   // anon- bzw. publishable-Key aus Project Settings > API (öffentlich, durch Row Level Security geschützt)
 
 const KONTO_KEY = "zuglogbuch.konto.v1", CL_KEY = "zuglogbuch.cloud.v1";
 const cloudBereit = () => /^https:\/\/\S+$/.test(SUPABASE_URL) && SUPABASE_KEY.length > 20;
@@ -2814,7 +2911,7 @@ async function cloudAbgleich(still) {
       Object.keys(sy.tab).forEach(k => { if (sy.tab[k].h === "?") sy.tab[k].h = k in w ? syHash(w[k]) : ""; });
       angewendet.forEach(k => { cl.pushed[k] = sy.tab[k].t + "|" + sy.tab[k].h; });
       sySpeichern();
-      speichern(); lnSpeichern(); fzSpeichern(); eigeneSpeichern(); lmSpeichern();
+      speichern(); lnSpeichern(); fzSpeichern(); eigeneSpeichern(); lmSpeichern(); titelSpeichern();
       zeigen(); lnZeigen(); fzZeigen(); katalogZeigen(); modellListenFuellen(); galerieZeigen();
       if (linienAnzeigen) lnKarteAktualisieren();
     }
@@ -2843,7 +2940,7 @@ async function cloudFotos() {
   if (!konto || !cl.fotosAn || cloudFotoLauf || !navigator.onLine || !fotosGeladen || !fotoDB) return;
   cloudFotoLauf = true;
   try {
-    const ids = new Set(zuege.flatMap(z => rohFotos(z)).filter(t => /^idb:[a-z0-9]+$/.test(t)));
+    const ids = new Set(zuege.flatMap(z => rohFotos(z)).concat(Object.values(titel)).filter(t => /^idb:[a-z0-9]+$/.test(t)));
     const hoch = [...ids].filter(t => !cl.fotos[t] && /^data:image\//.test(String(fotoCache.get(t) || "")));
     let n = 0;
     for (const t of hoch) {
