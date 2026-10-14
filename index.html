@@ -3,7 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zug-Logbuch</title>
+<title>Traintastic</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%20role%3D%22img%22%20aria-label%3D%22Traintastic%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22%23ffb81c%22/%3E%3Cpath%20d%3D%22M17%2049V27a15%2015%200%200%201%2030%200v22z%22%20fill%3D%22%23111b27%22/%3E%3Cpath%20d%3D%22M22.5%2031v-3.5c0-4%204-7%209.5-7s9.5%203%209.5%207V31z%22%20fill%3D%22%23ffe9a8%22/%3E%3Crect%20x%3D%2217%22%20y%3D%2235.5%22%20width%3D%2230%22%20height%3D%223%22%20fill%3D%22%23e63946%22/%3E%3Ccircle%20cx%3D%2224.5%22%20cy%3D%2243.5%22%20r%3D%223%22%20fill%3D%22%23ffb81c%22/%3E%3Ccircle%20cx%3D%2239.5%22%20cy%3D%2243.5%22%20r%3D%223%22%20fill%3D%22%23ffb81c%22/%3E%3Cpath%20d%3D%22M10%2056h44%22%20stroke%3D%22%23111b27%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22/%3E%3Cpath%20d%3D%22M51%207l1.7%204.3L57%2013l-4.3%201.7L51%2019l-1.7-4.3L45%2013l4.3-1.7z%22%20fill%3D%22%23e63946%22/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<meta name="theme-color" content="#111b27">
+<meta name="application-name" content="Traintastic">
+<meta name="apple-mobile-web-app-title" content="Traintastic">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,6 +24,7 @@ header::after{content:"";display:block;height:14px;margin-top:26px;
   background:repeating-linear-gradient(90deg,#3a4552 0 10px,transparent 10px 26px) bottom/100% 6px no-repeat,
              linear-gradient(#8a949f,#8a949f) center 2px/100% 3px no-repeat}
 .kopf{max-width:1040px;margin:0 auto}
+header h1 .ta{color:var(--amber)}
 header h1{margin:0;font:700 clamp(2.4rem,7vw,3.6rem)/1 var(--kopf);letter-spacing:.01em}
 header p{margin:6px 0 0;color:#aab6c3}
 .stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
@@ -298,26 +304,44 @@ body{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
   .tab.aktiv{animation:tabein .2s ease-out}
   @keyframes tabein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 }
+@media (max-width:430px){.funktionen button,.funktionen button:hover{flex:1 1 0;font-size:.6rem;padding-inline:0;letter-spacing:-.01em}.funktionen .ico{width:21px;height:21px}}
 /* Logbuch auf dem Handy: kompakte Zeilen statt hoher Karten */
 @media (max-width:640px){
   #liste{grid-template-columns:1fr;gap:12px}
-  #liste .karte{display:grid;grid-template-columns:96px 1fr;grid-template-areas:"bild inh" "mini mini" "akt akt";border-top:0;border-left:5px solid var(--c)}
+  #liste .karte{display:grid;grid-template-columns:96px 1fr;grid-template-areas:"bild inh" "bild akt" "mini mini";border-top:0;border-left:5px solid var(--c)}
   #liste .karte .galerie{display:contents}
-  #liste .karte img.gross{grid-area:bild;width:96px;height:100%;min-height:96px;aspect-ratio:auto;object-fit:cover}
+  #liste .karte img.gross{grid-area:bild;width:96px;height:100%;min-height:120px;aspect-ratio:auto;object-fit:cover}
   #liste .karte .mini{grid-area:mini}
   #liste .karte .inhalt{grid-area:inh;padding:10px 12px;min-width:0}
-  #liste .karte .aktion{grid-area:akt;padding:6px 12px 12px}
+  #liste .karte .aktion{grid-area:akt;padding:0 12px 12px;align-self:end}
   #liste .karte .aktion button{padding:7px 14px;font-size:.85rem}
   #liste .karte h3{font-size:1.4rem;overflow-wrap:anywhere}
 }
+
+.fz-seg{grid-column:1/-1;margin-top:6px;color:var(--grau);font-size:.75rem;font-weight:600}
+.fz-seg:first-child{margin-top:0}
+#bsDialog{z-index:3600}
+#syDialog{z-index:3650}
+#syDialog textarea{font:.78rem/1.3 monospace;word-break:break-all}
+.kontoBtn{margin-left:auto;display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.1);color:var(--weiss);border:1px solid rgba(255,255,255,.28);padding:8px 14px;font-size:.85rem;border-radius:999px}
+.kontoBtn:hover{background:rgba(255,255,255,.2)}
+.kontoBtn i{width:9px;height:9px;border-radius:50%;background:#8a949f;display:inline-block}
+.kontoBtn.ein i{background:#7fd69b}
+.kontoBtn.fehler i{background:var(--amber)}
+.kfeld{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.kcheck{flex-direction:row;align-items:center;gap:10px;margin-top:14px;font-size:.95rem;color:var(--text)}
+.kcheck input{width:20px;height:20px;accent-color:var(--rot)}
+.kmehr{margin-top:16px;border-top:1px solid var(--linie);padding-top:12px}
+.kmehr summary{cursor:pointer;font-weight:600}
 </style>
 </head>
 <body>
 <header>
   <div class="kopf">
     <div class="titelzeile">
-      <svg viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="11" fill="#ffb81c"/><rect x="11" y="8" width="22" height="24" rx="6" fill="#111b27"/><rect x="14.5" y="12" width="15" height="8" rx="2" fill="#ffb81c"/><circle cx="16.5" cy="26" r="1.8" fill="#ffb81c"/><circle cx="27.5" cy="26" r="1.8" fill="#ffb81c"/><path d="M15 36l3-4M29 36l-3-4" stroke="#111b27" stroke-width="2.4" stroke-linecap="round"/></svg>
-      <div><h1>Zug-Logbuch</h1><p>Trag ein, was du gesehen hast.</p></div>
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="15" fill="#ffb81c"/><path d="M17 49V27a15 15 0 0 1 30 0v22z" fill="#111b27"/><path d="M22.5 31v-3.5c0-4 4-7 9.5-7s9.5 3 9.5 7V31z" fill="#ffe9a8"/><rect x="17" y="35.5" width="30" height="3" fill="#e63946"/><circle cx="24.5" cy="43.5" r="3" fill="#ffb81c"/><circle cx="39.5" cy="43.5" r="3" fill="#ffb81c"/><path d="M10 56h44" stroke="#111b27" stroke-width="3" stroke-linecap="round"/><path d="M51 7l1.7 4.3L57 13l-4.3 1.7L51 19l-1.7-4.3L45 13l4.3-1.7z" fill="#e63946"/></svg>
+      <div><h1>Train<span class="ta">tastic</span></h1><p>Trag ein, was du gesehen hast.</p></div>
+      <button type="button" class="kontoBtn" id="kontoBtn" aria-haspopup="dialog"><i></i><span>Anmelden</span></button>
     </div>
     <div class="stats" id="stats"></div>
   </div>
@@ -403,7 +427,7 @@ body{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
       <button class="leise" id="fzImport" type="button">Wiederherstellen</button>
       <input id="fzDatei" type="file" accept="application/json" hidden>
     </div>
-    <p class="kat-info">Hier zählt jede einzelne Lok und jeder Triebzug. Bei Baureihen mit Nummern wie „143 017“ erkennt die App die Nummer automatisch aus dem Logbuch. Bei Triebzügen ohne Baureihennummer (z. B. Stadler KISS oder FLIRT) wählst du beim Eintragen das Modell und gibst die Nummer an, die am Zug steht. Dann zählt die App pro Modell. Einen Bestand (erste bis letzte Nummer) kennt die App nur bei BR 101 und BR 111, alle anderen legst du selbst fest.</p>
+    <p class="kat-info">Hier zählt jede einzelne Lok und jeder Triebzug. Bei Baureihen mit Nummern wie „143 017“ erkennt die App die Nummer automatisch aus dem Logbuch. Bei Triebzügen ohne Baureihennummer (z. B. Stadler KISS oder FLIRT) wählst du beim Eintragen das Modell und gibst die Nummer an, die am Zug steht. Dann zählt die App pro Modell. Welche Nummern es überhaupt gibt, kennt die App nur bei BR 101 und BR 111. Bei vielen Baureihen hat die Nummerierung Lücken (die BR 143 zum Beispiel), deshalb legst du den Bestand dort selbst fest, auch in mehreren Bereichen wie „1-5, 101-160“. Dann zeigt der Balken deinen Fortschritt.</p>
     <div class="filterleiste">
       <input id="fzSuche" type="search" placeholder="Baureihe suchen, z. B. 143 oder ICE" aria-label="Baureihen durchsuchen">
       <select id="fzArt" aria-label="Art"><option value="">Alle Arten</option></select>
@@ -474,6 +498,7 @@ body{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
     <h2>Meine Sichtungen</h2>
     <button class="leise" id="export" type="button">Alles sichern</button>
     <button class="leise" id="import" type="button">Wiederherstellen</button>
+    <button class="leise" id="syOeffnen2" type="button">Geräte abgleichen</button>
     <input id="datei" type="file" accept="application/json" hidden>
   </div>
   <div class="filterleiste">
@@ -526,6 +551,7 @@ body{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
   <div class="aktionen">
     <button type="button" id="sichAlles">Alles sichern</button>
     <button type="button" class="leise" id="sichLaden">Wiederherstellen</button>
+    <button type="button" class="leise" id="syOeffnen">Mit anderem Gerät abgleichen</button>
     <input id="sichDatei" type="file" accept="application/json" hidden>
   </div>
   <p class="kat-info">Eine Datei enthält Sichtungen, Fotos, Linien, Fahrzeuge und eigene Modelle. Beim Wiederherstellen wird nichts überschrieben, es kommt nur Fehlendes dazu. Auch ältere Sicherungsdateien werden erkannt.</p>
@@ -542,12 +568,116 @@ Bilder: Wikipedia / Wikimedia Commons (Lizenzen auf der jeweiligen Bildseite). K
   <button type="button" data-tab="bahnhof"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Bahnhof</button>
   <button type="button" data-tab="katalog"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>Katalog</button>
 </nav>
+<div class="lnwahl" id="syDialog" hidden role="dialog" aria-modal="true" aria-labelledby="syTitel">
+  <div class="box">
+    <h3 id="syTitel">Mit anderem Gerät abgleichen</h3>
+    <p class="kat-info">Sichtungen, Fotos, Linien, Fahrzeuge und eigene Modelle werden direkt zwischen deinen Geräten abgeglichen, ohne Server und ohne Konto. Beide Geräte brauchen Internet und müssen die App offen haben. Änderungen und Löschungen werden übernommen, bei Widersprüchen gewinnt die neuere Änderung. Mach vorher eine Sicherung.</p>
+    <p class="kat-info" id="syLetzte"></p>
+    <div class="aktionen" id="syWahl" style="margin-top:12px">
+      <button type="button" id="syStartBtn">Verbindung starten</button>
+      <button type="button" class="leise" id="syAntwortBtn">Code vom anderen Gerät eingeben</button>
+    </div>
+    <div id="syA" hidden>
+      <p class="kat-info" style="margin-top:12px"><b>1.</b> Schicke diesen Code an dein anderes Gerät, zum Beispiel als Nachricht an dich selbst. Öffne dort den Abgleich und tippe auf „Code vom anderen Gerät eingeben“.</p>
+      <textarea id="syCodeA" readonly rows="4" style="width:100%" aria-label="Code für das andere Gerät"></textarea>
+      <div class="aktionen" style="margin-top:8px"><button type="button" class="leise" id="syKopA">Kopieren</button><button type="button" class="leise" id="syTeilA" hidden>Teilen</button></div>
+      <p class="kat-info" style="margin-top:12px"><b>2.</b> Füge hier den Antwort-Code des anderen Geräts ein:</p>
+      <textarea id="syEingabeA" rows="4" style="width:100%" aria-label="Antwort-Code einfügen"></textarea>
+      <div class="aktionen" style="margin-top:8px"><button type="button" id="syVerbindenA">Verbinden</button></div>
+    </div>
+    <div id="syB" hidden>
+      <p class="kat-info" style="margin-top:12px"><b>1.</b> Füge hier den Code des ersten Geräts ein:</p>
+      <textarea id="syEingabeB" rows="4" style="width:100%" aria-label="Code einfügen"></textarea>
+      <div class="aktionen" style="margin-top:8px"><button type="button" id="syAntwortErz">Antwort erzeugen</button></div>
+      <div id="syBAntwort" hidden>
+        <p class="kat-info" style="margin-top:12px"><b>2.</b> Schicke diesen Antwort-Code zurück an das erste Gerät:</p>
+        <textarea id="syCodeB" readonly rows="4" style="width:100%" aria-label="Antwort-Code"></textarea>
+        <div class="aktionen" style="margin-top:8px"><button type="button" class="leise" id="syKopB">Kopieren</button><button type="button" class="leise" id="syTeilB" hidden>Teilen</button></div>
+      </div>
+    </div>
+    <p class="kat-info" id="syStatus" role="status" style="margin-top:12px"></p>
+    <p class="kat-info">Zum Verbinden nutzt dein Browser einen öffentlichen STUN-Server von Google, um die Adresse deines Geräts zu finden. Deine Daten laufen nur direkt zwischen den Geräten. In manchen Netzen (Mobilfunk, Firmen-WLAN) klappt das nicht. Nutze dann „Alles sichern“ und „Wiederherstellen“.</p>
+    <div class="aktionen" style="margin-top:10px"><button type="button" class="leise" id="syZu">Schließen</button></div>
+  </div>
+</div>
+<div class="lnwahl" id="bsDialog" hidden role="dialog" aria-modal="true" aria-labelledby="bsTitel">
+  <div class="box">
+    <h3 id="bsTitel"></h3>
+    <p class="kat-info">Welche Nummern gibt es von dieser Baureihe? Gib Bereiche und einzelne Nummern ein, getrennt durch Komma oder Zeilenumbruch, auch mit Lücken. Beispiele: „1-145“ oder „1-5, 101-160“ oder „143 001-143 010“. Die Nummern findest du zum Beispiel in der Wikipedia-Seite der Baureihe.</p>
+    <textarea id="bsText" rows="5" placeholder="1-145" aria-label="Nummern des Bestands" style="width:100%;margin-top:10px"></textarea>
+    <p class="kat-info" id="bsFehler" role="alert" style="color:var(--rot)"></p>
+    <div class="aktionen" style="margin-top:10px">
+      <button type="button" id="bsSpeichern">Speichern</button>
+      <button type="button" class="leise" id="bsAbbruch">Abbrechen</button>
+      <button type="button" class="leise" id="bsLoeschen">Bestand entfernen</button>
+    </div>
+  </div>
+</div>
 <div class="lnwahl" id="lnWahl" hidden role="dialog" aria-modal="true" aria-labelledby="lnWahlTitel">
   <div class="box">
     <h3 id="lnWahlTitel"></h3>
     <p class="kat-info">Diese Linie gibt es in der Nähe mehrfach. Tippe die richtige an, dann wird sie abgehakt.</p>
     <div id="lnWahlListe"></div>
     <button type="button" class="leise" id="lnWahlKeine">Keine davon</button>
+  </div>
+</div>
+<div class="lnwahl" id="kontoDialog" hidden role="dialog" aria-modal="true" aria-labelledby="kontoTitel">
+  <div class="box">
+    <h3 id="kontoTitel">Konto</h3>
+
+    <div id="kontoSetup" hidden>
+      <p class="kat-info">Die Cloud ist noch nicht eingerichtet. Trage in der <b>index.html</b> bei <code>SUPABASE_URL</code> und <code>SUPABASE_KEY</code> die Daten deines Supabase-Projekts ein und führe <code>supabase-setup.sql</code> im SQL Editor aus. Ohne Konto funktioniert die App wie bisher auf diesem Gerät.</p>
+    </div>
+
+    <div id="kontoAus" hidden>
+      <p class="kat-info">Mit einem Konto gleichen sich Logbuch, Linien, Fahrzeuge und eigene Modelle auf all deinen Geräten ab. Was schon auf diesem Gerät liegt, kommt mit ins Konto.</p>
+      <div class="chips">
+        <button type="button" class="leise aktiv" id="kModusLogin">Anmelden</button>
+        <button type="button" class="leise" id="kModusNeu">Neues Konto</button>
+      </div>
+      <div class="kfeld">
+        <label>E-Mail<input id="kEmail" type="email" autocomplete="email" inputmode="email"></label>
+        <label>Passwort<input id="kPass" type="password" autocomplete="current-password"></label>
+        <div class="aktionen">
+          <button type="button" id="kGo">Anmelden</button>
+          <button type="button" class="leise" id="kVergessen">Passwort vergessen?</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="kontoEin" hidden>
+      <p style="margin:6px 0 0"><b id="kMail"></b></p>
+      <p class="kat-info" id="kStatus" role="status"></p>
+      <label class="kcheck"><input type="checkbox" id="kFotos"> Fotos auch in der Cloud sichern</label>
+      <p class="kat-info">Aus: Fotos bleiben nur auf diesem Gerät. An: Sie liegen privat in deinem Konto und erscheinen auch auf deinen anderen Geräten.</p>
+      <div class="aktionen" style="margin-top:12px">
+        <button type="button" id="kJetzt">Jetzt abgleichen</button>
+        <button type="button" class="leise" id="kAus">Abmelden</button>
+      </div>
+      <details class="kmehr">
+        <summary>Passwort und Daten</summary>
+        <div class="kfeld">
+          <label>Neues Passwort<input id="kNeuPass2" type="password" autocomplete="new-password"></label>
+          <div class="aktionen"><button type="button" class="leise" id="kPassAendern">Passwort ändern</button></div>
+          <div class="aktionen">
+            <button type="button" class="leise" id="kCloudLoeschen">Cloud-Daten löschen</button>
+            <button type="button" class="leise" id="kKontoLoeschen">Konto löschen</button>
+          </div>
+          <p class="kat-info">„Cloud-Daten löschen“ entfernt Logbuch und Fotos aus dem Konto und meldet dich ab. „Konto löschen“ entfernt zusätzlich das Konto selbst. Auf diesem Gerät bleibt immer alles erhalten.</p>
+        </div>
+      </details>
+    </div>
+
+    <div id="kontoNeuPass" hidden>
+      <p class="kat-info">Wähle ein neues Passwort für dein Konto.</p>
+      <div class="kfeld">
+        <label>Neues Passwort<input id="kNeuPass" type="password" autocomplete="new-password"></label>
+        <div class="aktionen"><button type="button" id="kNeuSpeichern">Passwort speichern</button></div>
+      </div>
+    </div>
+
+    <p class="kat-info" id="kMeld" role="status" style="margin-top:10px"></p>
+    <div class="aktionen" style="margin-top:10px"><button type="button" class="leise" id="kZu">Schließen</button></div>
   </div>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -846,6 +976,7 @@ function ersatzbild(typ) {
 }
 
 function speichern() {
+  syTrack();
   try { localStorage.setItem(KEY, JSON.stringify(zuege.map(ohneFotos))); }
   catch (e) { alert("Speicher voll. Lösche alte Einträge oder sichere dein Logbuch."); }
   fotosAufraeumen();
@@ -1485,7 +1616,7 @@ function tafelZeichnen() {
 const LM_KEY = "zuglogbuch.linienmodelle.v1";
 let linienModelle = {};
 try { linienModelle = JSON.parse(localStorage.getItem(LM_KEY)) || {}; } catch (e) { linienModelle = {}; }
-const lmSpeichern = () => { try { localStorage.setItem(LM_KEY, JSON.stringify(linienModelle)); } catch (e) { toast("Speicher voll: Das Modell konnte nicht gemerkt werden."); } };
+const lmSpeichern = () => { syTrack(); try { localStorage.setItem(LM_KEY, JSON.stringify(linienModelle)); } catch (e) { toast("Speicher voll: Das Modell konnte nicht gemerkt werden."); } };
 const lmNorm = n => String(n || "").replace(/\s/g, "").toUpperCase();
 const lmKey = d => lmNorm((d.line || {}).name) + "|" + (d.agency || "");
 function lmZaehlen() { // Logbuch: Linie -> {Modell: Anzahl}
@@ -1630,7 +1761,7 @@ function tafelEintragen(art, i, modellId) {
 const LN_KEY = "zuglogbuch.linien.v1", LN_LISTE_KEY = "zuglogbuch.linienliste.v1";
 let linienHaken = {}, linienAnzeigen = false;
 try { const d = JSON.parse(localStorage.getItem(LN_KEY)) || {}; linienHaken = d.haken || {}; linienAnzeigen = !!d.anzeigen; } catch (e) {}
-const lnSpeichern = () => { try { localStorage.setItem(LN_KEY, JSON.stringify({haken: linienHaken, anzeigen: linienAnzeigen})); } catch (e) { toast("Speicher voll: Die Haken konnten nicht gesichert werden."); } };
+const lnSpeichern = () => { syTrack(); try { localStorage.setItem(LN_KEY, JSON.stringify({haken: linienHaken, anzeigen: linienAnzeigen})); } catch (e) { toast("Speicher voll: Die Haken konnten nicht gesichert werden."); } };
 const linienStatHtml = () => `<div class="stat" id="statLinien"><b>${Object.keys(linienHaken).length}</b><span title="abgehakte Linien">Linien</span></div>`;
 const lnStatAktual = () => { const el = $("statLinien"); if (el) el.outerHTML = linienStatHtml(); };
 const lnA = s => esc(s).replace(/"/g, "&quot;");
@@ -1844,8 +1975,8 @@ lnZeigen();
 const FZ_KEY = "zuglogbuch.fahrzeuge.v1";
 let fzDaten = {}; // Schlüssel -> {man: {Nummer: Zeit}, von, bis}; Schlüssel "143" = Baureihe, "m:kiss" = Modell mit freier Nummer
 try { fzDaten = JSON.parse(localStorage.getItem(FZ_KEY)) || {}; } catch (e) { fzDaten = {}; }
-const fzSpeichern = () => { try { localStorage.setItem(FZ_KEY, JSON.stringify(fzDaten)); } catch (e) { toast("Speicher voll: Die Haken konnten nicht gesichert werden."); } };
-const FZ_FLOTTE = {"101": [1, 145], "111": [1, 227]}; // nur Bestände, die lückenlos nummeriert sind
+const fzSpeichern = () => { syTrack(); try { localStorage.setItem(FZ_KEY, JSON.stringify(fzDaten)); } catch (e) { toast("Speicher voll: Die Haken konnten nicht gesichert werden."); } };
+const FZ_FLOTTE = {"101": [[1, 145]], "111": [[1, 227]]}; // nur Bestände, bei denen ich die Nummern sicher kenne
 const KL_EXTRA = {ice1: ["401"], ice2: ["402"], ice3: ["403", "406"], ice3neo: ["408"], velarod: ["407"], ice4: ["412"], icet: ["411", "415"], icetd: ["605"], v200: ["220"]};
 const KL_MODELL = {};
 MODELLE.forEach(m => { (KL_EXTRA[m.id] || (/^br\d{2,3}$/.test(m.id) ? [m.id.slice(2)] : [])).forEach(k => { KL_MODELL[k] = m; }); });
@@ -1868,7 +1999,32 @@ function fzAuto() { // aus dem Logbuch: Schlüssel -> {Nummer: frühester Zeitpu
   return a;
 }
 const fzMan = kl => (fzDaten[kl] && fzDaten[kl].man) || {};
-const fzRange = kl => (fzDaten[kl] && fzDaten[kl].von) ? [fzDaten[kl].von, fzDaten[kl].bis] : (FZ_FLOTTE[kl] || null);
+function fzSeg(kl) { // Bestand der Baureihe als Bereiche [[von, bis], ...] oder null
+  const d = fzDaten[kl];
+  if (d && Array.isArray(d.seg) && d.seg.length) return d.seg;
+  if (d && d.von) return [[d.von, d.bis]]; // älteres Format
+  return FZ_FLOTTE[kl] || null;
+}
+const fzSegGesamt = seg => seg.reduce((n, x) => n + x[1] - x[0] + 1, 0);
+const fzInSeg = (seg, n) => seg.some(x => n >= x[0] && n <= x[1]);
+function fzSegParse(text, kl) { // "1-5, 101-160" oder "143 001-143 010" -> {seg} oder {fehler}
+  const teile = [];
+  for (const roh of String(text).replace(/[–—]/g, "-").split(/[,;\n]+/)) {
+    const t = roh.trim().replace(/\s+/g, " ");
+    if (!t) continue;
+    const m = t.match(new RegExp("^(?:" + kl + " ?)?(\\d{1,4})(?: ?- ?(?:" + kl + " ?)?(\\d{1,4}))?$"));
+    if (!m) return {fehler: "„" + t + "“ kann ich nicht lesen. Beispiel: 1-5, 101-160"};
+    const a = +m[1], b = m[2] ? +m[2] : a;
+    if (a < 1 || b < a) return {fehler: "„" + t + "“ ist kein gültiger Bereich."};
+    teile.push([a, b]);
+  }
+  teile.sort((x, y) => x[0] - y[0]);
+  const seg = [];
+  teile.forEach(x => { const l = seg[seg.length - 1]; if (l && x[0] <= l[1] + 1) l[1] = Math.max(l[1], x[1]); else seg.push(x.slice()); });
+  if (fzSegGesamt(seg) > 5000) return {fehler: "Das sind mehr als 5000 Nummern."};
+  return {seg};
+}
+const fzSegText = seg => seg.map(x => x[0] === x[1] ? x[0] : x[0] + "-" + x[1]).join(", ");
 function fzAnzahl() {
   const a = fzAuto(), kls = new Set(Object.keys(a).concat(Object.keys(fzDaten)));
   let n = 0;
@@ -1879,16 +2035,19 @@ const fzStatHtml = () => `<div class="stat" id="statFz"><b>${fzAnzahl()}</b><spa
 const fzStatAktual = () => { const el = $("statFz"); if (el) el.outerHTML = fzStatHtml(); };
 
 let fzOffen = new Set();
-function fzInhalt(kl, g, man, rg, frei) {
+function fzInhalt(kl, g, man, seg, frei) {
   const alle = [...new Set(Object.keys(g).concat(Object.keys(man)))].sort((a, b) => frei ? a.localeCompare(b, "de", {numeric: true}) : a - b);
   const lab = n => frei ? esc(n) : fzPad(n);
   const zelle = n => `<button type="button" class="fz-z ${g[n] ? "g" : "m"}" data-kl="${lnA(kl)}" data-n="${lnA(n)}">${lab(n)}</button>`;
   let h = "";
-  if (rg) {
+  if (seg) {
     let z = "";
-    for (let n = rg[0]; n <= rg[1]; n++) z += `<button type="button" class="fz-z ${g[n] ? "g" : man[n] ? "m" : ""}" data-kl="${kl}" data-n="${n}">${fzPad(n)}</button>`;
+    seg.forEach(x => {
+      if (seg.length > 1) z += `<div class="fz-seg">Nr. ${fzPad(x[0])} bis ${fzPad(x[1])}</div>`;
+      for (let n = x[0]; n <= x[1]; n++) z += `<button type="button" class="fz-z ${g[n] ? "g" : man[n] ? "m" : ""}" data-kl="${kl}" data-n="${n}">${fzPad(n)}</button>`;
+    });
     h += `<div class="kat-info">Tippe auf eine Nummer zum Abhaken. Rot: aus dem Logbuch, gelb: von Hand.</div><div class="fz-gitter">${z}</div>`;
-    const aus = alle.filter(n => +n < rg[0] || +n > rg[1]);
+    const aus = alle.filter(n => !fzInSeg(seg, +n));
     if (aus.length) h += `<div class="kat-info">Außerhalb des Bestands:</div><div class="fz-chips">${aus.map(zelle).join("")}</div>`;
   } else {
     h += alle.length ? `<div class="fz-chips">${alle.map(zelle).join("")}</div>` : '<div class="kat-info" style="margin-top:8px">Noch kein Fahrzeug gesehen.</div>';
@@ -1908,7 +2067,7 @@ function fzZeigen() {
     const frei = kl.startsWith("m:"), m = frei ? modell(kl.slice(2)) : KL_MODELL[kl], g = auto[kl] || {}, man = fzMan(kl);
     const n = new Set(Object.keys(g).concat(Object.keys(man))).size;
     const name = frei ? (m ? m.name : "Gelöschtes Modell") : m ? (KL_EXTRA[m.id] && KL_EXTRA[m.id].length > 1 ? m.name.replace(/\s*\(BR [^)]*\)/, "") + " · BR " + kl : m.name) : "BR " + kl;
-    return {kl, frei, name, typ: m ? m.typ : "Sonstiges", g, man, n, rg: frei ? null : fzRange(kl)};
+    return {kl, frei, name, typ: m ? m.typ : "Sonstiges", g, man, n, rg: frei ? null : fzSeg(kl)};
   }).filter(r => (!art || r.typ === art) && (!st || (st === "ja") === (r.n > 0)) && (!q || norm(r.name + " " + r.kl).includes(q)))
     .sort((a, b) => arten.indexOf(a.typ) - arten.indexOf(b.typ) || a.frei - b.frei || (a.frei ? a.name.localeCompare(b.name, "de") : parseInt(a.kl, 10) - parseInt(b.kl, 10)));
   const mit = zeilen.filter(r => r.n > 0).length;
@@ -1916,8 +2075,8 @@ function fzZeigen() {
   let gruppe = "";
   $("fzListe").innerHTML = zeilen.length ? zeilen.map(r => {
     const kopf = r.typ !== gruppe ? (gruppe = r.typ, `<h3 class="fz-gruppe" style="--c:${farben[r.typ] || "#66717d"}">${esc(r.typ)}</h3>`) : "";
-    const gesamt = r.rg ? r.rg[1] - r.rg[0] + 1 : 0;
-    const imBestand = r.rg ? Object.keys(r.g).concat(Object.keys(r.man)).filter((x, i, a) => a.indexOf(x) === i && +x >= r.rg[0] && +x <= r.rg[1]).length : 0;
+    const gesamt = r.rg ? fzSegGesamt(r.rg) : 0;
+    const imBestand = r.rg ? Object.keys(r.g).concat(Object.keys(r.man)).filter((x, i, a) => a.indexOf(x) === i && fzInSeg(r.rg, +x)).length : 0;
     return kopf + `<details class="fz" data-kl="${lnA(r.kl)}" style="--c:${farben[r.typ] || "#66717d"}"${fzOffen.has(r.kl) ? " open" : ""}>
       <summary><span class="fz-name">${esc(r.name)}</span><span class="fz-zahl">${r.n}${gesamt ? " / " + gesamt : ""}</span>
       ${gesamt ? `<span class="fz-balken"><i style="width:${Math.round(100 * imBestand / gesamt)}%"></i></span>` : ""}</summary>
@@ -1932,7 +2091,7 @@ function fzToggle(kl, n) {
   const d = fzDaten[kl] || (fzDaten[kl] = {});
   d.man = d.man || {};
   if (d.man[n]) delete d.man[n]; else d.man[n] = new Date().toISOString();
-  if (!Object.keys(d.man).length && !d.von) delete fzDaten[kl];
+  if (!Object.keys(d.man).length && !d.von && !d.seg) delete fzDaten[kl];
   fzSpeichern(); fzZeigen();
 }
 function fzHinzu(kl) {
@@ -1944,18 +2103,33 @@ function fzHinzu(kl) {
   if ((a[kl] && a[kl][n]) || fzMan(kl)[n]) { toast(n + " ist schon abgehakt."); return; }
   fzToggle(kl, n);
 }
+let bsKl = "";
 function fzBestand(kl) {
-  const aktuell = fzRange(kl);
-  const t = prompt("Erste und letzte laufende Nummer der BR " + kl + ", z. B. 1-145.\nLeer lassen, um den Bestand zu entfernen.", aktuell ? aktuell[0] + "-" + aktuell[1] : "");
-  if (t === null) return;
-  const d = fzDaten[kl] || (fzDaten[kl] = {});
-  const m = t.match(/^\s*(\d+)\s*[-–]\s*(\d+)\s*$/);
-  if (!t.trim()) { delete d.von; delete d.bis; }
-  else if (m && +m[1] >= 1 && +m[2] >= +m[1] && +m[2] - +m[1] < 2000) { d.von = +m[1]; d.bis = +m[2]; }
-  else { toast("Bitte so eingeben: 1-145"); return; }
-  if (!Object.keys(d.man || {}).length && !d.von) delete fzDaten[kl];
-  fzSpeichern(); fzZeigen();
+  bsKl = kl;
+  const m = KL_MODELL[kl], seg = fzSeg(kl);
+  $("bsTitel").textContent = "Bestand der " + (m ? m.name.replace(/\s*\(BR [^)]*\)/, "") + " · BR " + kl : "BR " + kl);
+  $("bsText").value = seg ? fzSegText(seg) : "";
+  $("bsFehler").textContent = "";
+  $("bsDialog").hidden = false;
+  $("bsText").focus();
 }
+function bsZu() { $("bsDialog").hidden = true; bsKl = ""; }
+$("bsSpeichern").onclick = () => {
+  const t = $("bsText").value;
+  if (!t.trim()) { $("bsFehler").textContent = "Bitte Nummern eingeben oder „Bestand entfernen“ wählen."; return; }
+  const r = fzSegParse(t, bsKl);
+  if (r.fehler) { $("bsFehler").textContent = r.fehler; return; }
+  const d = fzDaten[bsKl] || (fzDaten[bsKl] = {});
+  d.seg = r.seg; delete d.von; delete d.bis;
+  fzSpeichern(); fzZeigen(); toast(fzSegGesamt(r.seg) + " Nummern im Bestand"); bsZu();
+};
+$("bsLoeschen").onclick = () => {
+  const d = fzDaten[bsKl];
+  if (d) { delete d.seg; delete d.von; delete d.bis; if (!Object.keys(d.man || {}).length) delete fzDaten[bsKl]; }
+  fzSpeichern(); fzZeigen(); bsZu();
+};
+$("bsAbbruch").onclick = bsZu;
+$("bsDialog").addEventListener("click", e => { if (e.target === $("bsDialog")) bsZu(); });
 $("fzListe").addEventListener("click", e => {
   const z = e.target.closest(".fz-z");
   if (z) { fzToggle(z.dataset.kl, z.dataset.n); return; }
@@ -1984,7 +2158,7 @@ $("modell").addEventListener("change", nrHinweis);
 
 // Eigene Modelle im Katalog
 Object.keys(farben).forEach(t => $("emTyp").insertAdjacentHTML("beforeend", `<option>${t}</option>`));
-const eigeneSpeichern = () => { try { localStorage.setItem(EIGENE_KEY, JSON.stringify(eigeneModelle)); } catch (e) { toast("Speicher voll: Das Modell konnte nicht gesichert werden."); } };
+const eigeneSpeichern = () => { syTrack(); try { localStorage.setItem(EIGENE_KEY, JSON.stringify(eigeneModelle)); } catch (e) { toast("Speicher voll: Das Modell konnte nicht gesichert werden."); } };
 $("emSpeichern").onclick = () => {
   const name = $("emName").value.trim();
   if (!name) { toast("Bitte einen Namen eingeben."); return; }
@@ -2045,12 +2219,12 @@ async function sichAlles() {
   const liste = zuege.map(ohneFotos), fotos = {};
   liste.forEach(z => z.fotos.forEach(t => { if (fotoCache.has(t)) fotos[t] = fotoCache.get(t); }));
   const inhalt = {zuglogbuch: "komplett", format: 3, erstellt: new Date().toISOString(), zuege: liste, fotos, linien: linienHaken, fahrzeuge: fzDaten, modelle: eigeneModelle, linienmodelle: linienModelle};
-  const name = "zug-logbuch-sicherung-" + new Date().toISOString().slice(0, 10) + ".json";
+  const name = "traintastic-sicherung-" + new Date().toISOString().slice(0, 10) + ".json";
   const blob = new Blob([JSON.stringify(inhalt)], {type: "application/json"});
   persistAnfragen();
   try { // Am Handy über das Teilen-Menü (z. B. in die Cloud oder per Mail), sonst als Download
     const f = new File([blob], name, {type: "application/json"});
-    if (matchMedia("(pointer:coarse)").matches && navigator.canShare && navigator.canShare({files: [f]})) { await navigator.share({files: [f], title: "Zug-Logbuch Sicherung"}); sichMerken(); return; }
+    if (matchMedia("(pointer:coarse)").matches && navigator.canShare && navigator.canShare({files: [f]})) { await navigator.share({files: [f], title: "Traintastic Sicherung"}); sichMerken(); return; }
   } catch (e) { if (e && e.name === "AbortError") return; }
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob); a.download = name; a.click();
@@ -2091,6 +2265,7 @@ async function sichLadenDatei(datei) {
         d.man = d.man || {};
         Object.keys(v.man || {}).forEach(k => { if (!d.man[k]) { d.man[k] = v.man[k]; n.f++; } });
         if (v.von && v.bis && !d.von) { d.von = v.von; d.bis = v.bis; }
+        if (Array.isArray(v.seg) && !d.seg) d.seg = v.seg;
       });
       fzSpeichern(); fzZeigen();
     }
@@ -2158,9 +2333,609 @@ async function lnNachholen() { if (navigator.onLine) for (const z of zuege.filte
 window.addEventListener("online", lnNachholen);
 setTimeout(lnNachholen, 3000);
 
+// ===== Geräte abgleichen: direkt von Gerät zu Gerät (WebRTC), ohne Server und ohne Konto =====
+// Jeder Wert (Sichtung, Linien-Haken, Fahrzeug-Haken, Modell ...) ist ein Eintrag mit Schlüssel, Zeitpunkt der letzten Änderung und Hash.
+// Beim Abgleich gewinnt pro Schlüssel die neuere Änderung; Löschungen werden als Eintrag ohne Wert gemerkt.
+const SY_KEY = "zuglogbuch.abgleich.v1";
+let sy = null; // {tab: {Schlüssel: {h, t}}, letzte}
+function syKanon(v) {
+  if (v === null || typeof v !== "object") return JSON.stringify(v);
+  if (Array.isArray(v)) return "[" + v.map(syKanon).join(",") + "]";
+  return "{" + Object.keys(v).sort().filter(k => v[k] !== undefined).map(k => JSON.stringify(k) + ":" + syKanon(v[k])).join(",") + "}";
+}
+function syHash(v) { const t = syKanon(v); let h = 5381; for (let i = 0; i < t.length; i++) h = ((h << 5) + h + t.charCodeAt(i)) | 0; return (h >>> 0).toString(36) + "." + t.length.toString(36); }
+function syWerte() {
+  const w = {};
+  zuege.forEach(z => { const c = ohneFotos(z); delete c.lnKontext; w["z:" + z.id] = c; });
+  Object.keys(linienHaken).forEach(k => { w["l:" + k] = linienHaken[k]; });
+  Object.keys(fzDaten).forEach(kl => {
+    const d = fzDaten[kl] || {};
+    Object.keys(d.man || {}).forEach(n => { w["f:" + kl + "|" + n] = d.man[n]; });
+    if (Array.isArray(d.seg) && d.seg.length) w["fs:" + kl] = d.seg; else if (d.von) w["fs:" + kl] = [[d.von, d.bis]];
+  });
+  eigeneModelle.forEach(m => { w["m:" + m.id] = m; });
+  Object.keys(linienModelle).forEach(k => { w["lm:" + k] = linienModelle[k]; });
+  return w;
+}
+const sySpeichern = () => { try { localStorage.setItem(SY_KEY, JSON.stringify(sy)); } catch (e) {} try { cloudPlanen(); } catch (e) {} };
+function syTrack() { // wird bei jedem Speichern aufgerufen und merkt sich, was sich wann geändert hat
+  try {
+    if (!sy) return;
+    const jetzt = Date.now(), w = syWerte();
+    let neu = false;
+    Object.keys(w).forEach(k => { const h = syHash(w[k]), e = sy.tab[k]; if (!e || e.h !== h) { sy.tab[k] = {h, t: jetzt}; neu = true; } });
+    Object.keys(sy.tab).forEach(k => { if (!(k in w) && sy.tab[k].h !== "") { sy.tab[k] = {h: "", t: jetzt}; neu = true; } });
+    if (neu) sySpeichern();
+  } catch (e) {}
+}
+function syInit() {
+  let roh = null;
+  try { roh = JSON.parse(localStorage.getItem(SY_KEY)); } catch (e) {}
+  if (roh && roh.tab) {
+    sy = roh;
+    const alt = Date.now() - 365 * 864e5;
+    Object.keys(sy.tab).forEach(k => { if (sy.tab[k].h === "" && sy.tab[k].t < alt) delete sy.tab[k]; });
+    syTrack();
+  } else { // erster Start: alles Vorhandene gilt als „alt“ (Zeitpunkt 0), damit neuere Änderungen anderer Geräte gewinnen
+    sy = {tab: {}, letzte: 0};
+    const w = syWerte();
+    Object.keys(w).forEach(k => { sy.tab[k] = {h: syHash(w[k]), t: 0}; });
+    sySpeichern();
+  }
+}
+const syNeuer = (r, l) => !l || r[0] > l.t || (r[0] === l.t && r[1] !== l.h && String(r[1]) > String(l.h));
+const syPraefix = k => ["fs", "lm", "f", "m", "z", "l"].find(x => k.startsWith(x + ":"));
+function syAnwenden(k, v) { // v === null: gelöscht. Gibt false zurück, wenn der Wert unbrauchbar ist.
+  const p = syPraefix(k);
+  if (!p) return false;
+  const r = k.slice(p.length + 1);
+  if (p === "z") {
+    if (v === null) zuege = zuege.filter(z => z.id !== r);
+    else if (v && typeof v === "object" && v.id === r && typeof v.nummer === "string") { const i = zuege.findIndex(z => z.id === r), c = ohneFotos(v); if (i >= 0) zuege[i] = c; else zuege.push(c); }
+    else return false;
+  } else if (p === "l") {
+    if (v === null) delete linienHaken[r]; else if (v && Array.isArray(v.ids) && v.ref) linienHaken[r] = v; else return false;
+  } else if (p === "f") {
+    const i = r.lastIndexOf("|"), kl = r.slice(0, i), nr = r.slice(i + 1);
+    if (i < 0) return false;
+    const d = fzDaten[kl] || (fzDaten[kl] = {});
+    d.man = d.man || {};
+    if (v === null) delete d.man[nr]; else if (typeof v === "string") d.man[nr] = v; else return false;
+    if (!Object.keys(d.man).length && !d.seg && !d.von) delete fzDaten[kl];
+  } else if (p === "fs") {
+    const d = fzDaten[r] || (fzDaten[r] = {});
+    if (v === null) { delete d.seg; delete d.von; delete d.bis; }
+    else if (Array.isArray(v) && v.every(x => Array.isArray(x) && x.length === 2 && x[0] >= 1 && x[1] >= x[0])) { d.seg = v; delete d.von; delete d.bis; }
+    else return false;
+    if (!Object.keys(d.man || {}).length && !d.seg) delete fzDaten[r];
+  } else if (p === "m") {
+    const i = eigeneModelle.findIndex(m => m.id === r), mi = MODELLE.findIndex(m => m.id === r);
+    if (v === null) { if (i >= 0) eigeneModelle.splice(i, 1); if (mi >= 0) MODELLE.splice(mi, 1); }
+    else if (v && v.id === r && v.name && farben[v.typ]) { v.eigen = true; if (i >= 0) eigeneModelle[i] = v; else eigeneModelle.push(v); if (mi >= 0) MODELLE[mi] = v; else MODELLE.push(v); }
+    else return false;
+  } else if (p === "lm") {
+    if (v === null) delete linienModelle[r]; else if (typeof v === "string") linienModelle[r] = v; else return false;
+  }
+  return true;
+}
+
+// --- Verbindung ---
+const SY_ICE = [{urls: "stun:stun.l.google.com:19302"}];
+let syPc = null, syDc = null, syKette = Promise.resolve(), syTeile = {}, syMsgId = 0, syLauf = null;
+const syStatus = t => { $("syStatus").textContent = t; };
+const syB64 = buf => btoa(String.fromCharCode.apply(null, buf)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const syUnB64 = t => Uint8Array.from(atob(t.replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0));
+async function syPack(str) {
+  try {
+    if (typeof CompressionStream === "function") {
+      const buf = new Uint8Array(await new Response(new Blob([str]).stream().pipeThrough(new CompressionStream("deflate-raw"))).arrayBuffer());
+      return "ZL1." + syB64(buf);
+    }
+  } catch (e) {}
+  return "ZL0." + syB64(new TextEncoder().encode(str));
+}
+async function syUnpack(code) {
+  const m = String(code).replace(/\s+/g, "").replace(/^["„“]+|["“”]+$/g, "").match(/^ZL([01])\.([A-Za-z0-9_-]+)$/);
+  if (!m) throw new Error("Das ist kein gültiger Code. Kopiere den ganzen Code.");
+  const buf = syUnB64(m[2]);
+  if (m[1] === "0") return new TextDecoder().decode(buf);
+  if (typeof DecompressionStream !== "function") throw new Error("Dieser Browser kann den Code nicht entpacken. Aktualisiere den Browser oder nutze „Alles sichern“ und „Wiederherstellen“.");
+  try { return await new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).text(); }
+  catch (e) { throw new Error("Der Code ist unvollständig oder beschädigt. Kopiere ihn noch einmal komplett."); }
+}
+function syGesammelt(pc) { // wartet, bis alle Verbindungsadressen gesammelt sind (höchstens 5 Sekunden)
+  return new Promise(ok => {
+    if (pc.iceGatheringState === "complete") return ok();
+    const fertig = () => { pc.removeEventListener("icegatheringstatechange", pruefen); ok(); };
+    const pruefen = () => { if (pc.iceGatheringState === "complete") fertig(); };
+    pc.addEventListener("icegatheringstatechange", pruefen);
+    setTimeout(fertig, 5000);
+  });
+}
+function syPcNeu() {
+  syAufraeumen();
+  if (typeof RTCPeerConnection === "undefined") throw new Error("Dieser Browser kann keine Direktverbindung aufbauen.");
+  const pc = syPc = new RTCPeerConnection({iceServers: SY_ICE});
+  pc.onconnectionstatechange = () => {
+    if (pc !== syPc) return;
+    if (pc.connectionState === "failed") syStatus("Die Verbindung ist fehlgeschlagen. Beide Geräte brauchen Internet. In manchen Netzen klappt eine Direktverbindung nicht: Nutze dann „Alles sichern“ und „Wiederherstellen“.");
+    else if ((pc.connectionState === "disconnected" || pc.connectionState === "closed") && syLauf && !syLauf.fertig) syStatus("Die Verbindung wurde unterbrochen. Starte den Abgleich noch einmal.");
+  };
+  return pc;
+}
+function syAufraeumen() {
+  try { if (syDc) syDc.close(); } catch (e) {}
+  try { if (syPc) syPc.close(); } catch (e) {}
+  syPc = syDc = null; syTeile = {}; syKette = Promise.resolve(); syLauf = null;
+}
+async function syStart() {
+  try {
+    const pc = syPcNeu();
+    syKanal(pc.createDataChannel("zuglogbuch"));
+    syStatus("Code wird erzeugt …");
+    await pc.setLocalDescription(await pc.createOffer());
+    await syGesammelt(pc);
+    $("syCodeA").value = await syPack(JSON.stringify(pc.localDescription));
+    $("syWahl").hidden = true; $("syA").hidden = false;
+    syStatus("");
+  } catch (e) { syStatus("Fehler: " + e.message); }
+}
+async function syVerbinden() {
+  try {
+    if (!syPc) throw new Error("Bitte zuerst „Verbindung starten“.");
+    await syPc.setRemoteDescription(JSON.parse(await syUnpack($("syEingabeA").value)));
+    syStatus("Verbindung wird aufgebaut …");
+  } catch (e) { syStatus("Fehler: " + e.message); }
+}
+async function syAntworten() {
+  try {
+    const angebot = JSON.parse(await syUnpack($("syEingabeB").value));
+    const pc = syPcNeu();
+    pc.ondatachannel = e => syKanal(e.channel);
+    syStatus("Antwort wird erzeugt …");
+    await pc.setRemoteDescription(angebot);
+    await pc.setLocalDescription(await pc.createAnswer());
+    await syGesammelt(pc);
+    $("syCodeB").value = await syPack(JSON.stringify(pc.localDescription));
+    $("syBAntwort").hidden = false;
+    syStatus("Schicke den Antwort-Code zurück. Lass diese Seite offen.");
+  } catch (e) { syStatus("Fehler: " + e.message); }
+}
+
+// --- Nachrichten (in Blöcken, damit auch große Mengen durch den Kanal passen) ---
+async function syGesendet(obj) {
+  const dc = syDc, t = JSON.stringify(obj), n = Math.max(1, Math.ceil(t.length / 15000)), id = ++syMsgId;
+  for (let i = 0; i < n; i++) {
+    while (dc.bufferedAmount > 1048576) await new Promise(r => setTimeout(r, 30));
+    dc.send(JSON.stringify({c: id, i, n, d: t.slice(i * 15000, (i + 1) * 15000)}));
+  }
+}
+const syLaufNeu = () => ({peerFertig: false, zusammen: "", fertig: false, daten: false, foto: false, neu: 0, aend: 0, fotosNeu: 0, gesendet: 0, fotosGesendet: 0, wunsch: 0});
+function syKanal(dc) {
+  syDc = dc; syLauf = syLaufNeu();
+  const los = () => { // startet genau einmal, auch wenn der Kanal schon offen ist oder Nachrichten vor dem „open“ ankommen
+    if (syDc !== dc || dc.gestartet) return;
+    dc.gestartet = true;
+    syBeginn().catch(x => syStatus("Fehler beim Abgleich: " + x.message));
+    setTimeout(() => { if (syDc === dc && syLauf && !syLauf.fertig) syStatus("Der Abgleich dauert länger als erwartet. Beide Geräte müssen die App offen lassen. Sonst starte ihn neu."); }, 90000);
+  };
+  dc.onopen = los;
+  dc.onclose = () => { if (syDc === dc && syLauf && !syLauf.fertig) syStatus("Die Verbindung wurde unterbrochen. Starte den Abgleich noch einmal."); };
+  if (dc.readyState === "open") los();
+  dc.onmessage = e => {
+    let m; try { m = JSON.parse(e.data); } catch (x) { return; }
+    const o = syTeile[m.c] || (syTeile[m.c] = []);
+    o[m.i] = m.d;
+    if (o.filter(x => x !== undefined).length < m.n) return;
+    delete syTeile[m.c];
+    let obj; try { obj = JSON.parse(o.join("")); } catch (x) { return; }
+    syKette = syKette.then(() => syBehandeln(obj)).catch(x => syStatus("Fehler beim Abgleich: " + x.message));
+  };
+}
+function syManifest() { const m = {}; Object.keys(sy.tab).forEach(k => { m[k] = [sy.tab[k].t, sy.tab[k].h]; }); return m; }
+async function syBeginn() {
+  syTrack();
+  if (!syLauf.daten && !syLauf.fertig) syStatus("Verbunden. Abgleich läuft …");
+  await syGesendet({t: "manifest", v: 1, m: syManifest()});
+}
+const syFehlendeFotos = () => [...new Set(zuege.flatMap(z => rohFotos(z)).filter(t => /^idb:/.test(t) && !fotoCache.has(t)))];
+async function syBehandeln(m) {
+  if (!m || !syDc) return;
+  if (!syLauf) syLauf = syLaufNeu();
+  if (m.t === "manifest") {
+    const w = [];
+    Object.keys(m.m || {}).forEach(k => { const r = m.m[k]; if (Array.isArray(r) && syPraefix(k) && syNeuer(r, sy.tab[k])) w.push(k); });
+    await syGesendet({t: "want", k: w});
+  } else if (m.t === "want") {
+    const werte = syWerte(), keys = (m.k || []).filter(k => sy.tab[k]);
+    if (!keys.length) await syGesendet({t: "daten", r: [], ende: true});
+    for (let i = 0; i < keys.length; i += 100) {
+      const teil = keys.slice(i, i + 100).map(k => ({k, t: sy.tab[k].t, h: sy.tab[k].h, v: k in werte ? werte[k] : null}));
+      syLauf.gesendet += teil.length;
+      await syGesendet({t: "daten", r: teil, ende: i + 100 >= keys.length});
+    }
+  } else if (m.t === "daten") {
+    (m.r || []).forEach(r => {
+      if (!r || typeof r.k !== "string" || !syPraefix(r.k) || !syNeuer([r.t, r.h], sy.tab[r.k])) return;
+      const war = r.k.startsWith("z:") && zuege.some(z => "z:" + z.id === r.k);
+      if (!syAnwenden(r.k, r.v === undefined ? null : r.v)) return;
+      sy.tab[r.k] = {h: "?", t: r.t}; // Hash wird unten aus dem tatsächlichen Wert neu berechnet
+      syLauf.aend++; if (r.k.startsWith("z:") && r.v !== null && !war) syLauf.neu++;
+    });
+    if (m.ende) {
+      MODELLE.sort((a, b) => Object.keys(farben).indexOf(a.typ) - Object.keys(farben).indexOf(b.typ));
+      const w = syWerte();
+      Object.keys(sy.tab).forEach(k => { if (sy.tab[k].h === "?") sy.tab[k].h = k in w ? syHash(w[k]) : ""; });
+      sySpeichern();
+      speichern(); lnSpeichern(); fzSpeichern(); eigeneSpeichern(); lmSpeichern();
+      syLauf.daten = true;
+      const fehlt = syFehlendeFotos();
+      syLauf.wunsch = fehlt.length;
+      syStatus(fehlt.length ? "Fotos werden geladen … (0 von " + fehlt.length + ")" : "Fast fertig …");
+      await syGesendet({t: "fotoWunsch", k: fehlt});
+    }
+  } else if (m.t === "fotoWunsch") {
+    const keys = (m.k || []).filter(k => /^idb:/.test(k) && fotoCache.has(k));
+    for (const k of keys) { await syGesendet({t: "foto", k, d: fotoCache.get(k)}); syLauf.fotosGesendet++; }
+    await syGesendet({t: "fotoEnde"});
+  } else if (m.t === "foto") {
+    const benutzt = zuege.some(z => rohFotos(z).includes(m.k));
+    if (benutzt && /^idb:/.test(m.k) && /^data:image\//.test(m.d || "") && m.d.length < 25e6) {
+      fotoCache.set(m.k, m.d);
+      if (fotoDB) await idbOp("readwrite", st => st.put(m.d, m.k));
+      syLauf.fotosNeu++;
+      syStatus("Fotos werden geladen … (" + syLauf.fotosNeu + " von " + syLauf.wunsch + ")");
+    }
+  } else if (m.t === "fotoEnde") {
+    syLauf.foto = true;
+  } else if (m.t === "fertig") {
+    syLauf.peerFertig = true;
+    if (syLauf.fertig) syAbschluss();
+  }
+  if (syLauf.daten && syLauf.foto && !syLauf.fertig) syFertig();
+}
+function syFertig() {
+  syLauf.fertig = true;
+  sy.letzte = Date.now(); sySpeichern();
+  zeigen(); lnZeigen(); fzZeigen(); katalogZeigen(); modellListenFuellen(); galerieZeigen();
+  if (linienAnzeigen) lnKarteAktualisieren();
+  const l = syLauf;
+  l.zusammen = "Fertig. Übernommen: " + l.neu + " Sichtungen, " + (l.aend - l.neu) + " weitere Änderungen, " + l.fotosNeu + " Fotos. Gesendet: " + l.gesendet + " Einträge, " + l.fotosGesendet + " Fotos.";
+  syGesendet({t: "fertig"}).catch(() => {});
+  if (l.peerFertig) syAbschluss();
+  else syStatus("Dein Gerät hat alles übernommen. Das andere Gerät lädt noch. Lass diese Seite offen …");
+}
+function syAbschluss() { // beide Seiten sind fertig: Ergebnis zeigen und Verbindung kurz danach schließen
+  const l = syLauf, pc = syPc, dc = syDc;
+  if (!l || l.abgeschlossen) return;
+  l.abgeschlossen = true;
+  syStatus(l.zusammen); $("syLetzte").textContent = syLetzteText();
+  toast("Abgleich abgeschlossen");
+  setTimeout(() => { if (syLauf === l) { try { dc.close(); pc.close(); } catch (e) {} } }, 1500);
+}
+
+// --- Bedienung ---
+async function syKopieren(id) {
+  const ta = $(id);
+  try { await navigator.clipboard.writeText(ta.value); toast("Code kopiert"); return; } catch (e) {}
+  ta.select();
+  try { document.execCommand("copy"); toast("Code kopiert"); } catch (e) { toast("Bitte den Code von Hand markieren und kopieren."); }
+}
+async function syTeilen(id) { try { await navigator.share({title: "Traintastic Abgleich", text: $(id).value}); } catch (e) {} }
+function syZuruecksetzen() { syAufraeumen(); ["syA", "syB", "syBAntwort"].forEach(i => { $(i).hidden = true; }); $("syWahl").hidden = false; ["syCodeA", "syCodeB", "syEingabeA", "syEingabeB"].forEach(i => { $(i).value = ""; }); syStatus(""); }
+function syLetzteText() {
+  if (!sy || !sy.letzte) return "Noch nie abgeglichen.";
+  const t = Math.floor((Date.now() - sy.letzte) / 864e5);
+  return "Zuletzt abgeglichen: " + (t === 0 ? "heute" : t === 1 ? "gestern" : "vor " + t + " Tagen") + ", " + new Date(sy.letzte).toLocaleTimeString("de-DE", {hour: "2-digit", minute: "2-digit"}) + " Uhr.";
+}
+const syDialogOeffnen = () => { syTrack(); syZuruecksetzen(); $("syLetzte").textContent = syLetzteText(); $("syDialog").hidden = false; };
+$("syOeffnen").onclick = $("syOeffnen2").onclick = syDialogOeffnen;
+$("syZu").onclick = () => { $("syDialog").hidden = true; syAufraeumen(); };
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("syDialog").hidden) $("syZu").click(); });
+$("syStartBtn").onclick = syStart;
+$("syAntwortBtn").onclick = () => { $("syWahl").hidden = true; $("syB").hidden = false; $("syEingabeB").focus(); };
+$("syVerbindenA").onclick = syVerbinden;
+$("syAntwortErz").onclick = syAntworten;
+$("syKopA").onclick = () => syKopieren("syCodeA");
+$("syKopB").onclick = () => syKopieren("syCodeB");
+$("syTeilA").onclick = () => syTeilen("syCodeA");
+$("syTeilB").onclick = () => syTeilen("syCodeB");
+if (navigator.share) { $("syTeilA").hidden = false; $("syTeilB").hidden = false; }
+syInit();
+
 zeitSetzen(); vorschauAktualisieren(); zeigen(); katalogZeigen(); bilderLaden();
-fotoLaden().then(() => { fotosAufraeumen(); zeigen(); persistInit(); });
+fotoLaden().then(() => { fotosGeladen = true; fotosAufraeumen(); zeigen(); persistInit(); cloudStart(); });
 if (bhfZuletzt.length) bhfWaehlen(bhfZuletzt[0]); else bhfChipsZeigen();
+
+// ===== Konto und Cloud (Supabase) =====
+// Anmeldung per E-Mail und Passwort. Die Daten werden mit dem vorhandenen Abgleich-System (syWerte/syAnwenden)
+// pro Eintrag zusammengeführt: der jüngere Stand gewinnt. Fotos gehen nur in die Cloud, wenn du das einschaltest.
+const SUPABASE_URL = "https://sjnuuscfzugvvgfwjcfa.supabase.co";   // zum Beispiel "https://abcdefgh.supabase.co"
+const SUPABASE_KEY = "sb_publishable_zSBip_OsPaxKOBjTHB-AUg_qCPemfgk";   // anon- bzw. publishable-Key aus Project Settings > API (öffentlich, durch Row Level Security geschützt)
+
+const KONTO_KEY = "zuglogbuch.konto.v1", CL_KEY = "zuglogbuch.cloud.v1";
+const cloudBereit = () => /^https:\/\/\S+$/.test(SUPABASE_URL) && SUPABASE_KEY.length > 20;
+let konto = null, cl = {uid: "", seit: "", pushed: {}, fotos: {}, fotosAn: false, letzte: 0};
+let cloudLaeuft = false, cloudTimer = null, cloudFehler = "", kModus = "login", kNeu = false;
+let cloudFotoLauf = false, fotosGeladen = false, refreshP = null;
+const cloudFotoNein = new Set();
+try { konto = JSON.parse(localStorage.getItem(KONTO_KEY)); } catch (e) { konto = null; }
+try { Object.assign(cl, JSON.parse(localStorage.getItem(CL_KEY)) || {}); } catch (e) {}
+const kontoSpeichern = () => { try { konto ? localStorage.setItem(KONTO_KEY, JSON.stringify(konto)) : localStorage.removeItem(KONTO_KEY); } catch (e) {} };
+const clSpeichern = () => { try { localStorage.setItem(CL_KEY, JSON.stringify(cl)); } catch (e) {} };
+const kMeld = t => { $("kMeld").textContent = t || ""; };
+const clNeu = uid => ({uid: uid || "", seit: "", pushed: {}, fotos: {}, fotosAn: false, letzte: 0});
+
+function sbFehlerText(j, status) {
+  const t = String((j && (j.error_description || j.msg || j.message || j.error)) || "");
+  if (/invalid login/i.test(t)) return "E-Mail oder Passwort stimmt nicht.";
+  if (/not confirmed/i.test(t)) return "Bitte bestätige zuerst deine E-Mail-Adresse. Der Link steht in der Mail.";
+  if (/already (been )?registered/i.test(t)) return "Diese E-Mail ist schon registriert. Melde dich an.";
+  if (/password.*(at least|short|weak|characters)/i.test(t)) return "Das Passwort ist zu schwach. Nimm mindestens 8 Zeichen.";
+  if (/same.*password|different from the old/i.test(t)) return "Das neue Passwort muss anders sein als das alte.";
+  if (/rate limit|too many|over_.*_rate/i.test(t) || status === 429) return "Zu viele Versuche. Warte ein paar Minuten.";
+  if (/valid email|invalid.*email/i.test(t)) return "Diese E-Mail-Adresse ist ungültig.";
+  if (/signups? not allowed|signup.*disabled/i.test(t)) return "Neue Konten sind in diesem Projekt ausgeschaltet.";
+  return t ? "Fehler: " + t : "Fehler " + status;
+}
+async function sbAnfrage(pfad, opt) {
+  opt = opt || {};
+  const h = Object.assign({apikey: SUPABASE_KEY}, opt.header || {});
+  if (opt.auth) { await kontoFrisch(); if (!konto) throw new Error("Bitte melde dich neu an."); h.Authorization = "Bearer " + konto.access; }
+  let body = opt.body;
+  if (body !== undefined && !(body instanceof Blob)) { body = JSON.stringify(body); h["Content-Type"] = "application/json"; }
+  let r;
+  try { r = await fetch(SUPABASE_URL.replace(/\/$/, "") + pfad, {method: opt.method || (body !== undefined ? "POST" : "GET"), headers: h, body}); }
+  catch (e) { throw new Error("Keine Verbindung zu Supabase."); }
+  if (opt.roh) return r;
+  const text = await r.text();
+  let j = null;
+  try { j = text ? JSON.parse(text) : null; } catch (e) {}
+  if (!r.ok) { const err = new Error(sbFehlerText(j, r.status)); err.status = r.status; throw err; }
+  return j;
+}
+function sitzungSetzen(j) {
+  konto = {access: j.access_token, refresh: j.refresh_token, ablauf: Date.now() + (j.expires_in || 3600) * 1000, id: j.user.id, email: j.user.email};
+  kontoSpeichern();
+}
+async function kontoFrisch() {
+  if (!konto || Date.now() < konto.ablauf - 60000) return;
+  if (!refreshP) refreshP = (async () => {
+    try { sitzungSetzen(await sbAnfrage("/auth/v1/token?grant_type=refresh_token", {body: {refresh_token: konto.refresh}})); }
+    catch (e) { if (e.status >= 400 && e.status < 500) { konto = null; kontoSpeichern(); kontoZeigen(); } else throw e; }
+  })().finally(() => { refreshP = null; });
+  await refreshP;
+}
+const rueckUrl = () => location.origin + location.pathname;
+const lokaleDatenDa = () => zuege.length || Object.keys(linienHaken).length || Object.keys(fzDaten).length || eigeneModelle.length;
+
+async function anmeldungFertig(j) {
+  if (cl.uid && cl.uid !== j.user.id && lokaleDatenDa() &&
+      !confirm("Auf diesem Gerät liegen noch Daten eines anderen Kontos. Sollen sie mit diesem Konto zusammengeführt werden?\n\nOK = zusammenführen, Abbrechen = nicht anmelden")) {
+    kMeld("Abgebrochen. Du bist nicht angemeldet."); return;
+  }
+  if (cl.uid !== j.user.id) { cl = clNeu(j.user.id); clSpeichern(); }
+  sitzungSetzen(j);
+  $("kPass").value = ""; kMeld("");
+  kontoZeigen();
+  toast("Angemeldet");
+  cloudAbgleich();
+}
+async function kontoGo() {
+  const email = $("kEmail").value.trim(), pass = $("kPass").value;
+  if (!email || !pass) { kMeld("Bitte E-Mail und Passwort eingeben."); return; }
+  if (kModus === "signup" && pass.length < 8) { kMeld("Nimm ein Passwort mit mindestens 8 Zeichen."); return; }
+  kMeld("Einen Moment …"); $("kGo").disabled = true;
+  try {
+    if (kModus === "signup") {
+      const j = await sbAnfrage("/auth/v1/signup?redirect_to=" + encodeURIComponent(rueckUrl()), {body: {email, password: pass}});
+      if (j && j.access_token) await anmeldungFertig(j);
+      else kMeld("Fast geschafft: Wir haben dir eine E-Mail geschickt. Klicke den Link darin und melde dich danach hier an.");
+    } else {
+      await anmeldungFertig(await sbAnfrage("/auth/v1/token?grant_type=password", {body: {email, password: pass}}));
+    }
+  } catch (e) { kMeld(e.message); }
+  finally { $("kGo").disabled = false; }
+}
+async function kontoVergessen() {
+  const email = $("kEmail").value.trim();
+  if (!email) { kMeld("Gib oben deine E-Mail-Adresse ein."); return; }
+  try {
+    await sbAnfrage("/auth/v1/recover?redirect_to=" + encodeURIComponent(rueckUrl()), {body: {email}});
+    kMeld("Falls es zu dieser Adresse ein Konto gibt, ist eine E-Mail mit einem Link unterwegs.");
+  } catch (e) { kMeld(e.message); }
+}
+async function kontoAbmelden() {
+  try { await sbAnfrage("/auth/v1/logout", {auth: true, body: {}}); } catch (e) {}
+  konto = null; kontoSpeichern(); kNeu = false; kontoZeigen();
+  toast("Abgemeldet. Deine Daten bleiben auf diesem Gerät.");
+}
+async function kNeuSetzen(id) {
+  const p = $(id).value;
+  if (p.length < 8) { kMeld("Nimm ein Passwort mit mindestens 8 Zeichen."); return; }
+  try {
+    await sbAnfrage("/auth/v1/user", {method: "PUT", auth: true, body: {password: p}});
+    $(id).value = ""; kNeu = false; kontoZeigen(); kMeld("Passwort geändert.");
+  } catch (e) { kMeld(e.message); }
+}
+async function cloudLoeschen(auchKonto) {
+  if (!konto) return;
+  if (!confirm(auchKonto
+    ? "Konto und alle Cloud-Daten endgültig löschen? Das lässt sich nicht rückgängig machen. Auf diesem Gerät bleibt alles erhalten."
+    : "Alle Cloud-Daten (Logbuch und Fotos) löschen und dich abmelden? Auf diesem Gerät bleibt alles erhalten.")) return;
+  kMeld("Wird gelöscht …");
+  try {
+    for (;;) {
+      const l = await sbAnfrage("/storage/v1/object/list/fotos", {auth: true, body: {prefix: konto.id, limit: 1000}});
+      if (!l || !l.length) break;
+      await sbAnfrage("/storage/v1/object/fotos", {auth: true, method: "DELETE", body: {prefixes: l.map(o => konto.id + "/" + o.name)}});
+      if (l.length < 1000) break;
+    }
+    await sbAnfrage("/rest/v1/kv?user_id=eq." + konto.id, {auth: true, method: "DELETE"});
+    if (auchKonto) await sbAnfrage("/rest/v1/rpc/konto_loeschen", {auth: true, body: {}});
+    const merk = cl.fotosAn;
+    konto = null; kontoSpeichern(); cl = clNeu(""); cl.fotosAn = merk; clSpeichern();
+    kontoZeigen(); kMeld(auchKonto ? "Konto gelöscht." : "Cloud-Daten gelöscht. Du bist abgemeldet.");
+  } catch (e) { kMeld(e.message); }
+}
+
+// --- Abgleich ---
+function cloudPlanen() {
+  if (!konto || cloudLaeuft) return;
+  clearTimeout(cloudTimer);
+  cloudTimer = setTimeout(() => cloudAbgleich(true), 4000);
+}
+async function cloudAbgleich(still) {
+  if (!konto || !cloudBereit() || cloudLaeuft || !sy) return;
+  if (!navigator.onLine) { cloudFehler = "Offline. Änderungen werden später hochgeladen."; kontoZeigen(); return; }
+  cloudLaeuft = true; cloudFehler = ""; kontoZeigen("Abgleich läuft …");
+  let neu = 0;
+  try {
+    // 1. Änderungen aus der Cloud holen und anwenden
+    let zeilen = [];
+    for (let von = 0;; von += 1000) {
+      const teil = await sbAnfrage("/rest/v1/kv?select=k,v,h,t,updated_at&order=updated_at.asc,k.asc&limit=1000&offset=" + von +
+        (cl.seit ? "&updated_at=gte." + encodeURIComponent(cl.seit) : ""), {auth: true});
+      zeilen = zeilen.concat(teil || []);
+      if (!teil || teil.length < 1000) break;
+    }
+    const angewendet = [];
+    zeilen.forEach(r => {
+      if (!r || typeof r.k !== "string" || typeof r.h !== "string" || !syPraefix(r.k) || !syNeuer([Number(r.t), r.h], sy.tab[r.k])) return;
+      if (!syAnwenden(r.k, r.h === "" ? null : r.v)) return;
+      sy.tab[r.k] = {h: "?", t: Number(r.t)};
+      angewendet.push(r.k);
+      if (r.k.startsWith("z:") && r.h !== "") neu++;
+    });
+    if (zeilen.length) cl.seit = zeilen[zeilen.length - 1].updated_at;
+    if (angewendet.length) {
+      MODELLE.sort((a, b) => Object.keys(farben).indexOf(a.typ) - Object.keys(farben).indexOf(b.typ));
+      const w = syWerte();
+      Object.keys(sy.tab).forEach(k => { if (sy.tab[k].h === "?") sy.tab[k].h = k in w ? syHash(w[k]) : ""; });
+      angewendet.forEach(k => { cl.pushed[k] = sy.tab[k].t + "|" + sy.tab[k].h; });
+      sySpeichern();
+      speichern(); lnSpeichern(); fzSpeichern(); eigeneSpeichern(); lmSpeichern();
+      zeigen(); lnZeigen(); fzZeigen(); katalogZeigen(); modellListenFuellen(); galerieZeigen();
+      if (linienAnzeigen) lnKarteAktualisieren();
+    }
+    // 2. Eigene Änderungen hochladen
+    const w2 = syWerte(), aus = [];
+    Object.keys(sy.tab).forEach(k => {
+      if (!syPraefix(k)) return;
+      const e = sy.tab[k];
+      if (cl.pushed[k] === e.t + "|" + e.h || (e.h !== "" && !(k in w2))) return;
+      aus.push({k, v: e.h === "" ? null : w2[k], h: e.h, t: e.t});
+    });
+    for (let i = 0; i < aus.length; i += 200) {
+      const teil = aus.slice(i, i + 200);
+      await sbAnfrage("/rest/v1/rpc/kv_push", {auth: true, body: {rows: teil}});
+      teil.forEach(r => { cl.pushed[r.k] = r.t + "|" + r.h; });
+      clSpeichern();
+    }
+    cl.letzte = Date.now(); clSpeichern();
+    if (neu && !still) toast(neu + (neu === 1 ? " Sichtung" : " Sichtungen") + " aus der Cloud übernommen");
+  } catch (e) { cloudFehler = e.message || "Abgleich fehlgeschlagen."; }
+  finally { cloudLaeuft = false; kontoZeigen(); }
+  if (!cloudFehler && cl.fotosAn) cloudFotos();
+}
+const blobZuDataUrl = b => new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = no; r.readAsDataURL(b); });
+async function cloudFotos() {
+  if (!konto || !cl.fotosAn || cloudFotoLauf || !navigator.onLine || !fotosGeladen || !fotoDB) return;
+  cloudFotoLauf = true;
+  try {
+    const ids = new Set(zuege.flatMap(z => rohFotos(z)).filter(t => /^idb:[a-z0-9]+$/.test(t)));
+    const hoch = [...ids].filter(t => !cl.fotos[t] && /^data:image\//.test(String(fotoCache.get(t) || "")));
+    let n = 0;
+    for (const t of hoch) {
+      const blob = await (await fetch(fotoCache.get(t))).blob();
+      await sbAnfrage("/storage/v1/object/fotos/" + konto.id + "/" + t.slice(4), {auth: true, method: "POST", body: blob, header: {"Content-Type": blob.type || "image/jpeg", "x-upsert": "true"}});
+      cl.fotos[t] = 1; n++;
+      if (n % 5 === 0) clSpeichern();
+      kontoZeigen("Fotos werden hochgeladen … (" + n + " von " + hoch.length + ")");
+    }
+    const fehlt = syFehlendeFotos().filter(t => /^idb:[a-z0-9]+$/.test(t) && !cloudFotoNein.has(t));
+    let m = 0;
+    for (const t of fehlt) {
+      const r = await sbAnfrage("/storage/v1/object/authenticated/fotos/" + konto.id + "/" + t.slice(4), {auth: true, roh: true});
+      if (!r.ok) { cloudFotoNein.add(t); continue; }
+      const d = await blobZuDataUrl(await r.blob());
+      if (!/^data:image\//.test(d)) { cloudFotoNein.add(t); continue; }
+      fotoCache.set(t, d);
+      await idbOp("readwrite", st => st.put(d, t));
+      cl.fotos[t] = 1; m++;
+      kontoZeigen("Fotos werden geladen … (" + m + " von " + fehlt.length + ")");
+    }
+    clSpeichern();
+    if (m) { zeigen(); galerieZeigen(); }
+  } catch (e) { cloudFehler = "Fotos: " + e.message; }
+  finally { cloudFotoLauf = false; kontoZeigen(); }
+}
+function cloudStart() { kontoZeigen(); if (konto) cloudAbgleich(true); }
+
+// --- Oberfläche ---
+function kontoZeigen(laufText) {
+  const b = $("kontoBtn");
+  b.className = "kontoBtn" + (konto ? (cloudFehler ? " fehler" : " ein") : "");
+  b.querySelector("span").textContent = konto ? "Konto" : "Anmelden";
+  const bereit = cloudBereit();
+  $("kontoSetup").hidden = bereit;
+  $("kontoAus").hidden = !bereit || !!konto;
+  $("kontoEin").hidden = !bereit || !konto || kNeu;
+  $("kontoNeuPass").hidden = !(bereit && konto && kNeu);
+  $("kGo").textContent = kModus === "signup" ? "Konto erstellen" : "Anmelden";
+  $("kModusLogin").classList.toggle("aktiv", kModus === "login");
+  $("kModusNeu").classList.toggle("aktiv", kModus === "signup");
+  $("kVergessen").hidden = kModus === "signup";
+  $("kPass").autocomplete = kModus === "signup" ? "new-password" : "current-password";
+  if (konto) {
+    $("kMail").textContent = konto.email;
+    $("kFotos").checked = !!cl.fotosAn;
+    const st = $("kStatus");
+    st.textContent = laufText || cloudFehler ||
+      (cl.letzte ? "Zuletzt abgeglichen um " + new Date(cl.letzte).toLocaleTimeString("de-DE", {hour: "2-digit", minute: "2-digit"}) + " Uhr. Alles aktuell." : "Noch nicht abgeglichen.");
+    st.style.color = cloudFehler && !laufText ? "var(--rot)" : "";
+  }
+}
+function kontoOeffnen() { kontoZeigen(); kMeld(""); $("kontoDialog").hidden = false; if (konto) cloudAbgleich(true); }
+function kontoSchliessen() { $("kontoDialog").hidden = true; kNeu = false; kontoZeigen(); }
+$("kontoBtn").onclick = kontoOeffnen;
+$("kZu").onclick = kontoSchliessen;
+$("kontoDialog").addEventListener("click", e => { if (e.target === e.currentTarget) kontoSchliessen(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("kontoDialog").hidden) kontoSchliessen(); });
+$("kModusLogin").onclick = () => { kModus = "login"; kMeld(""); kontoZeigen(); };
+$("kModusNeu").onclick = () => { kModus = "signup"; kMeld(""); kontoZeigen(); };
+$("kGo").onclick = kontoGo;
+$("kPass").addEventListener("keydown", e => { if (e.key === "Enter") kontoGo(); });
+$("kEmail").addEventListener("keydown", e => { if (e.key === "Enter") $("kPass").focus(); });
+$("kVergessen").onclick = kontoVergessen;
+$("kJetzt").onclick = () => { kMeld(""); cloudAbgleich(); };
+$("kAus").onclick = kontoAbmelden;
+$("kPassAendern").onclick = () => kNeuSetzen("kNeuPass2");
+$("kNeuSpeichern").onclick = () => kNeuSetzen("kNeuPass");
+$("kCloudLoeschen").onclick = () => cloudLoeschen(false);
+$("kKontoLoeschen").onclick = () => cloudLoeschen(true);
+$("kFotos").onchange = () => { cl.fotosAn = $("kFotos").checked; clSpeichern(); if (cl.fotosAn) cloudFotos(); };
+setInterval(() => { if (!document.hidden) cloudAbgleich(true); }, 60000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) cloudAbgleich(true); });
+addEventListener("online", () => cloudAbgleich(true));
+
+// Links aus E-Mails (Bestätigung, Passwort vergessen) kommen mit dem Anmeldedaten im Teil nach dem „#“ zurück
+function kontoHash() {
+  const h = location.hash.slice(1);
+  if (!/(^|&)(access_token|error)=/.test(h)) return;
+  const p = new URLSearchParams(h);
+  try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+  if (p.get("error")) { setTimeout(() => toast("Der E-Mail-Link ist abgelaufen oder ungültig. Fordere einen neuen an."), 600); return; }
+  const j = {access_token: p.get("access_token"), refresh_token: p.get("refresh_token"), expires_in: +p.get("expires_in") || 3600};
+  const typ = p.get("type");
+  sbAnfrage("/auth/v1/user", {header: {Authorization: "Bearer " + j.access_token}}).then(async u => {
+    j.user = u;
+    await anmeldungFertig(j);
+    if (typ === "recovery" && konto) { kNeu = true; kontoOeffnen(); }
+  }).catch(e => toast(e.message));
+}
+kontoHash();
+kontoZeigen();
 
 // Tabs mit Funktionsleiste unten
 function tabZeigen(name) {
