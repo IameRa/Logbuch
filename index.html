@@ -2747,8 +2747,8 @@ document.addEventListener("keydown", e => { if (e.key === "Escape" && !$("tbDial
 // ===== Konto und Cloud (Supabase) =====
 // Anmeldung per E-Mail und Passwort. Die Daten werden mit dem vorhandenen Abgleich-System (syWerte/syAnwenden)
 // pro Eintrag zusammengeführt: der jüngere Stand gewinnt. Fotos gehen nur in die Cloud, wenn du das einschaltest.
-const SUPABASE_URL = "";   // zum Beispiel "https://abcdefgh.supabase.co"
-const SUPABASE_KEY = "";   // anon- bzw. publishable-Key aus Project Settings > API (öffentlich, durch Row Level Security geschützt)
+const SUPABASE_URL = "https://sjnuuscfzugvvgfwjcfa.supabase.co";   // zum Beispiel "https://abcdefgh.supabase.co"
+const SUPABASE_KEY = "sb_publishable_zSBip_OsPaxKOBjTHB-AUg_qCPemfgk";   // anon- bzw. publishable-Key aus Project Settings > API (öffentlich, durch Row Level Security geschützt)
 
 const KONTO_KEY = "zuglogbuch.konto.v1", CL_KEY = "zuglogbuch.cloud.v1";
 const cloudBereit = () => /^https:\/\/\S+$/.test(SUPABASE_URL) && SUPABASE_KEY.length > 20;
