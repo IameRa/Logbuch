@@ -233,16 +233,96 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
 .eigen{background:var(--weiss);border-radius:12px;padding:12px 14px;margin:12px 0}
 .eigen summary{cursor:pointer;font-weight:600}
 .eigen .raster{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:10px}
+
+.sichhinweis{width:calc(100% - 32px);max-width:1008px;margin:12px auto 0;padding:10px 14px;background:#fff4d6;border:1px solid var(--amber);border-radius:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.9rem;color:var(--text)}
+.sichhinweis[hidden]{display:none}
+.sichhinweis span{flex:1 1 220px}
+.sichhinweis button{padding:6px 14px;font-size:.85rem}
+.sicherung{background:var(--weiss);border-radius:12px;padding:14px;margin-bottom:16px;color:var(--text)}
+.lnwahl{position:fixed;inset:0;z-index:3500;background:rgba(17,27,39,.55);display:flex;align-items:flex-end;justify-content:center}
+.lnwahl[hidden]{display:none}
+.lnwahl .box{background:var(--papier);width:min(520px,100%);max-height:80vh;overflow:auto;border-radius:18px 18px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px))}
+.lnwahl h3{margin:0 0 6px;font:700 1.3rem var(--kopf)}
+#lnWahlListe{display:grid;gap:8px;margin:12px 0}
+#lnWahlListe button,#lnWahlListe button:hover{text-align:left;background:var(--weiss);color:var(--text);border:1px solid var(--linie);border-radius:12px;padding:10px 14px;display:block;font-weight:600}
+#lnWahlListe button span{display:block;color:var(--grau);font-size:.8rem;font-weight:400}
+
+.zeile .sub.lm{color:#cfd8e3}
+.zeile .sub.lm i{font-style:normal;color:#8fa0b3}
+
+/* ===== Design-Schicht: Bahnhofsbeschilderung bei Nacht, ruhig und einheitlich ===== */
+:root{--r:14px;--schatten:0 1px 2px rgba(17,27,39,.05),0 6px 20px rgba(17,27,39,.07)}
+header{padding:16px 16px 0}
+.titelzeile{display:flex;align-items:center;gap:12px}
+.titelzeile svg{flex:none;width:44px;height:44px}
+header h1{font-size:clamp(1.9rem,5.5vw,2.5rem)}
+header p{margin:2px 0 0;font-size:.9rem}
+header::after{margin-top:14px;height:12px}
+.stats{display:flex;gap:0;flex-wrap:nowrap;overflow-x:auto;margin-top:14px;background:var(--tafel);border:1px solid #2a3b4f;border-radius:12px;scrollbar-width:none}
+.stats::-webkit-scrollbar{display:none}
+.stat{flex:1 0 auto;min-width:0;background:none;border:0;border-radius:0;box-shadow:none;padding:8px 14px 7px;border-right:1px solid #2a3b4f}
+.stat:last-child{border-right:0}
+.stat b{font-size:1.75rem}
+.stat span{font-size:.74rem;white-space:nowrap}
+.sichhinweis{padding:8px 12px;font-size:.86rem;border-radius:var(--r)}
+h2{font-size:1.7rem}
+input,select,textarea{border-radius:10px}
+.karte,.tafel,form,#kartebox{box-shadow:var(--schatten)}
+.karte{border-radius:var(--r);border-top-width:4px}
+.leer{border:0;box-shadow:var(--schatten);color:var(--grau)}
+.mdaten summary{list-style:none;cursor:pointer;color:var(--grau);font-size:.88rem;display:flex;align-items:center;gap:8px}
+.mdaten summary::-webkit-details-marker{display:none}
+.mdaten summary::after{content:"";width:6px;height:6px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .15s}
+.mdaten[open] summary::after{transform:rotate(225deg) translateY(-2px)}
+.fz-gruppe{display:flex;align-items:center;gap:9px;margin:20px 0 2px;font:700 1.2rem/1 var(--kopf);letter-spacing:.02em}
+.fz-gruppe:first-child{margin-top:4px}
+.fz-gruppe::before{content:"";width:11px;height:11px;border-radius:3px;background:var(--c)}
+.fz{border-left-width:4px;box-shadow:var(--schatten)}
+.ln-zeile{border-left-width:4px;box-shadow:var(--schatten)}
+.sicherung{padding:12px 14px}
+.sicherung summary{cursor:pointer;display:flex;justify-content:space-between;gap:12px;align-items:baseline;font-weight:600;list-style:none}
+.sicherung summary::-webkit-details-marker{display:none}
+.sicherung summary small{color:var(--grau);font-weight:400;font-size:.8rem}
+.sicherung[open] summary{margin-bottom:8px}
+body{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+#toast{bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+/* Navigation als schwebende Leiste */
+.funktionen{left:50%;right:auto;transform:translateX(-50%);width:min(960px,calc(100% - 16px));bottom:calc(8px + env(safe-area-inset-bottom,0px));padding:4px;gap:2px;
+  border:1px solid #2a3b4f;border-radius:20px;background:rgba(15,26,38,.97);box-shadow:0 10px 30px rgba(10,16,24,.4);scrollbar-width:none}
+.funktionen::-webkit-scrollbar{display:none}
+.funktionen button,.funktionen button:hover{flex:1 0 58px;border-radius:15px;padding:7px 2px 6px;gap:3px;color:#9fb0c2;font-size:.68rem}
+.funktionen button:hover{color:var(--weiss)}
+.funktionen button.aktiv,.funktionen button.aktiv:hover{background:var(--tafel);color:var(--amber);box-shadow:none}
+.funktionen .ico{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;font-size:0}
+@media (prefers-reduced-motion:no-preference){
+  .tab.aktiv{animation:tabein .2s ease-out}
+  @keyframes tabein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+}
+/* Logbuch auf dem Handy: kompakte Zeilen statt hoher Karten */
+@media (max-width:640px){
+  #liste{grid-template-columns:1fr;gap:12px}
+  #liste .karte{display:grid;grid-template-columns:96px 1fr;grid-template-areas:"bild inh" "mini mini" "akt akt";border-top:0;border-left:5px solid var(--c)}
+  #liste .karte .galerie{display:contents}
+  #liste .karte img.gross{grid-area:bild;width:96px;height:100%;min-height:96px;aspect-ratio:auto;object-fit:cover}
+  #liste .karte .mini{grid-area:mini}
+  #liste .karte .inhalt{grid-area:inh;padding:10px 12px;min-width:0}
+  #liste .karte .aktion{grid-area:akt;padding:6px 12px 12px}
+  #liste .karte .aktion button{padding:7px 14px;font-size:.85rem}
+  #liste .karte h3{font-size:1.4rem;overflow-wrap:anywhere}
+}
 </style>
 </head>
 <body>
 <header>
   <div class="kopf">
-    <h1>Zug-Logbuch</h1>
-    <p>Trag ein, was du gesehen hast.</p>
+    <div class="titelzeile">
+      <svg viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="11" fill="#ffb81c"/><rect x="11" y="8" width="22" height="24" rx="6" fill="#111b27"/><rect x="14.5" y="12" width="15" height="8" rx="2" fill="#ffb81c"/><circle cx="16.5" cy="26" r="1.8" fill="#ffb81c"/><circle cx="27.5" cy="26" r="1.8" fill="#ffb81c"/><path d="M15 36l3-4M29 36l-3-4" stroke="#111b27" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <div><h1>Zug-Logbuch</h1><p>Trag ein, was du gesehen hast.</p></div>
+    </div>
     <div class="stats" id="stats"></div>
   </div>
 </header>
+<div class="sichhinweis" id="sichHinweis" hidden></div>
 <main>
 
   <section class="tab" id="tab-neu">
@@ -319,8 +399,8 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
   <section class="tab" id="tab-fahrzeuge">
     <div class="leiste" style="margin-top:0">
       <h2>Fahrzeuge</h2>
-      <button class="leise" id="fzExport" type="button">Sichern</button>
-      <button class="leise" id="fzImport" type="button">Laden</button>
+      <button class="leise" id="fzExport" type="button">Alles sichern</button>
+      <button class="leise" id="fzImport" type="button">Wiederherstellen</button>
       <input id="fzDatei" type="file" accept="application/json" hidden>
     </div>
     <p class="kat-info">Hier zählt jede einzelne Lok und jeder Triebzug. Bei Baureihen mit Nummern wie „143 017“ erkennt die App die Nummer automatisch aus dem Logbuch. Bei Triebzügen ohne Baureihennummer (z. B. Stadler KISS oder FLIRT) wählst du beim Eintragen das Modell und gibst die Nummer an, die am Zug steht. Dann zählt die App pro Modell. Einen Bestand (erste bis letzte Nummer) kennt die App nur bei BR 101 und BR 111, alle anderen legst du selbst fest.</p>
@@ -336,8 +416,8 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
   <section class="tab" id="tab-linien">
     <div class="leiste" style="margin-top:0">
       <h2>Linien</h2>
-      <button class="leise" id="lnExport" type="button">Sichern</button>
-      <button class="leise" id="lnImport" type="button">Laden</button>
+      <button class="leise" id="lnExport" type="button">Alles sichern</button>
+      <button class="leise" id="lnImport" type="button">Wiederherstellen</button>
       <input id="lnDatei" type="file" accept="application/json" hidden>
     </div>
     <p class="kat-info">Bahnlinien wie RE 7, S 1 oder ICE 28 aus den Kartendaten von OpenStreetMap. Wähle ein Gebiet, lade die Linien und hake ab, welche du gefahren oder gesehen hast. Die Haken bleiben auf diesem Gerät gespeichert. Die Daten stammen von Freiwilligen und sind nicht überall vollständig.</p>
@@ -392,8 +472,8 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
   <section class="tab" id="tab-liste">
   <div class="leiste" style="margin-top:0">
     <h2>Meine Sichtungen</h2>
-    <button class="leise" id="export" type="button">Sichern</button>
-    <button class="leise" id="import" type="button">Laden</button>
+    <button class="leise" id="export" type="button">Alles sichern</button>
+    <button class="leise" id="import" type="button">Wiederherstellen</button>
     <input id="datei" type="file" accept="application/json" hidden>
   </div>
   <div class="filterleiste">
@@ -439,18 +519,37 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
   <div class="liste" id="katalog"></div>
   </section>
 </main>
-<footer>Bilder: Wikipedia / Wikimedia Commons (Lizenzen auf der jeweiligen Bildseite). Karte und Linien: © OpenStreetMap-Mitwirkende (Linien über die Overpass-API, deutsche Beschriftung). Zugdaten: <a href="https://transitous.org/sources/" target="_blank" rel="noopener">Transitous</a> (Datenquellen dort aufgeführt). Internet nötig. Die Daten sind Richtwerte und können je nach Unterbauart abweichen.</footer>
+<footer>
+<details class="sicherung">
+  <summary><span>Datensicherung</span><small id="sichKurz"></small></summary>
+  <p class="kat-info" id="sichInfo"></p>
+  <div class="aktionen">
+    <button type="button" id="sichAlles">Alles sichern</button>
+    <button type="button" class="leise" id="sichLaden">Wiederherstellen</button>
+    <input id="sichDatei" type="file" accept="application/json" hidden>
+  </div>
+  <p class="kat-info">Eine Datei enthält Sichtungen, Fotos, Linien, Fahrzeuge und eigene Modelle. Beim Wiederherstellen wird nichts überschrieben, es kommt nur Fehlendes dazu. Auch ältere Sicherungsdateien werden erkannt.</p>
+</details>
+Bilder: Wikipedia / Wikimedia Commons (Lizenzen auf der jeweiligen Bildseite). Karte und Linien: © OpenStreetMap-Mitwirkende (Linien über die Overpass-API, deutsche Beschriftung). Zugdaten: <a href="https://transitous.org/sources/" target="_blank" rel="noopener">Transitous</a> (Datenquellen dort aufgeführt). Internet nötig. Die Daten sind Richtwerte und können je nach Unterbauart abweichen.</footer>
 
 <nav class="funktionen" id="funktionen" aria-label="Funktionen">
-  <button type="button" data-tab="neu"><span class="ico" aria-hidden="true">✏️</span>Eintragen</button>
-  <button type="button" data-tab="liste"><span class="ico" aria-hidden="true">📖</span>Logbuch</button>
-  <button type="button" data-tab="galerie"><span class="ico" aria-hidden="true">🖼️</span>Galerie</button>
-  <button type="button" data-tab="fahrzeuge"><span class="ico" aria-hidden="true">🚂</span>Fahrzeuge</button>
-  <button type="button" data-tab="karte"><span class="ico" aria-hidden="true">🗺️</span>Karte</button>
-  <button type="button" data-tab="linien"><span class="ico" aria-hidden="true">🛤️</span>Linien</button>
-  <button type="button" data-tab="bahnhof"><span class="ico" aria-hidden="true">🚉</span>Bahnhof</button>
-  <button type="button" data-tab="katalog"><span class="ico" aria-hidden="true">📚</span>Katalog</button>
+  <button type="button" data-tab="neu"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>Eintragen</button>
+  <button type="button" data-tab="liste"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h10"/></svg>Logbuch</button>
+  <button type="button" data-tab="galerie"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m4 18 5-5 4 4 3-3 4 4"/></svg>Galerie</button>
+  <button type="button" data-tab="fahrzeuge"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="3" width="12" height="14" rx="3"/><path d="M6 11h12"/><circle cx="9.5" cy="14" r=".7"/><circle cx="14.5" cy="14" r=".7"/><path d="m8 21 2-4M16 21l-2-4"/></svg>Fahrzeuge</button>
+  <button type="button" data-tab="karte"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg>Karte</button>
+  <button type="button" data-tab="linien"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="6" r="2.2"/><path d="M8.2 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.8"/></svg>Linien</button>
+  <button type="button" data-tab="bahnhof"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Bahnhof</button>
+  <button type="button" data-tab="katalog"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>Katalog</button>
 </nav>
+<div class="lnwahl" id="lnWahl" hidden role="dialog" aria-modal="true" aria-labelledby="lnWahlTitel">
+  <div class="box">
+    <h3 id="lnWahlTitel"></h3>
+    <p class="kat-info">Diese Linie gibt es in der Nähe mehrfach. Tippe die richtige an, dann wird sie abgehakt.</p>
+    <div id="lnWahlListe"></div>
+    <button type="button" class="leise" id="lnWahlKeine">Keine davon</button>
+  </div>
+</div>
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="detail" hidden role="dialog" aria-label="Zugdetails">
   <div class="sheet">
@@ -705,7 +804,7 @@ function datenListe(m) {
 }
 function modellZeile(z) {
   const m = modell(z.modell);
-  return m ? `<div class="meta">${esc(m.name)}</div>` + datenListe(m) : "";
+  return m ? `<details class="mdaten"><summary>${esc(m.name)}</summary>${datenListe(m)}</details>` : "";
 }
 function katalogZeigen() {
   const q = $("katSuche").value.toLowerCase(), art = $("katFilter").value;
@@ -801,8 +900,8 @@ function zeigen() {
   const nummern = new Set(zuege.map(z => z.nummer.trim().toLowerCase()));
   $("stats").innerHTML =
     `<div class="stat"><b>${zuege.length}</b><span>Sichtungen</span></div>` +
-    `<div class="stat"><b>${nummern.size}</b><span>verschiedene Züge</span></div>` +
-    `<div class="stat"><b>${orte.size}</b><span>Orte</span></div>` + linienStatHtml() + fzStatHtml();
+    `<div class="stat"><b>${nummern.size}</b><span title="verschiedene Züge">Züge</span></div>` +
+    `<div class="stat"><b>${orte.size}</b><span>Orte</span></div>` + linienStatHtml() + fzStatHtml(); sichStatus();
   karteZeigen();
   galerieZeigen();
 }
@@ -1008,8 +1107,13 @@ $("form").addEventListener("submit", e => {
     return;
   }
   eintrag.id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  const lk = lnKontextVon(eintrag);
+  if (lk) eintrag.lnKontext = lk; // wird nach dem Abhaken der Linie wieder entfernt
+  eintragKontext = null;
   zuege.push(eintrag);
   speichern();
+  persistAnfragen();
+  if (lk) linieAbhaken(eintrag.id);
   const ort = $("ort").value, typ = $("typ").value, mod = $("modell").value;
   e.target.reset();
   $("ort").value = ort; $("typ").value = typ; $("modell").value = mod; // Ort und Art bleiben für den nächsten Zug stehen
@@ -1152,26 +1256,7 @@ function zeitSetzen() {
 }
 
 // Sichern und Laden
-$("export").onclick = () => {
-  const liste = zuege.map(ohneFotos), fotos = {};
-  liste.forEach(z => z.fotos.forEach(t => { if (fotoCache.has(t)) fotos[t] = fotoCache.get(t); }));
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([JSON.stringify({format: 2, zuege: liste, fotos})], {type: "application/json"}));
-  a.download = "zug-logbuch.json"; a.click();
-};
 $("import").onclick = () => $("datei").click();
-$("datei").onchange = async e => {
-  try {
-    const roh = JSON.parse(await e.target.files[0].text());
-    const neu = Array.isArray(roh) ? roh : (roh.zuege || []), fotos = (!Array.isArray(roh) && roh.fotos) || {};
-    const ids = new Set(zuege.map(z => z.id));
-    const dazu = neu.filter(z => z && z.id && !ids.has(z.id)).map(ohneFotos);
-    for (const z of dazu) for (const t of z.fotos) if (fotos[t] && !fotoCache.has(t) && fotoDB) { fotoCache.set(t, fotos[t]); await idbOp("readwrite", st => st.put(fotos[t], t)); }
-    zuege = zuege.concat(dazu);
-    speichern(); zeigen();
-  } catch (x) { alert("Die Datei konnte nicht gelesen werden."); }
-  e.target.value = "";
-};
 
 // Filter füllen und Suche verbinden
 Object.keys(farben).forEach(t => $("filter").insertAdjacentHTML("beforeend", `<option>${t}</option>`));
@@ -1221,7 +1306,7 @@ function bahnhoefeSammeln(liste, lat, lon) {
   (Array.isArray(liste) ? liste : []).forEach(m => {
     if (!m || !m.id || m.type !== "STOP" || namen.has(m.name)) return;
     namen.add(m.name);
-    alle.push({id: m.id, name: m.name, modes: m.modes || null,
+    alle.push({id: m.id, name: m.name, lat: m.lat, lon: m.lon, modes: m.modes || null,
       distance: lat != null && m.lat != null ? Math.round(entfernung(lat, lon, m.lat, m.lon)) : 0});
   });
   const bahn = alle.filter(s => s.modes && s.modes.some(x => ZUGPRODUKTE[x]));
@@ -1308,7 +1393,7 @@ function bhfWaehlen(s, behalteChips) {
   if (!s) return;
   bhf = s;
   if (!behalteChips && !bhfChips.some(c => c.id === s.id)) bhfChips = [];
-  bhfZuletzt = [{id: s.id, name: s.name}].concat(bhfZuletzt.filter(z => z.id !== s.id)).slice(0, 5);
+  bhfZuletzt = [{id: s.id, name: s.name, lat: s.lat, lon: s.lon}].concat(bhfZuletzt.filter(z => z.id !== s.id)).slice(0, 5);
   try { localStorage.setItem(BHF_KEY, JSON.stringify(bhfZuletzt)); } catch (e) {}
   $("bhfSuche").value = s.name; vorschlagZu();
   $("bhfName").textContent = s.name; $("bhfBereich").hidden = false;
@@ -1367,7 +1452,7 @@ $("bhfListe").addEventListener("keydown", e => {
 });
 
 function tafelZeichnen() {
-  const art = bhfReiter;
+  const art = bhfReiter, zaehl = lmZaehlen();
   $("zahlAb").textContent = tafelDaten.ab.length ? "(" + tafelDaten.ab.length + ")" : "";
   $("zahlAn").textContent = tafelDaten.an.length ? "(" + tafelDaten.an.length + ")" : "";
   document.querySelectorAll("#bhfReiter [data-r]").forEach(b => { const a = b.dataset.r === art; b.classList.toggle("aktiv", a); b.setAttribute("aria-selected", a); });
@@ -1389,29 +1474,68 @@ function tafelZeichnen() {
     return `<div class="zeile${d.cancelled ? " ausfall" : ""}" data-i="${i}" tabindex="0" role="button" aria-label="Details zum Zug anzeigen">
       <div><div class="zeit">${hm(geplant)}</div>${morgen ? '<div class="sub">am ' + tag.toLocaleDateString("de-DE", {day: "2-digit", month: "2-digit"}) + "</div>" : rel ? '<div class="rel">' + rel + "</div>" : ""}</div>
       <div><div class="ziel"><span class="linie">${esc(l.name || "Zug")}</span>${esc((art === "ab" ? "nach " : "Richtung ") + (ziel || "unbekannt"))}</div>
-        ${status ? `<div class="sub ${klasse}">${esc(status)}</div>` : ""}</div>
+        ${status ? `<div class="sub ${klasse}">${esc(status)}</div>` : ""}${(() => { const lm = lmVon(d, zaehl); return lm ? `<div class="sub lm">🚆 ${esc(modell(lm.id).name)} <i>(${esc(lmQuelle(lm))})</i></div>` : ""; })()}</div>
       <div class="gleis${gleisNeu ? " neu" : ""}">${gleis ? "Gl. " + esc(gleis) : "–"}${gleisNeu ? '<div class="sub">geändert</div>' : ""}<span class="plus">Details ›</span></div>
     </div>`;
   }).join("") : `<div class="leer">Keine ${bhfFilter ? esc(bhfFilter) + "-" : ""}Züge im gewählten Zeitraum.${bhfFilter ? "<br>Wähle oben „Alle“ oder" : "<br>Wähle"} einen längeren Zeitraum.</div>`;
 }
 
-// Modell zum Zug: Die Fahrplandaten nennen das Fahrzeug nicht, daher Auswahl aus dem Katalog
+// Linie -> Modell: Die Fahrplandaten (Transitous) enthalten kein Fahrzeug. Die App merkt sich das Modell deshalb pro Linie
+// und schlägt sonst das Modell vor, das du bei dieser Linie schon eingetragen hast.
+const LM_KEY = "zuglogbuch.linienmodelle.v1";
+let linienModelle = {};
+try { linienModelle = JSON.parse(localStorage.getItem(LM_KEY)) || {}; } catch (e) { linienModelle = {}; }
+const lmSpeichern = () => { try { localStorage.setItem(LM_KEY, JSON.stringify(linienModelle)); } catch (e) { toast("Speicher voll: Das Modell konnte nicht gemerkt werden."); } };
+const lmNorm = n => String(n || "").replace(/\s/g, "").toUpperCase();
+const lmKey = d => lmNorm((d.line || {}).name) + "|" + (d.agency || "");
+function lmZaehlen() { // Logbuch: Linie -> {Modell: Anzahl}
+  const c = {};
+  zuege.forEach(z => {
+    if (!z.modell) return;
+    const m = String(z.nummer || "").match(/^\s*([A-Za-zÄÖÜ]{1,4})\s?(\d{1,3}[A-Za-z]?)\b/);
+    if (!m) return;
+    const k = lmNorm(m[1] + m[2]), o = c[k] || (c[k] = {});
+    o[z.modell] = (o[z.modell] || 0) + 1;
+  });
+  return c;
+}
+function lmVon(d, zaehl) { // -> {id, quelle: "gemerkt" | "logbuch", n}
+  const fest = linienModelle[lmKey(d)];
+  if (fest && modell(fest)) return {id: fest, quelle: "gemerkt"};
+  const z = (zaehl || lmZaehlen())[lmNorm((d.line || {}).name)];
+  if (!z) return null;
+  const best = Object.keys(z).filter(id => modell(id)).sort((a, b) => z[b] - z[a])[0];
+  return best ? {id: best, quelle: "logbuch", n: z[best]} : null;
+}
+const lmQuelle = lm => lm.quelle === "gemerkt" ? "von dir gemerkt" : "aus deinem Logbuch, " + lm.n + "×";
+
+// Modell zum Zug
 let detailModell = "";
 function modellBereichZeigen() {
   const d = tafelDaten[detailArt][detailI], typ = d && ZUGPRODUKTE[(d.line || {}).product];
-  const liste = MODELLE.filter(m => m.typ === typ), gew = modell(detailModell);
+  const liste = MODELLE.filter(m => m.typ === typ), gew = modell(detailModell), lm = d && lmVon(d);
   if (!liste.length) { $("dtModell").innerHTML = ""; return; }
   const bild = m => attr(modellBild(m.id) || ersatzbild(m.typ));
   const eigene = gew ? zuege.filter(z => z.modell === gew.id).flatMap(z => fotosVon(z)).slice(0, 4) : [];
   $("dtModell").innerHTML = '<h3 style="margin:18px 0 4px;font:700 1.1rem var(--kopf)">Modell</h3>' +
-    '<p class="kat-info">Die Fahrplandaten nennen das Fahrzeug nicht. Wähle das Modell, das du siehst. Es wird beim Eintragen übernommen.</p>' +
+    '<p class="kat-info">Die kostenlosen Fahrplandaten enthalten kein Fahrzeug. Wähle das Modell einmal und tippe auf „Für alle Züge der Linie merken“: Dann steht es in der Tafel bei jedem Zug dieser Linie. Beim Eintragen wird es übernommen.</p>' +
+    (lm && lm.id === detailModell && lm.quelle === "logbuch" ? '<p class="kat-info">Vorschlag ' + esc(lmQuelle(lm)) + '. Prüfe ihn, bevor du dich darauf verlässt.</p>' : "") +
     (gew ? `<div class="dt-modell"><img src="${bild(gew)}" alt="${attr(gew.name)}" onerror="this.onerror=null;this.src='${ersatzbild(gew.typ)}'"><div class="inh"><b>${esc(gew.name)}</b>${datenListe(gew)}
       ${eigene.length ? '<p class="kat-info">Deine Fotos dieses Modells:</p><div class="dt-eigene">' + eigene.map(u => `<img src="${attr(u)}" alt="">`).join("") + "</div>" : ""}
-      <button type="button" class="leise" data-m="" style="margin-top:10px">Auswahl aufheben</button></div></div>` : "") +
+      <div class="aktionen" style="margin-top:10px"><button type="button" class="leise" data-lm="set">Für alle Züge der Linie ${esc(((d || {}).line || {}).name || "")} merken</button>${d && linienModelle[lmKey(d)] ? '<button type="button" class="leise" data-lm="del">Merken aufheben</button>' : ""}<button type="button" class="leise" data-m="">Auswahl aufheben</button></div></div></div>` : "") +
     '<div class="dt-modelle">' + liste.map(m => `<button type="button" class="mk${m.id === detailModell ? " aktiv" : ""}" data-m="${m.id}"><img src="${bild(m)}" alt="" loading="lazy" onerror="this.onerror=null;this.src='${ersatzbild(m.typ)}'"><span>${esc(m.name)}</span></button>`).join("") + "</div>";
 }
 function detailModellRefresh() { if (!$("detail").hidden) modellBereichZeigen(); }
 $("dtModell").addEventListener("click", e => {
+  const lmB = e.target.closest("[data-lm]");
+  if (lmB) {
+    const d = tafelDaten[detailArt][detailI];
+    if (!d) return;
+    if (lmB.dataset.lm === "set" && detailModell) { linienModelle[lmKey(d)] = detailModell; toast("Merke " + modell(detailModell).name + " für " + ((d.line || {}).name || "diese Linie")); }
+    else if (lmB.dataset.lm === "del") { delete linienModelle[lmKey(d)]; detailModell = ""; }
+    lmSpeichern(); modellBereichZeigen(); tafelZeichnen();
+    return;
+  }
   const b = e.target.closest("[data-m]");
   if (b) { detailModell = b.dataset.m; modellBereichZeigen(); }
 });
@@ -1448,7 +1572,7 @@ function detailOeffnen(art, i) {
       ${fakt("Betreiber", esc(d.agency || ""))}
     </div>`;
   $("dtMeld").innerHTML = meldungenHtml(d.alerts);
-  detailModell = ""; modellBereichZeigen();
+  detailModell = (lmVon(d) || {}).id || ""; modellBereichZeigen();
   $("dtEintragen").onclick = () => { const m = detailModell; detailZu(); tafelEintragen(art, i, m); };
   $("detail").hidden = false;
   if (!d.tripId) { $("dtHalte").innerHTML = '<p class="kat-info">Zu diesem Zug liegt kein Fahrtverlauf vor.</p>'; return; }
@@ -1492,6 +1616,7 @@ function tafelEintragen(art, i, modellId) {
   if (ZUGPRODUKTE[l.product]) $("typ").value = ZUGPRODUKTE[l.product];
   $("ort").value = bhf.name;
   if (modellId) modellWaehlen(modellId); else $("modell").value = "";
+  eintragKontext = bhf.lat != null ? {ref: l.name || "", lat: bhf.lat, lon: bhf.lon} : null;
   const t = new Date(d.when || d.plannedWhen);
   $("zeit").value = new Date(t - t.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
   vorschauAktualisieren();
@@ -1506,7 +1631,7 @@ const LN_KEY = "zuglogbuch.linien.v1", LN_LISTE_KEY = "zuglogbuch.linienliste.v1
 let linienHaken = {}, linienAnzeigen = false;
 try { const d = JSON.parse(localStorage.getItem(LN_KEY)) || {}; linienHaken = d.haken || {}; linienAnzeigen = !!d.anzeigen; } catch (e) {}
 const lnSpeichern = () => { try { localStorage.setItem(LN_KEY, JSON.stringify({haken: linienHaken, anzeigen: linienAnzeigen})); } catch (e) { toast("Speicher voll: Die Haken konnten nicht gesichert werden."); } };
-const linienStatHtml = () => `<div class="stat" id="statLinien"><b>${Object.keys(linienHaken).length}</b><span>Linien abgehakt</span></div>`;
+const linienStatHtml = () => `<div class="stat" id="statLinien"><b>${Object.keys(linienHaken).length}</b><span title="abgehakte Linien">Linien</span></div>`;
 const lnStatAktual = () => { const el = $("statLinien"); if (el) el.outerHTML = linienStatHtml(); };
 const lnA = s => esc(s).replace(/"/g, "&quot;");
 
@@ -1581,6 +1706,7 @@ async function lnLaden(region) {
     const liste = lnGruppieren(j.elements || []);
     if (!liste.length) { lnInfo("Für dieses Gebiet wurden keine Linien gefunden."); return; }
     lnListe = liste; lnIndex = new Map(liste.map(g => [g.k, g])); lnAnz = 150;
+    liste.forEach(g => { const h = linienHaken[g.k]; if (h) h.ids = [...new Set(h.ids.concat(g.ids))]; }); lnSpeichern();
     $("lnRegion").value = region;
     try { localStorage.setItem(LN_LISTE_KEY, JSON.stringify({region, t: Date.now(), liste})); } catch (e) {}
     lnInfo(liste.length + " Linien geladen.");
@@ -1707,23 +1833,7 @@ document.querySelectorAll(".lnAn").forEach(c => {
     lnKarteAktualisieren();
   });
 });
-$("lnExport").onclick = () => {
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([JSON.stringify({zuglogbuch: "linien", haken: linienHaken})], {type: "application/json"}));
-  a.download = "zug-logbuch-linien.json"; a.click();
-};
 $("lnImport").onclick = () => $("lnDatei").click();
-$("lnDatei").onchange = async e => {
-  try {
-    const h = JSON.parse(await e.target.files[0].text()).haken;
-    if (!h || typeof h !== "object") throw new Error();
-    let n = 0;
-    Object.keys(h).forEach(k => { const v = h[k]; if (v && Array.isArray(v.ids) && v.ref && !linienHaken[k]) { linienHaken[k] = v; n++; } });
-    lnSpeichern(); lnZeigen(); toast(n + " Linien übernommen");
-    if (linienAnzeigen) lnKarteAktualisieren();
-  } catch (x) { alert("Die Datei konnte nicht gelesen werden."); }
-  e.target.value = "";
-};
 try {
   const d = JSON.parse(localStorage.getItem(LN_LISTE_KEY));
   if (d && Array.isArray(d.liste) && d.liste.length) { lnListe = d.liste; lnIndex = new Map(lnListe.map(g => [g.k, g])); $("lnRegion").value = d.region; lnInfo(lnListe.length + " Linien aus dem letzten Laden (" + new Date(d.t).toLocaleDateString("de-DE") + ")."); }
@@ -1765,7 +1875,7 @@ function fzAnzahl() {
   kls.forEach(kl => { n += new Set(Object.keys(a[kl] || {}).concat(Object.keys(fzMan(kl)))).size; });
   return n;
 }
-const fzStatHtml = () => `<div class="stat" id="statFz"><b>${fzAnzahl()}</b><span>Fahrzeuge gesehen</span></div>`;
+const fzStatHtml = () => `<div class="stat" id="statFz"><b>${fzAnzahl()}</b><span title="gesehene Fahrzeuge">Fahrzeuge</span></div>`;
 const fzStatAktual = () => { const el = $("statFz"); if (el) el.outerHTML = fzStatHtml(); };
 
 let fzOffen = new Set();
@@ -1797,16 +1907,18 @@ function fzZeigen() {
   const zeilen = [...kls].map(kl => {
     const frei = kl.startsWith("m:"), m = frei ? modell(kl.slice(2)) : KL_MODELL[kl], g = auto[kl] || {}, man = fzMan(kl);
     const n = new Set(Object.keys(g).concat(Object.keys(man))).size;
-    const name = frei ? (m ? m.name : "Gelöschtes Modell") : m ? m.name + (KL_EXTRA[m.id] && KL_EXTRA[m.id].length > 1 ? " · BR " + kl : "") : "BR " + kl;
+    const name = frei ? (m ? m.name : "Gelöschtes Modell") : m ? (KL_EXTRA[m.id] && KL_EXTRA[m.id].length > 1 ? m.name.replace(/\s*\(BR [^)]*\)/, "") + " · BR " + kl : m.name) : "BR " + kl;
     return {kl, frei, name, typ: m ? m.typ : "Sonstiges", g, man, n, rg: frei ? null : fzRange(kl)};
   }).filter(r => (!art || r.typ === art) && (!st || (st === "ja") === (r.n > 0)) && (!q || norm(r.name + " " + r.kl).includes(q)))
     .sort((a, b) => arten.indexOf(a.typ) - arten.indexOf(b.typ) || a.frei - b.frei || (a.frei ? a.name.localeCompare(b.name, "de") : parseInt(a.kl, 10) - parseInt(b.kl, 10)));
   const mit = zeilen.filter(r => r.n > 0).length;
   $("fzZahl").textContent = zeilen.length + " Baureihen und Modelle · bei " + mit + " davon hast du schon Fahrzeuge gesehen · insgesamt " + fzAnzahl() + " verschiedene Fahrzeuge";
+  let gruppe = "";
   $("fzListe").innerHTML = zeilen.length ? zeilen.map(r => {
+    const kopf = r.typ !== gruppe ? (gruppe = r.typ, `<h3 class="fz-gruppe" style="--c:${farben[r.typ] || "#66717d"}">${esc(r.typ)}</h3>`) : "";
     const gesamt = r.rg ? r.rg[1] - r.rg[0] + 1 : 0;
     const imBestand = r.rg ? Object.keys(r.g).concat(Object.keys(r.man)).filter((x, i, a) => a.indexOf(x) === i && +x >= r.rg[0] && +x <= r.rg[1]).length : 0;
-    return `<details class="fz" data-kl="${lnA(r.kl)}" style="--c:${farben[r.typ] || "#66717d"}"${fzOffen.has(r.kl) ? " open" : ""}>
+    return kopf + `<details class="fz" data-kl="${lnA(r.kl)}" style="--c:${farben[r.typ] || "#66717d"}"${fzOffen.has(r.kl) ? " open" : ""}>
       <summary><span class="fz-name">${esc(r.name)}</span><span class="fz-zahl">${r.n}${gesamt ? " / " + gesamt : ""}</span>
       ${gesamt ? `<span class="fz-balken"><i style="width:${Math.round(100 * imBestand / gesamt)}%"></i></span>` : ""}</summary>
       <div class="fz-inhalt">${fzInhalt(r.kl, r.g, r.man, r.rg, r.frei)}</div></details>`;
@@ -1855,28 +1967,7 @@ $("fzListe").addEventListener("toggle", e => { const d = e.target; if (d.dataset
 Object.keys(farben).forEach(t => $("fzArt").insertAdjacentHTML("beforeend", `<option>${t}</option>`));
 $("fzSuche").addEventListener("input", fzZeigen);
 ["fzArt", "fzStatus"].forEach(id => $(id).addEventListener("change", fzZeigen));
-$("fzExport").onclick = () => {
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([JSON.stringify({zuglogbuch: "fahrzeuge", daten: fzDaten})], {type: "application/json"}));
-  a.download = "zug-logbuch-fahrzeuge.json"; a.click();
-};
 $("fzImport").onclick = () => $("fzDatei").click();
-$("fzDatei").onchange = async e => {
-  try {
-    const dt = JSON.parse(await e.target.files[0].text()).daten;
-    if (!dt || typeof dt !== "object") throw new Error();
-    let n = 0;
-    Object.keys(dt).forEach(kl => {
-      const v = dt[kl]; if (!v || typeof v !== "object") return;
-      const d = fzDaten[kl] || (fzDaten[kl] = {});
-      d.man = d.man || {};
-      Object.keys(v.man || {}).forEach(k => { if (!d.man[k]) { d.man[k] = v.man[k]; n++; } });
-      if (v.von && v.bis && !d.von) { d.von = v.von; d.bis = v.bis; }
-    });
-    fzSpeichern(); fzZeigen(); toast(n + " Fahrzeuge übernommen");
-  } catch (x) { alert("Die Datei konnte nicht gelesen werden."); }
-  e.target.value = "";
-};
 
 // Hinweis beim Eintragen: Baureihe und Nummer erkennen
 function nrHinweis() {
@@ -1913,8 +2004,162 @@ function modellLoeschen(id) {
   eigeneSpeichern(); modellListenFuellen(); katalogZeigen(); zeigen();
 }
 
+// ===== Eine gemeinsame Datensicherung =====
+const SICH_KEY = "zuglogbuch.sicherung.v1";
+let sichDatum = 0, sichPersist = null, sichBelegt = "", sichBannerZu = false, persistVersucht = false;
+try { sichDatum = (JSON.parse(localStorage.getItem(SICH_KEY)) || {}).t || 0; } catch (e) {}
+function sichStatus() {
+  const z = zuege.length, fo = fotoCache.size, li = Object.keys(linienHaken).length, fa = fzAnzahl(), mo = eigeneModelle.length;
+  const tage = sichDatum ? Math.floor((Date.now() - sichDatum) / 864e5) : null;
+  const letzte = sichDatum ? "Letzte Sicherung: " + (tage === 0 ? "heute" : tage === 1 ? "gestern" : "vor " + tage + " Tagen") + "." : "Du hast noch nie gesichert.";
+  $("sichKurz").textContent = letzte.replace("Letzte Sicherung: ", "zuletzt ").replace(/\.$/, "");
+  $("sichInfo").textContent = letzte + " Gesichert würden: " + z + " Sichtungen, " + fo + " Fotos, " + li + " Linien, " + fa + " Fahrzeuge, " + mo + " eigene Modelle."
+    + (sichBelegt ? " Belegt: " + sichBelegt + "." : "")
+    + (sichPersist === true ? " Der Browser schützt deine Daten vor automatischem Löschen." : sichPersist === false ? " Der Browser könnte deine Daten bei Platzmangel löschen, sichere deshalb regelmäßig." : "");
+  const faellig = z + li + fa + mo > 0 && (tage === null || tage >= 14) && !sichBannerZu;
+  $("sichHinweis").hidden = !faellig;
+  if (faellig) $("sichHinweis").innerHTML = `<span>${tage === null ? "Du hast noch nie gesichert." : "Letzte Sicherung vor " + tage + " Tagen."} Sichere deine Sichtungen und Fotos, bevor sie verloren gehen.</span><button type="button" id="sichBannerBtn">Jetzt sichern</button><button type="button" class="leise" id="sichBannerZu">Später</button>`;
+}
+$("sichHinweis").addEventListener("click", e => {
+  if (e.target.closest("#sichBannerBtn")) sichAlles();
+  else if (e.target.closest("#sichBannerZu")) { sichBannerZu = true; sichStatus(); }
+});
+async function persistInit() {
+  try {
+    if (navigator.storage && navigator.storage.persisted) sichPersist = await navigator.storage.persisted();
+    if (navigator.storage && navigator.storage.estimate) { const e = await navigator.storage.estimate(); if (e.usage != null) sichBelegt = (e.usage / 1048576 < 10 ? (e.usage / 1048576).toFixed(1) : Math.round(e.usage / 1048576)) + " MB"; }
+  } catch (e) {}
+  sichStatus();
+}
+function persistAnfragen() { // Der Browser soll Logbuch und Fotos nicht von sich aus löschen
+  if (persistVersucht || sichPersist) return;
+  persistVersucht = true;
+  try { navigator.storage.persist().then(ok => { sichPersist = ok; sichStatus(); }).catch(() => {}); } catch (e) {}
+}
+function sichMerken() {
+  sichDatum = Date.now();
+  try { localStorage.setItem(SICH_KEY, JSON.stringify({t: sichDatum})); } catch (e) {}
+  sichStatus(); toast("Sicherung erstellt");
+}
+async function sichAlles() {
+  const liste = zuege.map(ohneFotos), fotos = {};
+  liste.forEach(z => z.fotos.forEach(t => { if (fotoCache.has(t)) fotos[t] = fotoCache.get(t); }));
+  const inhalt = {zuglogbuch: "komplett", format: 3, erstellt: new Date().toISOString(), zuege: liste, fotos, linien: linienHaken, fahrzeuge: fzDaten, modelle: eigeneModelle, linienmodelle: linienModelle};
+  const name = "zug-logbuch-sicherung-" + new Date().toISOString().slice(0, 10) + ".json";
+  const blob = new Blob([JSON.stringify(inhalt)], {type: "application/json"});
+  persistAnfragen();
+  try { // Am Handy über das Teilen-Menü (z. B. in die Cloud oder per Mail), sonst als Download
+    const f = new File([blob], name, {type: "application/json"});
+    if (matchMedia("(pointer:coarse)").matches && navigator.canShare && navigator.canShare({files: [f]})) { await navigator.share({files: [f], title: "Zug-Logbuch Sicherung"}); sichMerken(); return; }
+  } catch (e) { if (e && e.name === "AbortError") return; }
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+  sichMerken();
+}
+async function sichLadenDatei(datei) {
+  if (!datei) return;
+  let roh;
+  try { roh = JSON.parse(await datei.text()); } catch (e) { alert("Die Datei konnte nicht gelesen werden."); return; }
+  const b = {zuege: [], fotos: {}, linien: null, fz: null, modelle: [], lm: null};
+  if (Array.isArray(roh)) b.zuege = roh;
+  else if (roh && typeof roh === "object") {
+    if (Array.isArray(roh.zuege)) { b.zuege = roh.zuege; b.fotos = roh.fotos || {}; }
+    if (roh.zuglogbuch === "komplett") { b.linien = roh.linien; b.fz = roh.fahrzeuge; b.modelle = Array.isArray(roh.modelle) ? roh.modelle : []; b.lm = roh.linienmodelle; }
+    else if (roh.zuglogbuch === "linien") b.linien = roh.haken;
+    else if (roh.zuglogbuch === "fahrzeuge") b.fz = roh.daten;
+  }
+  if (!b.zuege.length && !(b.linien && Object.keys(b.linien).length) && !(b.fz && Object.keys(b.fz).length) && !b.modelle.length) { alert("In der Datei wurden keine Daten gefunden."); return; }
+  const n = {z: 0, l: 0, f: 0, m: 0};
+  try {
+    b.modelle.forEach(m => { // eigene Modelle zuerst, die Sichtungen verweisen darauf
+      if (m && m.id && m.name && farben[m.typ] && !modell(m.id)) { m.eigen = true; eigeneModelle.push(m); MODELLE.push(m); n.m++; }
+    });
+    if (n.m) { MODELLE.sort((x, y) => Object.keys(farben).indexOf(x.typ) - Object.keys(farben).indexOf(y.typ)); eigeneSpeichern(); modellListenFuellen(); katalogZeigen(); }
+    const ids = new Set(zuege.map(z => z.id));
+    const dazu = b.zuege.filter(z => z && z.id && !ids.has(z.id)).map(ohneFotos);
+    for (const z of dazu) for (const t of z.fotos) if (b.fotos[t] && !fotoCache.has(t) && fotoDB) { fotoCache.set(t, b.fotos[t]); await idbOp("readwrite", st => st.put(b.fotos[t], t)); }
+    if (dazu.length) { zuege = zuege.concat(dazu); n.z = dazu.length; speichern(); }
+    if (b.linien && typeof b.linien === "object") {
+      Object.keys(b.linien).forEach(k => { const v = b.linien[k]; if (v && Array.isArray(v.ids) && v.ref && !linienHaken[k]) { linienHaken[k] = v; n.l++; } });
+      if (n.l) { lnSpeichern(); lnZeigen(); if (linienAnzeigen) lnKarteAktualisieren(); }
+    }
+    if (b.fz && typeof b.fz === "object") {
+      Object.keys(b.fz).forEach(kl => {
+        const v = b.fz[kl]; if (!v || typeof v !== "object") return;
+        const d = fzDaten[kl] || (fzDaten[kl] = {});
+        d.man = d.man || {};
+        Object.keys(v.man || {}).forEach(k => { if (!d.man[k]) { d.man[k] = v.man[k]; n.f++; } });
+        if (v.von && v.bis && !d.von) { d.von = v.von; d.bis = v.bis; }
+      });
+      fzSpeichern(); fzZeigen();
+    }
+    if (b.lm && typeof b.lm === "object") { Object.keys(b.lm).forEach(k => { if (!linienModelle[k] && modell(b.lm[k])) linienModelle[k] = b.lm[k]; }); lmSpeichern(); }
+    zeigen();
+    toast("Wiederhergestellt: " + n.z + " Sichtungen, " + n.l + " Linien, " + n.f + " Fahrzeuge, " + n.m + " Modelle");
+  } catch (x) { alert("Beim Wiederherstellen ist ein Fehler aufgetreten: " + x.message); }
+}
+$("export").onclick = $("lnExport").onclick = $("fzExport").onclick = $("sichAlles").onclick = sichAlles;
+$("sichLaden").onclick = () => $("sichDatei").click();
+["datei", "lnDatei", "fzDatei", "sichDatei"].forEach(id => { $(id).onchange = e => { const f = e.target.files[0]; e.target.value = ""; sichLadenDatei(f); }; });
+persistInit();
+
+// ===== Linie beim Eintragen automatisch abhaken =====
+let eintragKontext = null, lnKette = Promise.resolve();
+function lnKontextVon(e) { // z. B. "RE 7 (RE 21065)" -> Linie "RE 7" samt Standort für die Suche
+  if (!["ICE", "IC/EC", "Regionalzug", "S-Bahn"].includes(e.typ)) return null;
+  const m = String(e.nummer || "").match(/^\s*([A-Za-zÄÖÜ]{1,4})\s?(\d{1,3}[A-Za-z]?)\b/);
+  if (!m || /^BR$/i.test(m[1])) return null;
+  const a = m[1].toUpperCase(), n = m[2].toUpperCase();
+  const c = eintragKontext && eintragKontext.ref.replace(/\s/g, "").toUpperCase() === a + n ? eintragKontext : null;
+  const lat = c ? c.lat : e.pos ? e.pos.lat : null, lon = c ? c.lon : e.pos ? e.pos.lon : null;
+  return {ref: a + " " + n, a, n, lat: lat == null ? null : lat, lon: lon == null ? null : lon, r: c ? 2500 : 1500};
+}
+async function lnKandidaten(k) {
+  const gleich = g => g.ref.replace(/\s/g, "").toUpperCase() === k.a + k.n;
+  if (k.lat == null) return lnListe.filter(gleich); // ohne Standort nur aus der geladenen Liste
+  const f = '["type"="route"]["route"~"^(train|light_rail)$"]', um = `(around:${k.r},${k.lat},${k.lon})`;
+  const j = await overpass(`[out:json][timeout:60];(rel${f}["ref"~"^${k.a} ?${k.n}$"]${um};rel${f}["name"~"^${k.a} ?${k.n}[: ]"]${um};);out tags;`);
+  return lnGruppieren(j.elements || []).filter(gleich);
+}
+function lnWaehlen(ref, kand) {
+  return new Promise(ok => {
+    $("lnWahlTitel").textContent = "Welche Linie war „" + ref + "“?";
+    $("lnWahlListe").innerHTML = kand.map((g, i) => `<button type="button" data-i="${i}">${esc(g.ref)} · ${esc(g.name)}<span>${esc(g.art)}${g.netz ? " · " + esc(g.netz) : ""}</span></button>`).join("");
+    $("lnWahl").hidden = false;
+    const zu = w => { $("lnWahl").hidden = true; $("lnWahl").onclick = null; ok(w); };
+    $("lnWahl").onclick = e => { const b = e.target.closest("[data-i]"); if (b) zu(kand[+b.dataset.i]); else if (e.target.id === "lnWahlKeine" || e.target === $("lnWahl")) zu(null); };
+  });
+}
+function lnAbhaken(g) {
+  const h = linienHaken[g.k], neu = !h;
+  if (neu) linienHaken[g.k] = {k: g.k, ref: g.ref, name: g.name, netz: g.netz, art: g.art, ids: g.ids, t: Date.now()};
+  else h.ids = [...new Set(h.ids.concat(g.ids))];
+  lnSpeichern(); lnZeigen();
+  if (linienAnzeigen && neu) lnKarteAktualisieren();
+  return neu;
+}
+async function lnAbhakenIntern(id) {
+  const z = zuege.find(x => x.id === id);
+  if (!z || !z.lnKontext) return;
+  const k = z.lnKontext;
+  let kand;
+  try { kand = await lnKandidaten(k); } catch (e) { return; } // kein Netz: bleibt vorgemerkt und wird später nachgeholt
+  const fertig = g => { const e = zuege.find(x => x.id === id); if (!e) return; delete e.lnKontext; if (g) e.linie = {k: g.k, ref: g.ref}; speichern(); };
+  if (!kand.length) { fertig(null); if (k.lat != null) toast("Linie „" + k.ref + "“ wurde in den Kartendaten nicht gefunden."); return; }
+  const g = kand.length > 1 ? await lnWaehlen(k.ref, kand) : kand[0];
+  if (!g) { fertig(null); return; }
+  const neu = lnAbhaken(g);
+  fertig(g);
+  toast(neu ? "Linie " + g.ref + " abgehakt ✓" : "Linie " + g.ref + " war schon abgehakt");
+}
+function linieAbhaken(id) { lnKette = lnKette.then(() => lnAbhakenIntern(id)).catch(() => {}); return lnKette; }
+async function lnNachholen() { if (navigator.onLine) for (const z of zuege.filter(x => x.lnKontext)) await linieAbhaken(z.id); }
+window.addEventListener("online", lnNachholen);
+setTimeout(lnNachholen, 3000);
+
 zeitSetzen(); vorschauAktualisieren(); zeigen(); katalogZeigen(); bilderLaden();
-fotoLaden().then(() => { fotosAufraeumen(); zeigen(); });
+fotoLaden().then(() => { fotosAufraeumen(); zeigen(); persistInit(); });
 if (bhfZuletzt.length) bhfWaehlen(bhfZuletzt[0]); else bhfChipsZeigen();
 
 // Tabs mit Funktionsleiste unten
